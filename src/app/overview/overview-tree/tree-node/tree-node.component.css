@@ -1,0 +1,10 @@
+.overview-tree-node-children {
+    margin-left: 24px;
+    overflow: hidden;
+}
+
+.tree-caret-btn {
+    background: transparent;
+    border: none;
+    padding: 0px;
+}

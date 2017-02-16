@@ -1,0 +1,30 @@
+<div class="row" style="display: flex">
+    <div *ngFor="let config of active" style="flex: 1 1 200px; margin: 0px 6px">
+        <div class="card">
+            <div class="card-header">
+
+                <clr-dropdown [clrMenuPosition]="'bottom-right'" style="width: 100%" >
+                    <span clrDropdownToggle style="width: 100%; white-space: normal">
+                        {{config.path}}
+                        <clr-icon shape="caret down"></clr-icon>
+                    </span>
+                    <div class="dropdown-menu">
+                        <a href="..." class="dropdown-item">Item 1</a>
+                        <a href="..." class="dropdown-item">Item 2</a>
+                        <a href="..." class="dropdown-item">Item 3</a>
+                        <a href="..." class="dropdown-item">Item 4</a>
+                    </div>
+                </clr-dropdown>
+            </div>
+            <div class="card-block">
+                <p class="card-text">
+                    Host: asdfasdf<br />
+                    Port: 1234<br />
+                </p>
+            </div>
+            <div class="card-footer">
+                <a href="#" class="btn btn-sm btn-link">Action 1</a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,22 @@
+<div *ngIf="node.isLeaf">
+    <clr-icon [attr.shape]="node.icon" [class]="node.iconClass"></clr-icon>
+    {{node.name}}
+</div>
+
+<div *ngIf="!node.isLeaf">
+    <button (click)="toggleExpanded()" class="tree-caret-btn">
+        <clr-icon
+            shape="caret"
+            [attr.dir]="node.expanded ? 'down' : 'right'">
+        </clr-icon>
+        {{node.name}}
+    </button>
+</div>
+
+<div class="overview-tree-node-children" *ngIf="!node.isLeaf"
+     [@expandTrigger]="expandedState">
+    <overview-tree-node
+        *ngFor="let childNode of node.nodes"
+        [node]="childNode">
+    </overview-tree-node>
+</div>
