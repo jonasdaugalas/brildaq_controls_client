@@ -38,12 +38,6 @@ export class OverviewComponent implements OnInit {
                 path: '/dip/global/analyzer1',
                 state: 'ON'
             }, {
-                path: '/dip/global/alarms',
-                state: 'ON'
-            }, {
-                path: '/dip/global/dipprocessor',
-                state: 'ON'
-            }, {
                 path: '/central/global/lumistore',
                 state: 'OFF'
             }, {
@@ -55,6 +49,12 @@ export class OverviewComponent implements OnInit {
             }, {
                 path: '/plt/global/pltsource',
                 state: 'FM_OFF'
+            }, {
+                path: '/dip/global/alarms',
+                state: 'ON'
+            }, {
+                path: '/dip/global/dipprocessor',
+                state: 'ON'
             }, {
                 path: '/plt/global/pltprocessor',
                 state: 'ON'

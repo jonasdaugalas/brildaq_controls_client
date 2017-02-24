@@ -8,7 +8,6 @@ import { StoreModule } from '@ngrx/store';
 import { AppRouting } from './app.routing';
 import { AppComponent } from './app.component';
 import { OverviewComponent } from './overview/overview.component';
-import { EditorComponent } from './editor/editor.component';
 import { OverviewHeaderComponent } from './overview/overview-header/overview-header.component';
 import { OverviewTreeComponent } from './overview/overview-tree/overview-tree.component';
 import { OverviewActivePanelComponent } from './overview/overview-active-panel/overview-active-panel.component';
@@ -18,17 +17,18 @@ import { AppConfigurationService } from './shared/services/app-configuration.ser
 import { ConfigurationsService } from './shared/services/configurations.service';
 import { AlarmService } from './shared/services/alarm.service';
 import { appStateReducers } from './shared/models/app-state';
+import { ActionMenuComponent } from './overview/action-menu/action-menu.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     OverviewComponent,
-    EditorComponent,
     OverviewHeaderComponent,
     OverviewTreeComponent,
     OverviewActivePanelComponent,
-    TreeNodeComponent
+    TreeNodeComponent,
+    ActionMenuComponent
   ],
   imports: [
       BrowserModule,

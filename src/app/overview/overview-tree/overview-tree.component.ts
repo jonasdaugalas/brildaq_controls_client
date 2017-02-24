@@ -1,10 +1,12 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
 import { Configuration, ConfigurationStates } from '@app/shared/models/configuration';
+import { customConfigSortFn } from '@app/shared/utils/custom-sort';
 
 @Component({
     selector: 'overview-tree',
     templateUrl: './overview-tree.component.html',
-    styleUrls: ['./overview-tree.component.css']
+    styleUrls: ['./overview-tree.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OverviewTreeComponent implements OnInit {
 
@@ -12,60 +14,11 @@ export class OverviewTreeComponent implements OnInit {
 
     @Input() set configurations(newConfigs) {
         this._configurations = newConfigs;
+        this._configurations.sort(customConfigSortFn);
         this.buildTree();
     }
 
-    configTree = [
-        {
-            name: 'default1',
-            expanded: true,
-            nodes: [
-                {
-                    name: 'asdf',
-                    isLeaf: true,
-                    path: 'default1/asdf',
-                    icon: 'cog',
-                    iconClass: 'is-solid is-info'
-                }, {
-                    name: 'qwer',
-                    expanded: true,
-                    nodes: [
-                        {
-                            name: 'zxcv',
-                            isLeaf: true,
-                            path: 'default1/qwer/zxcv',
-                            icon: 'heart',
-                            iconClass: 'is-solid is-success'
-                        }
-                    ]
-                }
-            ]
-        }, {
-            name: 'default1',
-            expanded: false,
-            nodes: [
-                {
-                    name: 'asdf',
-                    isLeaf: true,
-                    path: 'default2/asdf',
-                    icon: 'error',
-                    iconClass: 'is-error is-solid'
-                }
-            ]
-        }, {
-            name: 'default3',
-            expanded: true,
-            nodes: [
-                {
-                    name: 'asdf',
-                    isLeaf: true,
-                    path: 'default3/asdf',
-                    icon: 'document',
-                    iconClass: 'is-solid'
-                }
-            ]
-        }
-    ];
+    configTree = [];
 
     protected buildTree() {
         console.log('building tree');

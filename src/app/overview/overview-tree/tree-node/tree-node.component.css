@@ -1,10 +1,27 @@
 .overview-tree-node-children {
     margin-left: 24px;
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 
 .tree-caret-btn {
     background: transparent;
     border: none;
     padding: 0px;
+}
+
+.bc-dropdown-toggle-active {
+    background-color: #E1F1F6;
+}
+
+.dropdown-menu {
+    /* position is taken care by Tether  */
+    position: relative;
+}
+
+.dropdown.open > .dropdown-menu {
+    display: block;
+}
+
+.dropdown > .dropdown-menu {
+    display: none;
 }

@@ -1,6 +1,24 @@
 <div *ngIf="node.isLeaf">
     <clr-icon [attr.shape]="node.icon" [class]="node.iconClass"></clr-icon>
-    {{node.name}}
+    <!-- <clr-dropdown [clrMenuPosition]="'right-bottom'"> -->
+    <!-- <span clrDropdownToggle> -->
+    <!-- {{node.name}} -->
+    <!-- </span> -->
+    <!-- <div class="dropdown-menu"> -->
+    <!-- <config-action-menu [config]="node"></config-action-menu> -->
+    <!-- </div> -->
+    <!-- </clr-dropdown> -->
+
+    <a #dropdown (click)="toggleDropdown($event)" style="cursor: pointer;"
+       [class.bc-dropdown-toggle-active]="dropdownIsOpen">
+        {{node.name}}
+    </a>
+    <div class="dropdown open" #dropdownMenu
+         [class.open]="dropdownIsOpen">
+        <div class="dropdown-menu">
+            <config-action-menu [config]="node"></config-action-menu>
+        </div>
+    </div>
 </div>
 
 <div *ngIf="!node.isLeaf">

@@ -1,0 +1,13 @@
+<form>
+    <div class="form-group">
+        <div class="toggle-switch">
+            <input id="vim_bindings_toggle" type="checkbox" [checked]="vimKeybindings" (change)="toggleBindings()">
+            <label for="vim_bindings_toggle">Vim bindings</label>
+        </div>
+    </div>
+</form>
+
+
+<div id="editor" style="height: 700px; width: 100%">
+    some text
+</div>

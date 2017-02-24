@@ -1,8 +1,34 @@
-/* .bc-card-header { */
-/*     padding: 3px 12px; */
-/* } */
+.card .card-footer {
+    padding: 0px 0px;
+    text-align: center;
+}
 
-/* .bc-card-header .btn-link { */
-/*     margin: 3px 0px; */
-/*     width: 100%; */
-/* } */
+.card .card-header {
+    border-radius: 3px 3px 0px 0px;
+    padding: 6px 12px;
+    font-size: 14px;
+    font-weight: normal;
+}
+
+.bc-card-header-success {
+    background-color: #DFF0D0;
+    color: #266900;
+}
+
+.bc-card-header-danger {
+    background-color: #EBAFA6;
+    color: #A32100;
+}
+
+@keyframes card-danger-blink-animation {
+    0%   {background-color: white;}
+    50%  {background-color: #EBAFA6;}
+    100% {background-color: white;}
+}
+
+.bc-card-danger-blink {
+    animation-name: card-danger-blink-animation;
+    animation-iteration-count: infinite;
+    animation-duration: 2s;
+    animation-timing-function: ease-out;
+}

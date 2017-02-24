@@ -1,4 +1,4 @@
-<div class="main-container">
+<clr-main-container>
     <overview-header
         [owners]="owners | async"
         [owner]="owner | async"
@@ -8,19 +8,17 @@
     </overview-header>
     <div class="content-container">
         <div class="content-area">
-            asdf content
-            <h1> asdf asdf asdf</h1>
-            <div> qwerqw qwer qwer qwe qwerqwer qwer qwer rq woiu oxzc oi</div>
             <overview-active-panel
                 [configurations]="configurations | async">
             </overview-active-panel>
         </div>
         <nav class="sidenav">
-            <section class="sidenav-content">
-                <section class="nav-group">
-                    <overview-tree [configurations]="configurations | async"></overview-tree>
-                </section>
+            <section>
+                <overview-tree
+                    style="display: block;"
+                    [configurations]="configurations | async">
+                </overview-tree>
             </section>
         </nav>
     </div>
-</div>
+</clr-main-container>
