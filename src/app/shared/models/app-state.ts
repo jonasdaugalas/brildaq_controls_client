@@ -21,6 +21,7 @@ export const appStateReducers = {
 };
 
 export const CONFIGURATIONS_UPDATE = 'CONFIGURATIONS_UPDATE';
+export const RUNNINGS_UPDATE = 'RUNNINGS_UPDATE';
 export const PROFILE_SET = 'PROFILE_SET';
 export const RCMS_USERS_SET = 'RCMS_USERS_SET';
 export const RCMS_USER_SET = 'RCMS_USER_SET';
@@ -75,7 +76,8 @@ export function userNameReducer(state: string, action: Action) {
 export function configurationsReducer(state: Array<Configuration> = [], action: Action) {
     switch (action.type) {
     case CONFIGURATIONS_UPDATE:
-        console.log('updating', action.payload);
+        return action.payload;
+    case RUNNINGS_UPDATE:
         return action.payload;
     default:
         return state;

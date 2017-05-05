@@ -12,7 +12,10 @@
     </div>
 </div>
 <div class="row" style="display: flex">
-    <div *ngFor="let config of filteredActive" style="flex: 1 1 240px; margin-left: 6px" class="card" [class.bc-card-danger-blink]="config.state === 'ERROR'">
+    <div *ngFor="let config of filteredActive"
+         style="flex: 1 1 240px; margin-left: 6px"
+         class="card"
+         [class.bc-card-danger-blink]="config.state === 'ERROR'">
         <div class="card-header"
              [class.bc-card-header-success]="config.state === 'ON'"
              [class.bc-card-header-danger]="config.state === 'ERROR'">
@@ -31,9 +34,5 @@
                 <b>Host</b>:&nbsp;srv-s2d16-21-01&nbsp;<b>Port</b>:&nbsp;<code>12345</code>
             </p>
         </div>
-        <!-- <div class="card-footer" > -->
-            <!-- <img width=20 height=20 [src]="'data:image/png;base64,' + decorations[config.path].bg"> -->
-        <!-- <span class="p8">{{decorations[config.path].label}}</span> -->
-        <!-- </div> -->
     </div>
 </div>

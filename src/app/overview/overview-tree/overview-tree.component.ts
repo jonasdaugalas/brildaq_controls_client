@@ -20,6 +20,11 @@ export class OverviewTreeComponent implements OnInit {
 
     configTree = [];
 
+    constructor() { }
+
+    ngOnInit() {
+    }
+
     protected buildTree() {
         console.log('building tree');
         console.log(this._configurations);
@@ -29,15 +34,17 @@ export class OverviewTreeComponent implements OnInit {
             branch.shift(); // drop first element because path starts with '/'
             this.makeTreeBranch(this.configTree, branch, config);
         }
+        console.log(this.configTree);
     }
 
     protected makeTreeBranch(fromNode, branch, config) {
-        console.log(fromNode, branch, this.configTree);
         let name = branch.shift();
+        console.log(fromNode, branch, config, name);
         if (branch.length === 0) {
             return fromNode.push(this.makeTreeLeaf(config));
         }
         let node = fromNode.find((el) => el.name === name);
+        console.log(node);
         if (typeof node === 'undefined') {
             node = {
                 name: name,
@@ -46,6 +53,7 @@ export class OverviewTreeComponent implements OnInit {
             };
             fromNode.push(node);
         }
+        console.log(node);
         return this.makeTreeBranch(node.nodes, branch, config);
     }
 
@@ -83,15 +91,6 @@ export class OverviewTreeComponent implements OnInit {
             icon: icon,
             iconClass: iconClass
         };
-    }
-
-    // openFile(directoryName: string, fileName: string) {
-    //     ...
-    //     ...
-    // }
-    constructor() { }
-
-    ngOnInit() {
     }
 
 }

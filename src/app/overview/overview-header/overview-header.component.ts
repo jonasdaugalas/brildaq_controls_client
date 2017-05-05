@@ -2,6 +2,7 @@ import {
     Component, EventEmitter, OnInit, Input, Output, ChangeDetectionStrategy
 } from '@angular/core';
 import { AlarmService } from '@app/shared/services/alarm.service';
+import { ConfigurationsService } from '@app/shared/services/configurations.service';
 import { Alarm } from '@app/shared/models/alarm';
 
 @Component({
@@ -18,7 +19,9 @@ export class OverviewHeaderComponent implements OnInit {
     // @Output() refresh = new EventEmitter();
     @Input() alarm: Alarm;
 
-    constructor(private alarmService: AlarmService) { }
+    constructor(protected alarmService: AlarmService,
+                protected configs: ConfigurationsService) {
+    }
 
     ngOnInit() {}
 
@@ -32,5 +35,9 @@ export class OverviewHeaderComponent implements OnInit {
 
     selectOwner(owner) {
         this.ownerChange.emit(owner);
+    }
+
+    onRefreshClick(event) {
+        this.configs.updateConfigs();
     }
 }

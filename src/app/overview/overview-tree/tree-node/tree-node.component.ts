@@ -1,4 +1,5 @@
-import { Component, OnInit, AfterViewInit, Input, trigger, state, animate, transition, style, keyframes, ViewChild } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Input, ViewChild } from '@angular/core';
+import { animate, trigger, state, transition, style, keyframes } from '@angular/animations';
 import * as Tether from 'tether';
 
 @Component({

@@ -32,7 +32,7 @@
 </div>
 
 <div class="overview-tree-node-children" *ngIf="!node.isLeaf"
-     [@expandTrigger]="expandedState">
+    [@expandTrigger]="expandedState">
     <overview-tree-node
         *ngFor="let childNode of node.nodes"
         [node]="childNode">

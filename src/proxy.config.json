@@ -1,0 +1,7 @@
+{
+    "/api/*": {
+        "target": "http://srv-s2d16-22-01/wsbrildaqcfg",
+        "secure": false,
+        "logLevel": "debug"
+    }
+}
