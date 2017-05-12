@@ -1,4 +1,4 @@
-import { Configuration } from '@app/shared/models/configuration';
+import { Configuration } from '@app/core/models/configuration';
 
 
 export function customConfigSortFn(a: Configuration, b: Configuration) {

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Configuration } from '@app/shared/models/configuration';
+import { Configuration } from '@app/core/models/configuration';
 
 @Component({
   selector: 'config-action-menu',

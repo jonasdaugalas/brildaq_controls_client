@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
-import { Configuration, ConfigurationStates } from '@app/shared/models/configuration';
+import { Configuration, ConfigurationStates } from '@app/core/models/configuration';
 import { customConfigSortFn } from '@app/shared/utils/custom-sort';
 
 @Component({

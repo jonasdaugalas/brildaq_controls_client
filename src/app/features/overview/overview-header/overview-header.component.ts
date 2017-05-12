@@ -1,9 +1,9 @@
 import {
     Component, EventEmitter, OnInit, Input, Output, ChangeDetectionStrategy
 } from '@angular/core';
-import { AlarmService } from '@app/shared/services/alarm.service';
-import { ConfigurationsService } from '@app/shared/services/configurations.service';
-import { Alarm } from '@app/shared/models/alarm';
+import { AlarmService } from '@app/core/services/alarm.service';
+import { ConfigurationsService } from '@app/core/services/configurations.service';
+import { Alarm } from '@app/core/models/alarm';
 
 @Component({
     selector: 'overview-header',
@@ -13,8 +13,8 @@ import { Alarm } from '@app/shared/models/alarm';
 })
 export class OverviewHeaderComponent implements OnInit {
 
-    @Input() owners: Array<string>;
-    @Input() owner;
+    @Input() owners: Array<string> = [];
+    @Input() owner = null;
     @Output() ownerChange = new EventEmitter();
     // @Output() refresh = new EventEmitter();
     @Input() alarm: Alarm;
@@ -26,7 +26,7 @@ export class OverviewHeaderComponent implements OnInit {
     ngOnInit() {}
 
     toggleAlarmMute() {
-        this.alarmService.toggleMute();
+        // this.alarmService.toggleMute();
     }
 
     playAlarm() {
@@ -38,6 +38,6 @@ export class OverviewHeaderComponent implements OnInit {
     }
 
     onRefreshClick(event) {
-        this.configs.updateConfigs();
+        // this.configs.updateConfigs();
     }
 }

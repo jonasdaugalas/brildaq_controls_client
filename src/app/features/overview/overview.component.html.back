@@ -1,11 +1,11 @@
 <clr-main-container>
-    <overview-header
-        [owners]="owners | async"
-        [owner]="owner | async"
-        (ownerChange)="ownerChanged($event)"
-        [alarm]="alarm | async"
-        (refresh)="refresh()">
-    </overview-header>
+    <!-- <overview-header -->
+    <!-- [owners]="owners | async" -->
+    <!-- [owner]="owner | async" -->
+    <!-- (ownerChange)="ownerChanged($event)" -->
+    <!-- [alarm]="alarm | async" -->
+    <!-- (refresh)="refresh()"> -->
+    <!-- </overview-header> -->
     <div class="content-container">
         <div class="content-area">
             <overview-active-panel
