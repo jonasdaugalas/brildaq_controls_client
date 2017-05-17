@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
-import { Configuration, ConfigurationStates } from '@app/core/models/configuration';
+import { Configuration } from '@app/core/models/configuration';
+import { STATES } from '@app/core/models/running-details';
 import { customConfigSortFn } from '@app/shared/utils/custom-sort';
 
 @Component({
@@ -61,25 +62,25 @@ export class OverviewTreeComponent implements OnInit {
         let icon = 'document';
         let iconClass = 'is-solid';
         switch (config.state) {
-        case ConfigurationStates.ON:
+        case STATES.ON:
             icon = 'heart';
             iconClass = 'is-solid is-success';
             break;
-        case ConfigurationStates.OFF:
+        case STATES.OFF:
             icon = 'cog';
             iconClass = 'is-solid is-info';
             break;
-        case ConfigurationStates.FM_OFF:
+        case STATES.FM_OFF:
             icon = 'document';
             iconClass = 'is-solid';
             break;
-        case ConfigurationStates.ERROR:
+        case STATES.ERROR:
             icon = 'error';
             iconClass = 'is-solid is-error';
             break;
-        case ConfigurationStates.RESETTING:
-        case ConfigurationStates.TURNING_ON:
-        case ConfigurationStates.TURNING_OFF:
+        case STATES.RESETTING:
+        case STATES.TURNING_ON:
+        case STATES.TURNING_OFF:
             icon = null;
             iconClass = 'spinner spinner-inline spinner-sm';
             break;

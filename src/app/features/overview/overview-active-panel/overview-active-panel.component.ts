@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
-import { Configuration, ConfigurationStates } from '@app/core/models/configuration';
+import { Configuration } from '@app/core/models/configuration';
+import { STATES } from '@app/core/models/running-details';
 import { customConfigSortFn } from '@app/shared/utils/custom-sort';
 
 @Component({
@@ -27,8 +28,8 @@ export class OverviewActivePanelComponent implements OnInit {
         console.log('new configs come to active panel');
         this._configurations = newConfigs;
         this.active = this._configurations.filter(el => {
-            return (el.state === ConfigurationStates.ON ||
-                    el.state === ConfigurationStates.ERROR);
+            return (el.state === STATES.ON ||
+                    el.state === STATES.ERROR);
         });
         this.active.sort(customConfigSortFn);
         this.refilter();

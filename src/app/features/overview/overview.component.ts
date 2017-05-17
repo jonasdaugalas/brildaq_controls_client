@@ -3,6 +3,8 @@ import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { State } from '@app/core/state/state.reducer';
 import * as configsActions from '@app/core/state/configurations.actions';
+import * as runningActions from '@app/core/state/running-configs.actions';
+import * as configDetailsActions from '@app/core/state/config-details.actions';
 import { Configuration } from '@app/core/models/configuration';
 
 @Component({
@@ -19,6 +21,22 @@ export class OverviewComponent implements OnInit {
 
     ngOnInit() {
         this.store.dispatch(new configsActions.UpdateAction());
+        this.store.dispatch(new runningActions.UpdateAction('lumipro'));
+        let configs;
+        const state$ = this.store.select(state => state);
+        const state_sub = state$.subscribe((val) => {
+            console.log(val);
+            configs = val.configs;
+        })
+        setTimeout(() => {
+            const configId = configs.ids[0];
+            const version = configs.entities[configId].version;
+            const configDetailsId = configId + '/v=' + version;
+            this.store.dispatch(new configDetailsActions.RequestAction({id: configDetailsId}));
+        }, 2000);
+        setTimeout(() => {
+            state_sub.unsubscribe();
+        }, 3000);
 
         // this.configurations = this.store.select(state => state.configurations);
         // this.owner = this.store.select(state => state.rcmsUser);

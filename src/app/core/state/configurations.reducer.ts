@@ -1,22 +1,20 @@
 import { Configuration } from '../models/configuration';
+import {
+    RequestState, RequestCanceledState, RequestFailedState,
+    RequestInitiatedState, RequestSuccessState, RequestNullState
+} from '../models/request-state';
 import * as configs from './configurations.actions';
 
 export interface State {
     ids: string[];
     entities: { [id: string]: Configuration };
-    loading: boolean;
-    loaded: boolean;
-    loadMessage: string;
-    error: any;
+    request: RequestState;
 }
 
 export const initialState: State = {
     ids: [],
     entities: {},
-    loading: false,
-    loaded: false,
-    loadMessage: '',
-    error: null
+    request: new RequestNullState()
 };
 
 export function reducer(state = initialState, action: configs.Actions): State {
@@ -24,10 +22,7 @@ export function reducer(state = initialState, action: configs.Actions): State {
     case configs.UPDATE: {
         console.log('UPDATE');
         return Object.assign({}, state, {
-            loading: true,
-            loaded: false,
-            loadMessage: 'Waiting',
-            error: null
+            request: new RequestInitiatedState()
         });
     }
     case configs.UPDATE_SUCCESS: {
@@ -36,19 +31,14 @@ export function reducer(state = initialState, action: configs.Actions): State {
         return {
             ids: Object.keys(newConfigs),
             entities: newConfigs,
-            loading: false,
-            loaded: true,
-            loadMessage: 'OK',
-            error: null
+            request: new RequestSuccessState()
         };
     }
     case configs.UPDATE_FAILED: {
-        console.log('FAIL');
+        console.log(action);
         return Object.assign({}, state, {
-            loading: false,
-            loaded: false,
-            loadMessage: action.message,
-            error: action.payload
+            request: new RequestFailedState(
+                action.payload.message, action.payload.error)
         });
     }
     default:

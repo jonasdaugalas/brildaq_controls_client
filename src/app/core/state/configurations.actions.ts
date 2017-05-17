@@ -12,13 +12,14 @@ export class UpdateAction implements Action {
 export class UpdateSuccessAction implements Action {
     readonly type = UPDATE_SUCCESS;
 
-    constructor(public payload: { string: Configuration }) {}
+    // constructor(public payload: { string: Configuration }) {}
+    constructor(public payload: any) {}
 }
 
 export class UpdateFailedAction implements Action {
     readonly type = UPDATE_FAILED;
 
-    constructor(public payload: any, public message: string) {}
+    constructor(public payload: {message: string, error: any}) {}
 }
 
 export type Actions

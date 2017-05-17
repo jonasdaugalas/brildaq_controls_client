@@ -5,6 +5,8 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 
 import { ConfigurationsEffects } from './state/configurations.effects';
+import { RunningConfigsEffects } from './state/running-configs.effects';
+import { ConfigDetailsEffects } from './state/config-details.effects';
 import { reducers } from './state/state.reducer';
 
 import { ConfigurationsService } from './services/configurations.service';
@@ -16,7 +18,9 @@ import { AlarmService } from './services/alarm.service';
     imports: [
         HttpModule,
         StoreModule.provideStore(reducers),
-        EffectsModule.run(ConfigurationsEffects)
+        EffectsModule.run(ConfigurationsEffects),
+        EffectsModule.run(RunningConfigsEffects),
+        EffectsModule.run(ConfigDetailsEffects)
     ],
     providers: [
         ConfigurationsService,
