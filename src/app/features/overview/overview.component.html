@@ -1,1 +1,29 @@
-hello
+<clr-main-container>
+    <overview-header
+        [users]="rcmsUsers"
+        [selectedUser]="selectedRcmsUser$ | async"
+        [isLoading]="isLoading$ | async"
+        (userChange)="selectRcmsUser($event)"
+        (refresh)="refresh()">
+    </overview-header>
+    <div class="content-container">
+        <div class="content-area">
+            <overview-active-panel
+                [activePaths]="activeConfigIds$ | async"
+                [states]="runningStates$ | async"
+                [running]="runningDetails$ | async"
+                [configDetails]="configDetails$ | async">
+            </overview-active-panel>
+        </div>
+        <nav class="sidenav">
+            <section>
+                <overview-tree
+                    style="display: block;"
+                    [paths]="userConfigurationIds$ | async"
+                    [running]="runningDetails$ | async"
+                    [states]="runningStates$ | async">
+                </overview-tree>
+            </section>
+        </nav>
+    </div>
+</clr-main-container>

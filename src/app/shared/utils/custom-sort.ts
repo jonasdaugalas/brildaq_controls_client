@@ -1,9 +1,6 @@
-import { Configuration } from '@app/core/models/configuration';
-
-
-export function customConfigSortFn(a: Configuration, b: Configuration) {
-    let aGroup = a.path.split('/')[1];
-    let bGroup = b.path.split('/')[1];
+export function customConfigSortFn(a: string, b: string) {
+    let aGroup = a.split('/')[2];
+    let bGroup = b.split('/')[2];
     // 'central' goes first against others
     if (aGroup === 'central' && bGroup !== 'central') {
         return -1;
@@ -15,9 +12,9 @@ export function customConfigSortFn(a: Configuration, b: Configuration) {
     } else if (bGroup === 'dip' && aGroup !== 'dip') {
         return 1;
     // otherwise sort alphabetically (case sensitive is OK - doesn't matter)
-    } else if (a.path < b.path) {
+    } else if (a < b) {
         return -1;
-    } else if (b.path < a.path) {
+    } else if (b < a) {
         return 1;
     }
     return 0;

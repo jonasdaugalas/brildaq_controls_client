@@ -4,7 +4,7 @@ import { Effect, Actions } from '@ngrx/effects';
 import { Store, Action } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 
-import { State } from './state.reducer';
+import * as appState from './state.reducer';
 import { ConfigurationsService } from '../services/configurations.service';
 import { RunningDetails } from '../models/running-details';
 import * as runningActions from './running-configs.actions';
@@ -37,10 +37,10 @@ export class RunningConfigsEffects {
     @Effect()
     updateSucces$: Observable<Action> = this.actions$
         .ofType(runningActions.UPDATE_SUCCESS)
-        .withLatestFrom(this.store$)
-        .switchMap(([action, state])=> {
-            const uris = state.running.ids.map((key) => {
-                return state.running.entities[key].URI;
+        .withLatestFrom(this.store$.select(appState.selectRunningEntities))
+        .switchMap(([action, running])=> {
+            const uris = Object.keys(running).map((key) => {
+                return running[key].URI;
             });
             return Observable.of(new runningActions.UpdateStatesAction(uris));
         });
@@ -65,6 +65,6 @@ export class RunningConfigsEffects {
 
     constructor(
         protected actions$: Actions,
-        protected store$: Store<State>,
+        protected store$: Store<appState.State>,
         protected configService: ConfigurationsService) {};
 }

@@ -7,7 +7,8 @@ import * as actions from './running-configs.actions';
 
 export interface State {
     ids: string[];
-    entities: { [id: string]: RunningDetails };
+    running: { [id: string]: RunningDetails };
+    states: { [id: string]: string };
     rcmsUser: string;
     requestRunning: RequestState;
     requestStates: RequestState;
@@ -15,7 +16,8 @@ export interface State {
 
 export const initialState: State = {
     ids: [],
-    entities: {},
+    running: {},
+    states: {},
     rcmsUser: '',
     requestRunning: new RequestNullState(),
     requestStates: new RequestNullState()
@@ -24,7 +26,7 @@ export const initialState: State = {
 export function reducer(state = initialState, action: actions.Actions): State {
     switch (action.type) {
     case actions.UPDATE: {
-        console.log('UPDATE');
+        console.log('UPDATE RUNNING');
         return Object.assign({}, state, {
             requestRunning: new RequestInitiatedState()
         });
@@ -36,11 +38,11 @@ export function reducer(state = initialState, action: actions.Actions): State {
         });
     }
     case actions.UPDATE_SUCCESS: {
-        console.log('SUCCESS running');
+        console.log('SUCCESS running', action.payload);
         const newRunning = action.payload.result;
         return Object.assign({}, state, {
             ids: Object.keys(newRunning),
-            entities: newRunning,
+            running: newRunning,
             rcmsUser: action.payload.rcmsUser,
             requestRunning: new RequestSuccessState()
         });
@@ -59,28 +61,23 @@ export function reducer(state = initialState, action: actions.Actions): State {
     }
     case actions.UPDATE_STATES_CANCEL: {
         console.log('UPDATE_STATES_CANCEL');
-        return Object.assign({}, state, {requestRunning: new RequestCanceledState()});
+        return Object.assign({}, state, {requestStates: new RequestCanceledState()});
     }
     case actions.UPDATE_STATES_SUCCESS: {
-        console.log('SUCCESS states');
-        const newStates = action.payload;
-        const newEntities = {};
-        state.ids.forEach(key => {
-            newEntities[key] = Object.assign(
-                {},
-                state.entities[key],
-                {state: newStates[state.entities[key].URI]}
-            );
+        console.log('SUCCESS states', action.payload);
+        const newStates = {};
+        state.ids.forEach(id => {
+            newStates[id] = action.payload[state.running[id].URI]
         });
         return Object.assign({}, state, {
-            entities: newEntities,
+            states: newStates,
             requestStates: new RequestSuccessState()
         });
     }
     case actions.UPDATE_STATES_FAILED: {
         console.log(action);
         return Object.assign({}, state, {
-            requestRunning: new RequestFailedState(
+            requestStates: new RequestFailedState(
                 action.payload.message, action.payload.error)
         });
     }
@@ -90,3 +87,9 @@ export function reducer(state = initialState, action: actions.Actions): State {
         return state;
     }
 }
+
+export const selectIds = (state: State) => state.ids;
+export const selectRunning = (state: State) => state.running;
+export const selectStates = (state: State) => state.states;
+export const selectRequestRunning = (state: State) => state.requestRunning;
+export const selectRequestStates = (state: State) => state.requestStates;

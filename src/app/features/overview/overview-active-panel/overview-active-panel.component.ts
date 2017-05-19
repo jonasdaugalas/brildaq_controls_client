@@ -1,17 +1,37 @@
 import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
-import { Configuration } from '@app/core/models/configuration';
-import { STATES } from '@app/core/models/running-details';
+import { ConfigDetails } from '@app/core/models/config-details';
+import { STATES, RunningDetails } from '@app/core/models/running-details';
 import { customConfigSortFn } from '@app/shared/utils/custom-sort';
 
 @Component({
     selector: 'overview-active-panel',
     templateUrl: './overview-active-panel.component.html',
     styleUrls: ['./overview-active-panel.component.css'],
-    // changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OverviewActivePanelComponent implements OnInit {
 
-    private _filter: string;
+    pathsWithVersion = {};
+
+    protected _running: {string: RunningDetails};
+    @Input() set running(newRunning) {
+        this._running = newRunning;
+        this.pathsWithVersion = {};
+        Object.keys(newRunning).forEach(key => {
+            this.pathsWithVersion[key] = key + '/v=' + newRunning[key].version;
+        });
+    }
+
+    @Input() configDetails: {string: ConfigDetails};
+    @Input() states: {string: string};
+
+    protected _activePaths: Array<string>;
+    @Input() set activePaths(newPaths: Array<string>) {
+        this._activePaths = newPaths;
+        this.refilter();
+    }
+
+    protected _filter: string;
     set filter(newFilter: string) {
         this._filter = newFilter;
         this.refilter();
@@ -20,22 +40,9 @@ export class OverviewActivePanelComponent implements OnInit {
         return this._filter;
     }
 
-    filteredActive: Array<Configuration>;
-    active: Array<Configuration>;
+    filteredActivePaths: Array<string>;
 
-    private _configurations: Array<Configuration>;
-    @Input() set configurations(newConfigs: Array<Configuration>) {
-        console.log('new configs come to active panel');
-        this._configurations = newConfigs;
-        this.active = this._configurations.filter(el => {
-            return (el.state === STATES.ON ||
-                    el.state === STATES.ERROR);
-        });
-        this.active.sort(customConfigSortFn);
-        this.refilter();
-    }
-
-    constructor() { }
+    constructor() {}
 
     ngOnInit() {
         this.filter = '/global/';
@@ -44,12 +51,20 @@ export class OverviewActivePanelComponent implements OnInit {
     refilter() {
         try {
             let regexp = new RegExp(this.filter, 'i');
-            this.filteredActive = this.active.filter(value => {
-                return value.path.search(regexp) >= 0;
+            this.filteredActivePaths = this._activePaths.filter(path => {
+                return path.search(regexp) >= 0;
             });
         } catch (err) {
-            this.filteredActive = [];
+            this.filteredActivePaths = [];
         }
+    }
+
+    isStateError(state) {
+        return state === STATES.ERROR;
+    }
+
+    isStateOK(state) {
+        return state === STATES.ON;
     }
 
 }

@@ -1,4 +1,4 @@
-<div *ngIf="node.isLeaf">
+<div *ngIf="node.isLeaf" class="overview-tree-node">
     <clr-icon [attr.shape]="node.icon" [class]="node.iconClass"></clr-icon>
     <!-- <clr-dropdown [clrMenuPosition]="'right-bottom'"> -->
     <!-- <span clrDropdownToggle> -->
@@ -16,13 +16,13 @@
     <div class="dropdown open" #dropdownMenu
          [class.open]="dropdownIsOpen">
         <div class="dropdown-menu">
-            <config-action-menu [config]="node"></config-action-menu>
+            <config-action-menu [path]="node.path"></config-action-menu>
         </div>
     </div>
 </div>
 
-<div *ngIf="!node.isLeaf">
-    <button (click)="toggleExpanded()" class="tree-caret-btn">
+<div *ngIf="!node.isLeaf" class="overview-tree-node">
+    <button (click)="node.expanded = !node.expanded" class="tree-caret-btn">
         <clr-icon
             shape="caret"
             [attr.dir]="node.expanded ? 'down' : 'right'">
@@ -31,8 +31,7 @@
     </button>
 </div>
 
-<div class="overview-tree-node-children" *ngIf="!node.isLeaf"
-    [@expandTrigger]="expandedState">
+<div class="overview-tree-node-children" *ngIf="!node.isLeaf" [hidden]="!node.expanded">
     <overview-tree-node
         *ngFor="let childNode of node.nodes"
         [node]="childNode">

@@ -1,3 +1,4 @@
+import { createSelector } from 'reselect';
 import { Configuration } from '../models/configuration';
 import {
     RequestState, RequestCanceledState, RequestFailedState,
@@ -20,13 +21,13 @@ export const initialState: State = {
 export function reducer(state = initialState, action: configs.Actions): State {
     switch (action.type) {
     case configs.UPDATE: {
-        console.log('UPDATE');
+        console.log('UPDATE CONFIGS');
         return Object.assign({}, state, {
             request: new RequestInitiatedState()
         });
     }
     case configs.UPDATE_SUCCESS: {
-        console.log('SUCCESS');
+        console.log('SUCCESS', action.payload);
         const newConfigs = action.payload;
         return {
             ids: Object.keys(newConfigs),
@@ -46,5 +47,6 @@ export function reducer(state = initialState, action: configs.Actions): State {
     }
 }
 
-export const getIds = (state: State) => state.ids;
-export const getEntities = (state: State) => state.entities;
+export const selectIds = (state: State) => state.ids;
+export const selectEntities = (state: State) => state.entities;
+export const selectRequest = (state: State) => state.request;

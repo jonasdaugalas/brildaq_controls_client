@@ -3,6 +3,17 @@ import { Configuration } from '@app/core/models/configuration';
 import { STATES } from '@app/core/models/running-details';
 import { customConfigSortFn } from '@app/shared/utils/custom-sort';
 
+class Leaf {
+    name: string;
+    isLeaf = true;
+    icon = 'document';
+    iconClass = 'is-solid';
+
+    constructor(public path: string) {
+        this.name = path.split('/').pop();
+    }
+}
+
 @Component({
     selector: 'overview-tree',
     templateUrl: './overview-tree.component.html',
@@ -11,15 +22,26 @@ import { customConfigSortFn } from '@app/shared/utils/custom-sort';
 })
 export class OverviewTreeComponent implements OnInit {
 
-    _configurations;
+    _runningDetails: {string: any};
+    @Input() set running(newRunning) {
+        this._runningDetails = newRunning;
+        this.updateLeafs(Object.keys(newRunning));
+    }
 
-    @Input() set configurations(newConfigs) {
-        this._configurations = newConfigs;
-        this._configurations.sort(customConfigSortFn);
+    _runningStates: {string: string};
+    @Input() set states(newStates) {
+        this._runningStates = newStates;
+        this.updateLeafs(Object.keys(newStates));
+    }
+
+    _paths: Array<string>;
+    @Input() set paths(newPaths: Array<string>) {
+        this._paths = newPaths.sort(customConfigSortFn);
         this.buildTree();
     }
 
     configTree = [];
+    configTreeLeafs = {};
 
     constructor() { }
 
@@ -27,26 +49,27 @@ export class OverviewTreeComponent implements OnInit {
     }
 
     protected buildTree() {
-        console.log('building tree');
-        console.log(this._configurations);
+        console.log('building tree', this._paths);
         this.configTree = [];
-        for (let config of this._configurations) {
-            let branch = config.path.split('/');
+        this.updateLeafs(this._paths);
+        this._paths.forEach(path => {
+            const branch = path.split('/');
             branch.shift(); // drop first element because path starts with '/'
-            this.makeTreeBranch(this.configTree, branch, config);
-        }
-        console.log(this.configTree);
+            branch.shift(); // drop second element because it is user
+            this.makeTreeBranch(this.configTree, branch, path);
+        });
     }
 
-    protected makeTreeBranch(fromNode, branch, config) {
+    protected makeTreeBranch(fromNode, branch, fullpath) {
         let name = branch.shift();
-        console.log(fromNode, branch, config, name);
         if (branch.length === 0) {
-            return fromNode.push(this.makeTreeLeaf(config));
+            // name is last element of branch
+            const leaf = this.configTreeLeafs[fullpath];
+            return fromNode.push(leaf);
         }
         let node = fromNode.find((el) => el.name === name);
-        console.log(node);
         if (typeof node === 'undefined') {
+            // node does not exists, create new
             node = {
                 name: name,
                 expanded: true,
@@ -54,44 +77,54 @@ export class OverviewTreeComponent implements OnInit {
             };
             fromNode.push(node);
         }
-        console.log(node);
-        return this.makeTreeBranch(node.nodes, branch, config);
+        // continues building branch on child nodes
+        return this.makeTreeBranch(node.nodes, branch, fullpath);
     }
 
-    protected makeTreeLeaf(config) {
-        let icon = 'document';
-        let iconClass = 'is-solid';
-        switch (config.state) {
+    protected updateLeafs(paths) {
+        paths.forEach(path => {
+            let leaf = this.configTreeLeafs[path];
+            if (!leaf) {
+                leaf = new Leaf(path);
+                this.configTreeLeafs[path] = leaf;
+            }
+            this.updateLeafStatus(leaf);
+        });
+    }
+
+    protected updateLeafStatus(leaf) {
+        if (!this._runningDetails.hasOwnProperty(leaf.path)) {
+            leaf.status = STATES.NO_FM;
+            leaf.icon = 'document';
+            leaf.iconClass = 'is-solid';
+            return;
+        }
+        leaf.status = this._runningStates[leaf.path];
+        switch (this._runningStates[leaf.path]) {
         case STATES.ON:
-            icon = 'heart';
-            iconClass = 'is-solid is-success';
+            leaf.icon = 'heart';
+            leaf.iconClass = 'is-solid is-success';
             break;
         case STATES.OFF:
-            icon = 'cog';
-            iconClass = 'is-solid is-info';
-            break;
-        case STATES.FM_OFF:
-            icon = 'document';
-            iconClass = 'is-solid';
+            leaf.icon = 'cog';
+            leaf.iconClass = 'is-solid is-info';
             break;
         case STATES.ERROR:
-            icon = 'error';
-            iconClass = 'is-solid is-error';
+            leaf.icon = 'error';
+            leaf.iconClass = 'is-solid is-error';
             break;
         case STATES.RESETTING:
         case STATES.TURNING_ON:
         case STATES.TURNING_OFF:
-            icon = null;
-            iconClass = 'spinner spinner-inline spinner-sm';
+            leaf.icon = null;
+            leaf.iconClass = 'spinner spinner-inline spinner-sm';
             break;
+        default:
+            leaf.status = STATES.UNKNOWN;
+            leaf.icon = 'warning';
+            leaf.iconClass = 'is-solid is-warning';
         }
-        return {
-            name: config.path.split('/').pop(),
-            isLeaf: true,
-            path: config.path,
-            icon: icon,
-            iconClass: iconClass
-        };
+
     }
 
 }

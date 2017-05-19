@@ -1,5 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Configuration } from '@app/core/models/configuration';
 
 @Component({
   selector: 'config-action-menu',
@@ -8,15 +7,15 @@ import { Configuration } from '@app/core/models/configuration';
 })
 export class ActionMenuComponent implements OnInit {
 
-    configName: string;
+    name: string;
 
-    private _config;
-    @Input() set config(newConfig: Configuration) {
-        this._config = newConfig;
-        this.configName = newConfig.path.split('/').pop();
+    private _path;
+    @Input() set path(newPath: string) {
+        this._path = newPath;
+        this.name = newPath.split('/').pop();
     }
-    get config(): Configuration {
-        return this._config;
+    get path(): string {
+        return this._path;
     }
 
     constructor() { }

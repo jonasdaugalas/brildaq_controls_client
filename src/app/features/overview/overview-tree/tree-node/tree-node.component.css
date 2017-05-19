@@ -1,5 +1,9 @@
+.overview-tree-node {
+    line-height: 18px;
+}
+
 .overview-tree-node-children {
-    margin-left: 24px;
+    margin-left: 18px;
     /* overflow: hidden; */
 }
 
@@ -10,7 +14,7 @@
 }
 
 .bc-dropdown-toggle-active {
-    background-color: #E1F1F6;
+    background-color: #89CBDF;
 }
 
 .dropdown-menu {

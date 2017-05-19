@@ -1,5 +1,6 @@
 import { NgModule, SkipSelf, Optional } from '@angular/core';
 import { HttpModule } from '@angular/http';
+import { ClarityModule } from 'clarity-angular';
 
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
@@ -20,7 +21,8 @@ import { AlarmService } from './services/alarm.service';
         StoreModule.provideStore(reducers),
         EffectsModule.run(ConfigurationsEffects),
         EffectsModule.run(RunningConfigsEffects),
-        EffectsModule.run(ConfigDetailsEffects)
+        EffectsModule.run(ConfigDetailsEffects),
+        ClarityModule.forRoot()
     ],
     providers: [
         ConfigurationsService,

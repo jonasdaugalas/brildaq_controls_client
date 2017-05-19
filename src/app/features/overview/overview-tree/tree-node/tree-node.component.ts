@@ -1,5 +1,4 @@
 import { Component, OnInit, AfterViewInit, Input, ViewChild } from '@angular/core';
-import { animate, trigger, state, transition, style, keyframes } from '@angular/animations';
 import * as Tether from 'tether';
 
 @Component({
@@ -8,20 +7,7 @@ import * as Tether from 'tether';
     styleUrls: ['./tree-node.component.css'],
     host: {
         '(document:click)': 'toggleDropdown($event)',
-    },
-    animations: [
-        trigger('expandTrigger', [
-            state('expanded', style({height: '*'})),
-            state('collapsed', style({height: '0px', transform: 'translateY(-50%)', overflow: 'hidden'})),
-            transition('expanded => collapsed', animate('100ms ease-out')),
-            transition('collapsed => expanded', animate(100, keyframes([
-                style({height: 0, transform: 'translateY(-50%)', offset: 0}),
-                style({height: '*', transform: 'translateY(2px)', offset: 0.6}),
-                style({height: '*', transform: 'translateY(3px)', offset: 0.7}),
-                style({height: '*', transform: 'translateY(0)', offset: 1})
-            ])))
-        ])
-    ]
+    }
 })
 export class TreeNodeComponent implements OnInit, AfterViewInit {
 
@@ -29,14 +15,12 @@ export class TreeNodeComponent implements OnInit, AfterViewInit {
     tether: Tether;
     @ViewChild('dropdown') dropdown;
     @ViewChild('dropdownMenu') dropdownMenu;
-    expandedState: string;
     dropdownIsOpen = false;
 
 
     constructor() { }
 
     ngOnInit() {
-        this._setExpandedState();
     }
 
     ngAfterViewInit() {
@@ -55,11 +39,6 @@ export class TreeNodeComponent implements OnInit, AfterViewInit {
         }
     }
 
-    toggleExpanded() {
-        this.node['expanded'] = !this.node['expanded'];
-        this._setExpandedState();
-    }
-
     toggleDropdown(event) {
         if (this.node['isLeaf']) {
             if (event['target'] === this.dropdown.nativeElement) {
@@ -70,10 +49,6 @@ export class TreeNodeComponent implements OnInit, AfterViewInit {
                 this.dropdownIsOpen = false;
             }
         }
-    }
-
-    private _setExpandedState() {
-        this.expandedState = (this.node['expanded'] ? 'expanded' : 'collapsed');
     }
 
 }

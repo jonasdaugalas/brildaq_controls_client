@@ -1,3 +1,18 @@
+.bc-active-card {
+    max-width: 360px;
+    flex: 1 1 300px;
+    margin-top: 12px;
+    margin-left: 6px;
+}
+
+.card .card-text {
+    font-size: 13px;
+}
+
+.card .card-block {
+    padding: 6px 12px;
+}
+
 .card .card-footer {
     padding: 0px 0px;
     text-align: center;

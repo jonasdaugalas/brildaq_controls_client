@@ -12,55 +12,53 @@
     <!-- </div> -->
 
     <div class="header-actions bc-header-actions-left">
-        <!-- [class.hidden-sm-down]="navItemsOnSmallHidden"> -->
         <clr-dropdown class="dropdown bottom-left">
             <button class="nav-text" clrDropdownToggle>
-                {{owner}}
+                {{selectedUser}}
                 <clr-icon shape="caret down"></clr-icon>
             </button>
             <div class="dropdown-menu">
                 <button clrDropdownItem
-                        *ngFor="let item of owners"
-                        (click)="selectOwner(item)">
+                        *ngFor="let item of users"
+                        (click)="selectUser(item)">
                     {{item}}
                 </button>
             </div>
         </clr-dropdown>
 
         <div class="bc-header-item">
-            <button class="btn btn-inverse" (click)="onRefreshClick()">
-                <clr-icon shape="refresh"></clr-icon>
+            <button class="btn btn-inverse" [clrLoading]="isLoading" (click)="onRefreshClick()">
+                <clr-icon [hidden]="isLoading" shape="refresh"></clr-icon>
                 Refresh
             </button>
         </div>
     </div>
 
     <div class="header-actions">
-        <!-- [class.hidden-sm-down]="navItemsOnSmallHidden"> -->
-        <clr-dropdown class="dropdown bottom-left"
-                      [clrCloseMenuOnItemClick]="false">
-            <button class="nav-text" clrDropdownToggle>
-                <clr-icon
-                    shape="bell"
-                    [class.is-solid]="!alarm.muted"
-                    [class.is-danger]="alarm.isPlaying">
-                </clr-icon>
-            </button>
-            <div class="dropdown-menu">
-                <h6 class="dropdown-header">
-                    {{alarm.muted ? 'Muted' : 'Unmuted'}}
-                </h6>
-                <button clrDropdownItem (click)="toggleAlarmMute()">
-                    {{alarm.muted ? 'Unmute' : 'Mute'}}
-                </button>
-                <div class="dropdown-divider"></div>
-                <button clrDropdownItem (click)="playAlarm()">
-                    Test sound
-                </button>
-            </div>
-        </clr-dropdown>
+        <!-- <clr-dropdown class="dropdown bottom-left" -->
+        <!-- [clrCloseMenuOnItemClick]="false"> -->
+        <!-- <button class="nav-text" clrDropdownToggle> -->
+        <!-- <clr-icon -->
+        <!-- shape="bell" -->
+        <!-- [class.is-solid]="!alarm.muted" -->
+        <!-- [class.is-danger]="alarm.isPlaying"> -->
+        <!-- </clr-icon> -->
+        <!-- </button> -->
+        <!-- <div class="dropdown-menu"> -->
+        <!-- <h6 class="dropdown-header"> -->
+        <!-- {{alarm.muted ? 'Muted' : 'Unmuted'}} -->
+        <!-- </h6> -->
+        <!-- <button clrDropdownItem (click)="toggleAlarmMute()"> -->
+        <!-- {{alarm.muted ? 'Unmute' : 'Mute'}} -->
+        <!-- </button> -->
+        <!-- <div class="dropdown-divider"></div> -->
+        <!-- <button clrDropdownItem (click)="playAlarm()"> -->
+        <!-- Test sound -->
+        <!-- </button> -->
+        <!-- </div> -->
+        <!-- </clr-dropdown> -->
 
-        <clr-dropdown class="dropdown bottom-right">
+        <clr-dropdown clrMenuPosition="bottom-right">
             <button class="nav-text" clrDropdownToggle>
                 Links
                 <clr-icon shape="caret down"></clr-icon>

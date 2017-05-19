@@ -1,8 +1,6 @@
 import {
     Component, EventEmitter, OnInit, Input, Output, ChangeDetectionStrategy
 } from '@angular/core';
-import { AlarmService } from '@app/core/services/alarm.service';
-import { ConfigurationsService } from '@app/core/services/configurations.service';
 import { Alarm } from '@app/core/models/alarm';
 
 @Component({
@@ -13,14 +11,13 @@ import { Alarm } from '@app/core/models/alarm';
 })
 export class OverviewHeaderComponent implements OnInit {
 
-    @Input() owners: Array<string> = [];
-    @Input() owner = null;
-    @Output() ownerChange = new EventEmitter();
-    // @Output() refresh = new EventEmitter();
-    @Input() alarm: Alarm;
+    @Input() users: Array<string> = [];
+    @Input() selectedUser = null;
+    @Input() isLoading = false;
+    @Output() userChange = new EventEmitter();
+    @Output() refresh = new EventEmitter();
 
-    constructor(protected alarmService: AlarmService,
-                protected configs: ConfigurationsService) {
+    constructor() {
     }
 
     ngOnInit() {}
@@ -30,14 +27,15 @@ export class OverviewHeaderComponent implements OnInit {
     }
 
     playAlarm() {
-        this.alarmService.play();
+        // this.alarmService.play();
     }
 
-    selectOwner(owner) {
-        this.ownerChange.emit(owner);
+    selectUser(newUser) {
+        console.log('selecting new user in header');
+        this.userChange.emit(newUser);
     }
 
     onRefreshClick(event) {
-        // this.configs.updateConfigs();
+        this.refresh.emit();
     }
 }

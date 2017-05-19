@@ -20,7 +20,7 @@ export const initialState: State = {
 export function reducer(state = initialState, action: actions.Actions): State {
     switch (action.type) {
     case actions.REQUEST: {
-        console.log('REQUEST');
+        console.log('REQUEST', action.payload);
         const exists = state.ids.indexOf(action.payload.id) > -1;
         const newState = Object.assign({}, state);
         if (!exists) {
@@ -34,7 +34,7 @@ export function reducer(state = initialState, action: actions.Actions): State {
         return newState;
     }
     case actions.REQUEST_SUCCESS: {
-        console.log('SUCCESS');
+        console.log('SUCCESS', action.payload);
         const newState = Object.assign({}, state);
         newState.requests = Object.assign({}, state.requests);
         newState.requests[action.payload.id] = new RequestSuccessState();
@@ -54,3 +54,7 @@ export function reducer(state = initialState, action: actions.Actions): State {
         return state;
     }
 }
+
+export const selectIds = (state: State) => state.ids;
+export const selectEntities = (state: State) => state.entities;
+export const selectRequest = (state: State) => state.requests;
