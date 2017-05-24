@@ -6,10 +6,12 @@ import * as appState from '@app/core/state/state.reducer';
 import * as configsActions from '@app/core/state/configurations.actions';
 import * as runningActions from '@app/core/state/running-configs.actions';
 import * as configDetailsActions from '@app/core/state/config-details.actions';
+import * as actionRequestsActions from '@app/core/state/action-requests.actions';
 import { Configuration } from '@app/core/models/configuration';
 import { RunningDetails, STATES as RUNNING_STATES } from '@app/core/models/running-details';
 import { ConfigDetails } from '@app/core/models/config-details';
 import { RequestState } from '@app/core/models/request-state';
+import { ActionRequest } from '@app/core/models/action-request';
 
 @Component({
     templateUrl: './overview.component.html',
@@ -29,6 +31,8 @@ export class OverviewComponent implements OnInit, OnDestroy {
     runningStates$: Observable<{string: string}>;
     runningStatesRequest$: Observable<RequestState>;
 
+    actionRequests$: Observable<{string: ActionRequest}>;
+
     activeConfigIds$: Observable<Array<string>>;
 
     configDetails$: Observable<{string: ConfigDetails}>;
@@ -47,13 +51,10 @@ export class OverviewComponent implements OnInit, OnDestroy {
         this.runningStates$ = this.store.select(appState.selectRunningStates);
         this.runningStatesRequest$ = this.store.select(appState.selectRunningRequestStates);
         this.configDetails$ = this.store.select(appState.selectConfigDetailsEntities);
+        this.actionRequests$ = this.store.select(appState.selectActionRequests);
     }
 
     ngOnInit() {
-
-        // this.store.takeUntil(this.ngUnsubscribe).subscribe(val => {
-        //     console.log(val);
-        // });
 
         // this.refresh();
 

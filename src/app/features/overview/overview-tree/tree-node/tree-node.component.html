@@ -1,22 +1,26 @@
 <div *ngIf="node.isLeaf" class="overview-tree-node">
-    <clr-icon [attr.shape]="node.icon" [class]="node.iconClass"></clr-icon>
-    <!-- <clr-dropdown [clrMenuPosition]="'right-bottom'"> -->
-    <!-- <span clrDropdownToggle> -->
-    <!-- {{node.name}} -->
-    <!-- </span> -->
-    <!-- <div class="dropdown-menu"> -->
-    <!-- <config-action-menu [config]="node"></config-action-menu> -->
-    <!-- </div> -->
-    <!-- </clr-dropdown> -->
+    <span class="tooltip">
+        <clr-icon *ngIf="node.icon"
+                  [attr.shape]="node.icon"
+                  [class]="node.iconClass">
+        </clr-icon>
+        <span *ngIf="node.spinner" class="spinner spinner-inline"></span>
+        <span class="tooltip-content">{{node.tooltip}}</span>
+    </span>
 
     <a #dropdown (click)="toggleDropdown($event)" style="cursor: pointer;"
        [class.bc-dropdown-toggle-active]="dropdownIsOpen">
         {{node.name}}
     </a>
+
     <div class="dropdown open" #dropdownMenu
          [class.open]="dropdownIsOpen">
         <div class="dropdown-menu">
-            <config-action-menu [path]="node.path"></config-action-menu>
+            <config-action-menu
+                [path]="node.path"
+                [state]="node.state"
+                [actionRequest]="node.actionRequest">
+            </config-action-menu>
         </div>
     </div>
 </div>

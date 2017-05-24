@@ -1,13 +1,19 @@
-import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
+import {
+    Component, OnInit, Input, ChangeDetectionStrategy
+} from '@angular/core';
 import { Configuration } from '@app/core/models/configuration';
 import { STATES } from '@app/core/models/running-details';
 import { customConfigSortFn } from '@app/shared/utils/custom-sort';
+import { ActionRequest } from '@app/core/models/action-request';
 
 class Leaf {
     name: string;
     isLeaf = true;
+    actionRequest: ActionRequest = null;
     icon = 'document';
     iconClass = 'is-solid';
+    spinner = false;
+    tooltip = '';
 
     constructor(public path: string) {
         this.name = path.split('/').pop();
@@ -38,6 +44,13 @@ export class OverviewTreeComponent implements OnInit {
     @Input() set paths(newPaths: Array<string>) {
         this._paths = newPaths.sort(customConfigSortFn);
         this.buildTree();
+    }
+
+    _actionRequests: {string: ActionRequest};
+    @Input() set actionRequests(newActionRequests) {
+        console.log('actionRequests updated');
+        this._actionRequests = newActionRequests;
+        this.updateLeafs(Object.keys(newActionRequests));
     }
 
     configTree = [];
@@ -88,15 +101,27 @@ export class OverviewTreeComponent implements OnInit {
                 leaf = new Leaf(path);
                 this.configTreeLeafs[path] = leaf;
             }
+            leaf.actionRequest = this._actionRequests[path];
             this.updateLeafStatus(leaf);
         });
     }
 
     protected updateLeafStatus(leaf) {
+        if (this._actionRequests.hasOwnProperty(leaf.path) &&
+            this._actionRequests[leaf.path].state.loading) {
+            leaf.status = null;
+            leaf.icon = null;
+            leaf.iconClass = '';
+            leaf.spinner = true;
+            leaf.tooltip = 'Sending command';
+            return;
+        }
+        leaf.spinner = false;
         if (!this._runningDetails.hasOwnProperty(leaf.path)) {
             leaf.status = STATES.NO_FM;
             leaf.icon = 'document';
             leaf.iconClass = 'is-solid';
+            leaf.tooltip = 'No function manager.';
             return;
         }
         leaf.status = this._runningStates[leaf.path];
@@ -104,25 +129,31 @@ export class OverviewTreeComponent implements OnInit {
         case STATES.ON:
             leaf.icon = 'heart';
             leaf.iconClass = 'is-solid is-success';
+            leaf.tooltip = 'ON';
             break;
         case STATES.OFF:
             leaf.icon = 'cog';
             leaf.iconClass = 'is-solid is-info';
+            leaf.tooltip = 'OFF';
             break;
         case STATES.ERROR:
             leaf.icon = 'error';
             leaf.iconClass = 'is-solid is-error';
+            leaf.tooltip = 'ERROR';
             break;
         case STATES.RESETTING:
         case STATES.TURNING_ON:
         case STATES.TURNING_OFF:
             leaf.icon = null;
-            leaf.iconClass = 'spinner spinner-inline spinner-sm';
+            leaf.iconClass = '';
+            leaf.spinner = true;
+            leaf.tooltip = leaf.status;
             break;
         default:
             leaf.status = STATES.UNKNOWN;
             leaf.icon = 'warning';
             leaf.iconClass = 'is-solid is-warning';
+            leaf.tooltip = 'Unknown state';
         }
 
     }

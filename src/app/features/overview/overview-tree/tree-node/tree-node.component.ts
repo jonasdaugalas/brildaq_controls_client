@@ -1,4 +1,6 @@
-import { Component, OnInit, AfterViewInit, Input, ViewChild } from '@angular/core';
+import {
+    Component, OnInit, AfterViewInit, Input, ViewChild
+} from '@angular/core';
 import * as Tether from 'tether';
 
 @Component({
@@ -16,7 +18,6 @@ export class TreeNodeComponent implements OnInit, AfterViewInit {
     @ViewChild('dropdown') dropdown;
     @ViewChild('dropdownMenu') dropdownMenu;
     dropdownIsOpen = false;
-
 
     constructor() { }
 

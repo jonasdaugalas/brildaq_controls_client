@@ -57,4 +57,4 @@ export function reducer(state = initialState, action: actions.Actions): State {
 
 export const selectIds = (state: State) => state.ids;
 export const selectEntities = (state: State) => state.entities;
-export const selectRequest = (state: State) => state.requests;
+export const selectRequests = (state: State) => state.requests;

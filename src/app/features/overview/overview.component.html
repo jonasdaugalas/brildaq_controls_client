@@ -21,7 +21,9 @@
                     style="display: block;"
                     [paths]="userConfigurationIds$ | async"
                     [running]="runningDetails$ | async"
-                    [states]="runningStates$ | async">
+                    [states]="runningStates$ | async"
+                    [actionRequests]="actionRequests$ | async"
+                    (onAction)="sendAction($event)">
                 </overview-tree>
             </section>
         </nav>
