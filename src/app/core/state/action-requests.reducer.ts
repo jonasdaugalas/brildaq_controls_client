@@ -15,6 +15,7 @@ export const initialState: State = {
 };
 
 export function reducer(state = initialState, action: actions.Actions): State {
+    console.log('ACTION-REQUEST REDUCER', state, action);
     switch (action.type) {
     case actions.SEND_ACTION: {
         console.log('SEND_ACTION', action.payload);

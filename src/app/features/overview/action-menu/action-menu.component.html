@@ -1,5 +1,7 @@
 <label class="dropdown-header">{{name}}</label>
-<!-- <a class="dropdown-item" [routerLink]="'/editor'"><b>Edit</b> <small>configuration</small></a> -->
+<a class="dropdown-item" [routerLink]="'/editor' + path">
+    <b>Edit</b> <small>configuration</small>
+</a>
 <button class="dropdown-item" (click)="sendTurnON()"
         [disabled]="disabledActionButton.turnon"
         [class.disabled]="disabledActionButton.turnon">

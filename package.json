@@ -24,6 +24,7 @@
     "@ngrx/core": "^1.2.0",
     "@ngrx/effects": "^2.0.3",
     "@ngrx/store": "^2.2.1",
+    "@ngrx/store-devtools": "^3.2.4",
     "@types/tether": "^1.4.0",
     "@webcomponents/custom-elements": "^1.0.0-rc.3",
     "brace": "^0.9.1",

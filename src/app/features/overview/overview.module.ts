@@ -2,11 +2,10 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ClarityModule } from 'clarity-angular';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-// import { RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 // import { SharedModule } from '@app/shared/shared.module';
-// import { OverviewRouting } from './overview.routing';
+import { OverviewRouting } from './overview.routing';
 
 import { OverviewComponent } from './overview.component';
 import { OverviewHeaderComponent } from './overview-header/overview-header.component';
@@ -20,10 +19,9 @@ import { ActionMenuComponent } from './action-menu/action-menu.component';
         CommonModule,
         // SharedModule,
         FormsModule,
-        BrowserAnimationsModule,
         ClarityModule.forChild(),
-        // RouterModule,
-        // OverviewRouting
+        RouterModule,
+        OverviewRouting
     ],
     declarations: [
         OverviewComponent,

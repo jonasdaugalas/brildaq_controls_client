@@ -28,27 +28,30 @@ class Leaf {
 })
 export class OverviewTreeComponent implements OnInit {
 
-    _runningDetails: {string: any};
+    _runningDetails: {string: any} | {};
     @Input() set running(newRunning) {
+        console.log('updating running details', newRunning);
         this._runningDetails = newRunning;
         this.updateLeafs(Object.keys(newRunning));
     }
 
-    _runningStates: {string: string};
+    _runningStates: {string: string} | {};
     @Input() set states(newStates) {
+        console.log('updating states', newStates);
         this._runningStates = newStates;
         this.updateLeafs(Object.keys(newStates));
     }
 
     _paths: Array<string>;
     @Input() set paths(newPaths: Array<string>) {
+        console.log('updating paths', newPaths);
         this._paths = newPaths.sort(customConfigSortFn);
         this.buildTree();
     }
 
-    _actionRequests: {string: ActionRequest};
+    _actionRequests: {string: ActionRequest} | {};
     @Input() set actionRequests(newActionRequests) {
-        console.log('actionRequests updated');
+        console.log('updating actionRequests', newActionRequests);
         this._actionRequests = newActionRequests;
         this.updateLeafs(Object.keys(newActionRequests));
     }
@@ -56,7 +59,12 @@ export class OverviewTreeComponent implements OnInit {
     configTree = [];
     configTreeLeafs = {};
 
-    constructor() { }
+    constructor() {
+        this._paths = [];
+        this._runningStates = {};
+        this._runningDetails = {};
+        this._actionRequests = {};
+    }
 
     ngOnInit() {
     }
@@ -107,7 +115,8 @@ export class OverviewTreeComponent implements OnInit {
     }
 
     protected updateLeafStatus(leaf) {
-        if (this._actionRequests.hasOwnProperty(leaf.path) &&
+        if (this._actionRequests &&
+            this._actionRequests.hasOwnProperty(leaf.path) &&
             this._actionRequests[leaf.path].state.loading) {
             leaf.status = null;
             leaf.icon = null;

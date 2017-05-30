@@ -2,6 +2,7 @@ import { NgModule, SkipSelf, Optional } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { ClarityModule } from 'clarity-angular';
 
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 
@@ -24,6 +25,9 @@ import { AlarmService } from './services/alarm.service';
         EffectsModule.run(RunningConfigsEffects),
         EffectsModule.run(ConfigDetailsEffects),
         EffectsModule.run(ActionRequestsEffects),
+        StoreDevtoolsModule.instrumentOnlyWithExtension({
+            maxAge: 5
+        }),
         ClarityModule.forRoot()
     ],
     providers: [

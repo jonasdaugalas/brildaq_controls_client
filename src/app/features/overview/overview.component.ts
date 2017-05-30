@@ -43,6 +43,7 @@ export class OverviewComponent implements OnInit, OnDestroy {
     selectedRcmsUser$: BehaviorSubject<string> = new BehaviorSubject<string>('lumipro');
 
     constructor(private store: Store<appState.State>) {
+        console.log('CONSTRUCT overview');
         this.configurations$ = this.store.select(appState.selectConfigsEntities);
         this.configurationIds$ = this.store.select(appState.selectConfigsIds);
         this.configurationsRequest$ = this.store.select(appState.selectConfigsRequest);
@@ -56,6 +57,7 @@ export class OverviewComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
 
+        console.log('INIT overview');
         // this.refresh();
 
         this.isLoading$ = this.configurationsRequest$
@@ -89,6 +91,7 @@ export class OverviewComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
+        console.log('DESTROYING overview');
         this.ngUnsubscribe.next();
         this.ngUnsubscribe.complete();
     }
