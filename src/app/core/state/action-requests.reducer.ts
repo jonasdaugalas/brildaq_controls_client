@@ -19,20 +19,19 @@ export function reducer(state = initialState, action: actions.Actions): State {
     switch (action.type) {
     case actions.SEND_ACTION: {
         console.log('SEND_ACTION', action.payload);
+        const newRequests = Object.assign({}, state.requests);
         if (state.requests.hasOwnProperty(action.payload.configId)) {
-            if (state.requests[action.payload.configId].state.loading) {
-                console.log('SEND_ACTION should be ignored', action.payload.configId, action.payload.actionType);
-                const newRequests = Object.assign({}, state.requests);
-                newRequests[action.payload.configId].ignore = true;
+            if (!state.requests[action.payload.configId].state.loading) {
+                newRequests[action.payload.configId] = {
+                    actionType: action.payload.actionType,
+                    state: new RequestInitiatedState(),
+                    ignore: false
+                }
                 return Object.assign({}, state, {requests: newRequests});
             }
         }
-        const newRequests = Object.assign({}, state.requests);
-        newRequests[action.payload.configId] = {
-            actionType: action.payload.actionType,
-            state: new RequestInitiatedState(),
-            ignore: false
-        }
+        console.log('SEND_ACTION should be ignored', action.payload.configId, action.payload.actionType);
+        newRequests[action.payload.configId].ignore = true;
         return Object.assign({}, state, {requests: newRequests});
     }
     case actions.SEND_ACTION_SUCCESS: {

@@ -3,20 +3,23 @@ import * as configsReducer from './configurations.reducer';
 import * as runningReducer from './running-configs.reducer';
 import * as configDetailsReducer from './config-details.reducer';
 import * as actionRequestsReducer from './action-requests.reducer';
+import * as historyReducer from './history.reducer';
 
 export interface State {
     configs: configsReducer.State;
     running: runningReducer.State;
     configDetails: configDetailsReducer.State;
     actionRequests: actionRequestsReducer.State;
+    history: historyReducer.State;
 }
 
 export const reducers = {
     configs: configsReducer.reducer,
     running: runningReducer.reducer,
     configDetails: configDetailsReducer.reducer,
-    actionRequests: actionRequestsReducer.reducer
-}
+    actionRequests: actionRequestsReducer.reducer,
+    history: historyReducer.reducer
+};
 
 export const selectConfigsIds = state => configsReducer.selectIds(state.configs);
 export const selectConfigsEntities = state => configsReducer.selectEntities(state.configs);
@@ -33,3 +36,13 @@ export const selectConfigDetailsEntities = state => configDetailsReducer.selectE
 export const selectConfigDetailsRequests = state => configDetailsReducer.selectRequests(state.configDetails);
 
 export const selectActionRequests = state => actionRequestsReducer.selectRequests(state.actionRequests);
+
+export const selectHistoryIds = state => historyReducer.selectIds(state.history);
+export const selectHistoryEntities = state => historyReducer.selectHistory(state.history);
+export const selectHistoryRequests = state => historyReducer.selectRequests(state.history);
+export function selectHistoryById(id) {
+    return state => historyReducer.selectHistoryById(id)(state.history);
+}
+export function selectHistoryRequestById(id) {
+    return state => historyReducer.selectRequestById(id)(state.history);
+}

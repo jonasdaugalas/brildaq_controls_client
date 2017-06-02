@@ -8,6 +8,7 @@ import * as configsActions from '@app/core/state/configurations.actions';
 import * as runningActions from '@app/core/state/running-configs.actions';
 import * as configDetailsActions from '@app/core/state/config-details.actions';
 import * as actionRequestsActions from '@app/core/state/action-requests.actions';
+import * as historyActions from '@app/core/state/history.actions';
 import { Configuration } from '@app/core/models/configuration';
 import { RunningDetails, STATES as RUNNING_STATES } from '@app/core/models/running-details';
 import { ConfigDetails } from '@app/core/models/config-details';
@@ -23,14 +24,13 @@ export class EditorComponent implements OnInit, OnDestroy {
 
     private ngUnsubscribe: Subject<void> = new Subject<void>();
 
-    _path: string = null;
-    set path(newPath) {
-        this._path = newPath;
-        this.reselectWorkingConfiguration();
-    }
-    get path() {
-        return this._path;
-    }
+    urlSegments = [];
+    path: string = null;
+    selectedVersion = null;
+    firstLoadVersionSelected = false;
+
+    history$: Observable<any>;
+    historyRequest$: Observable<any>;
 
     configurationIds$: Observable<Array<string>>;
     configurations$: Observable<{string: Configuration}>;
@@ -43,7 +43,6 @@ export class EditorComponent implements OnInit, OnDestroy {
 
     constructor(protected store: Store<appState.State>, protected route: ActivatedRoute) {
         this.configDetails$ = this.store.select(appState.selectConfigDetailsEntities);
-        // this.history$ = this.store.select(appState.selectHistoryEntities);
         // this.historyRequest$ = this.store.select(appState.selectHistoryRequest);
     }
 
@@ -56,16 +55,11 @@ export class EditorComponent implements OnInit, OnDestroy {
 
         // this.updateConfigs();
 
-        // ActivatedRoute attributes does not need to be unsubscribed.
+        // ActivatedRoute attributes do not need to be unsubscribed.
         this.route.url.subscribe(urlSegments => {
-            if (urlSegments.length === 0) {
-                this.path = null;
-                return;
-            }
-            this.path = urlSegments.reduce((acc, val, index, array) => {
-                return acc + '/' + val.path;
-            }, '');
-            console.log('route url changed. new path', this.path);
+            this.urlSegments = urlSegments;
+            this.updatePathFromURLSegments();
+            this.reselectWorkingConfiguration();
         });
     }
 
@@ -74,16 +68,56 @@ export class EditorComponent implements OnInit, OnDestroy {
         this.ngUnsubscribe.complete();
     }
 
+    protected updatePathFromURLSegments() {
+        if (this.urlSegments.length === 0) {
+            this.path = null;
+            return;
+        }
+        this.path = this.urlSegments.reduce((acc, val, index, array) => {
+            return acc + '/' + val.path;
+        }, '');
+    }
+
     reselectWorkingConfiguration() {
         console.log('reselecting', this.path);
-        this.configDetails$.takeLast(1).subscribe(val => {
-            console.log('last configDetails', val[this.path]);
-        });
-        // const config =
-        // this.store.dispatch(new historyActions.GetHistoryAction(this.path, 20));
-        // this.history$.take(1).subscribe(val => {
-        //     const
-        // });
+        this.firstLoadVersionSelected = false;
+        this.history$ = this.store.select(appState.selectHistoryById(this.path));
+        this.historyRequest$ = this.store.select(appState.selectHistoryRequestById(this.path));
+        this.store.dispatch(new historyActions.GetNewestHistoryAction({
+            configId: this.path, size: 20
+        }));
+        this.historyRequest$
+            .takeUntil(this.route.url)
+            .takeUntil(this.ngUnsubscribe)
+            .withLatestFrom(this.history$).subscribe(([request, history]) => {
+                console.log('history request subscription', request, history);
+                if (!request.forNewest) {
+                    console.log('not for newest. skipping');
+                    return;
+                }
+                this._selectVersion(history[0].version)
+                this.firstLoadVersionSelected = true;
+            });
+    }
+
+    protected _selectVersion(newVersion: number) {
+        this.selectedVersion = newVersion;
+        this.updateConfigDetails();
+    }
+
+    selectVersion(newVersion: number) {
+        if (!this.firstLoadVersionSelected) {
+            console.log('Initial version not yet selected. ');
+            return;
+        }
+        this._selectVersion(newVersion);
+    }
+
+    updateConfigDetails() {
+        this.store.dispatch(new configDetailsActions.RequestAction({
+            id: this.path + '/' + this.selectVersion,
+            withXML: true
+        }));
     }
 
 }

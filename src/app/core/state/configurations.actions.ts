@@ -12,7 +12,6 @@ export class UpdateAction implements Action {
 export class UpdateSuccessAction implements Action {
     readonly type = UPDATE_SUCCESS;
 
-    // constructor(public payload: { string: Configuration }) {}
     constructor(public payload: any) {}
 }
 

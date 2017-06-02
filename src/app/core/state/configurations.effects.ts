@@ -17,7 +17,6 @@ export class ConfigurationsEffects {
     update$: Observable<Action> = this.actions$
         .ofType(configsActions.UPDATE)
         .switchMap(() => {
-            console.log('doing effect');
             return this.configService.getConfigs()
                 .map((response) => (new configsActions.UpdateSuccessAction(response)))
                 .catch((err, caught) => Observable.of(

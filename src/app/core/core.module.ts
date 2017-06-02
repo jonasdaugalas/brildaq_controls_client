@@ -10,6 +10,7 @@ import { ConfigurationsEffects } from './state/configurations.effects';
 import { RunningConfigsEffects } from './state/running-configs.effects';
 import { ConfigDetailsEffects } from './state/config-details.effects';
 import { ActionRequestsEffects } from './state/action-requests.effects';
+import { HistoryEffects } from './state/history.effects';
 import { reducers } from './state/state.reducer';
 
 import { ConfigurationsService } from './services/configurations.service';
@@ -25,6 +26,7 @@ import { AlarmService } from './services/alarm.service';
         EffectsModule.run(RunningConfigsEffects),
         EffectsModule.run(ConfigDetailsEffects),
         EffectsModule.run(ActionRequestsEffects),
+        EffectsModule.run(HistoryEffects),
         StoreDevtoolsModule.instrumentOnlyWithExtension({
             maxAge: 5
         }),

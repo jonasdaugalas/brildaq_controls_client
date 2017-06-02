@@ -70,4 +70,14 @@ export class ConfigurationsService {
             .catch((err) => Observable.throw(err));
     }
 
+    getHistory(id: string, size=20, below=null) {
+        let url = '/api/history' + id + '/limit=' + size;
+        if (below) {
+            // yes. url parameter has double 'l'...
+            url += '/bellow=' + below;
+        }
+        return this.http.get(url)
+            .map((resp) => resp.json())
+            .catch((err) => Observable.throw(err));
+    }
 }
