@@ -86,16 +86,20 @@ export class EditorComponent implements OnInit, OnDestroy {
         this.store.dispatch(new historyActions.GetNewestHistoryAction({
             configId: this.path, size: 20
         }));
-        this.historyRequest$
-            .takeUntil(this.route.url)
+        this.history$
+            // .takeUntil(this.route.url)
             .takeUntil(this.ngUnsubscribe)
-            .withLatestFrom(this.history$).subscribe(([request, history]) => {
+            .withLatestFrom(this.historyRequest$).subscribe(([history, request]) => {
                 console.log('history request subscription', request, history);
                 if (!request.forNewest) {
                     console.log('not for newest. skipping');
                     return;
                 }
-                this._selectVersion(history[0].version)
+                if (!history.length) {
+                    console.log('history no length');
+                    return;
+                }
+                this._selectVersion(history[0][0])
                 this.firstLoadVersionSelected = true;
             });
     }
@@ -115,7 +119,7 @@ export class EditorComponent implements OnInit, OnDestroy {
 
     updateConfigDetails() {
         this.store.dispatch(new configDetailsActions.RequestAction({
-            id: this.path + '/' + this.selectVersion,
+            id: this.path + '/v=' + this.selectedVersion,
             withXML: true
         }));
     }
