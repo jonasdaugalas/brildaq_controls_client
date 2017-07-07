@@ -19,22 +19,23 @@ export class ActionRequestsEffects {
         .ofType(actionRequestsActions.SEND_ACTION)
         .withLatestFrom(this.store$.select(appState.selectActionRequests))
         .mergeMap(([action, actionRequests]) => {
-            if (actionRequests.hasOwnProperty(action.payload.configId) &&
-                actionRequests[action.payload.configId].ignore) {
-                console.log('Ignoring SEND_ACTION from effects', action.payload.configId, action.payload.actionType);
+            const payload = (<actionRequestsActions.SendActionAction>action).payload;
+            if (actionRequests.hasOwnProperty(payload.configId) &&
+                actionRequests[payload.configId].ignore) {
+                console.log('Ignoring SEND_ACTION from effects', payload.configId, payload.actionType);
                 return Observable.empty();
             }
-            return this.configService.sendAction(action.payload.configId, action.payload.actionType)
+            return this.configService.sendAction(payload.configId, payload.actionType)
                 .delay(2000)
                 .map((response) => (new actionRequestsActions.SendActionSuccessAction({
-                    configId: action.payload.configId,
-                    actionType: action.payload.actionType
+                    configId: payload.configId,
+                    actionType: payload.actionType
                 })))
                 .catch((err, caught) => Observable.of(
                     new actionRequestsActions.SendActionFailedAction({
-                        configId: action.payload.configId,
-                        actionType: action.payload.actionType,
-                        message: 'Failed to send action ' + action.payload.actionType,
+                        configId: payload.configId,
+                        actionType: payload.actionType,
+                        message: 'Failed to send action ' + payload.actionType,
                         error: err
                     })
                 ));

@@ -1,19 +1,20 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-import { Observable, Subject, BehaviorSubject } from 'rxjs';
+import { Observable, Subject, BehaviorSubject, Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import * as appState from '@app/core/state/state.reducer';
+import * as editorReducer from './state/editor.reducer';
 
-import * as configsActions from '@app/core/state/configurations.actions';
-import * as runningActions from '@app/core/state/running-configs.actions';
+// import * as configsActions from '@app/core/state/configurations.actions';
+// import * as runningActions from '@app/core/state/running-configs.actions';
 import * as configDetailsActions from '@app/core/state/config-details.actions';
 import * as actionRequestsActions from '@app/core/state/action-requests.actions';
 import * as historyActions from '@app/core/state/history.actions';
-import { Configuration } from '@app/core/models/configuration';
-import { RunningDetails, STATES as RUNNING_STATES } from '@app/core/models/running-details';
+import * as editorActions from './state/editor.actions';
+// import { Configuration } from '@app/core/models/configuration';
 import { ConfigDetails } from '@app/core/models/config-details';
-import { RequestState } from '@app/core/models/request-state';
-import { ActionRequest } from '@app/core/models/action-request';
+// import { RequestState } from '@app/core/models/request-state';
+// import { ActionRequest } from '@app/core/models/action-request';
 
 
 @Component({
@@ -23,6 +24,7 @@ import { ActionRequest } from '@app/core/models/action-request';
 export class EditorComponent implements OnInit, OnDestroy {
 
     private ngUnsubscribe: Subject<void> = new Subject<void>();
+    protected historySubscription: Subscription;
 
     urlSegments = [];
     path: string = null;
@@ -31,27 +33,31 @@ export class EditorComponent implements OnInit, OnDestroy {
 
     history$: Observable<any>;
     historyRequest$: Observable<any>;
+    editorMode$: Observable<string>;
 
-    configurationIds$: Observable<Array<string>>;
-    configurations$: Observable<{string: Configuration}>;
-    configurationsRequest$: Observable<RequestState>;
+    configDetails$: Observable<ConfigDetails>;
 
-    runningDetails$: Observable<{string: RunningDetails}>;
-    runningDetailsRequest$: Observable<RequestState>;
-
-    configDetails$: Observable<{string: ConfigDetails}>;
-
-    constructor(protected store: Store<appState.State>, protected route: ActivatedRoute) {
-        this.configDetails$ = this.store.select(appState.selectConfigDetailsEntities);
-        // this.historyRequest$ = this.store.select(appState.selectHistoryRequest);
+    constructor(protected store: Store<any>, protected route: ActivatedRoute) {
+        this.configDetails$ = Observable.empty();
+        this.historyRequest$ = Observable.empty();
+        this.history$ = Observable.empty();
+        this.historySubscription = this.history$.subscribe();
+        // this.editorMode$ = this.store.select(editorReducer.selectMode);
     }
 
     ngOnInit() {
-        // this.store
-        //     .takeUntil(this.ngUnsubscribe)
-        //     .subscribe(val => {
-        //         console.log(val);
-        //     });
+        // this.editorMode$.subscribe(val => {
+        //     console.log('EDITOR MODE', val);
+        // });
+        // setTimeout(() => {
+        //     this.store.dispatch(new editorActions.SwitchModeAction('easy'));
+        //     this.store.dispatch(new editorActions.SwitchModeAction('expert'));
+        //     this.store.dispatch(new editorActions.SwitchModeAction('crap'));
+        //     this.store.dispatch(new editorActions.SwitchModeAction('easy'));
+        // }, 3000);
+
+
+
 
         // this.updateConfigs();
 
@@ -81,13 +87,15 @@ export class EditorComponent implements OnInit, OnDestroy {
     reselectWorkingConfiguration() {
         console.log('reselecting', this.path);
         this.firstLoadVersionSelected = false;
+
         this.history$ = this.store.select(appState.selectHistoryById(this.path));
         this.historyRequest$ = this.store.select(appState.selectHistoryRequestById(this.path));
+
         this.store.dispatch(new historyActions.GetNewestHistoryAction({
-            configId: this.path, size: 20
+            configId: this.path, size: 10
         }));
-        this.history$
-            // .takeUntil(this.route.url)
+        this.historySubscription.unsubscribe();
+        this.historySubscription = this.history$
             .takeUntil(this.ngUnsubscribe)
             .withLatestFrom(this.historyRequest$).subscribe(([history, request]) => {
                 console.log('history request subscription', request, history);
@@ -106,6 +114,9 @@ export class EditorComponent implements OnInit, OnDestroy {
 
     protected _selectVersion(newVersion: number) {
         this.selectedVersion = newVersion;
+        this.configDetails$ = this.store.select(
+            appState.selectConfigDetailsById(
+                this.path + '/v=' + this.selectedVersion));
         this.updateConfigDetails();
     }
 
@@ -121,6 +132,12 @@ export class EditorComponent implements OnInit, OnDestroy {
         this.store.dispatch(new configDetailsActions.RequestAction({
             id: this.path + '/v=' + this.selectedVersion,
             withXML: true
+        }));
+    }
+
+    loadOlderHistory() {
+        this.store.dispatch(new historyActions.GetOlderHistoryAction({
+            configId: this.path, size: 20
         }));
     }
 

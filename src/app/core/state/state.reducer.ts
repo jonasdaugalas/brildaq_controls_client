@@ -34,6 +34,12 @@ export const selectRunningRequestStates = state => runningReducer.selectRequestS
 export const selectConfigDetailsIds = state => configDetailsReducer.selectIds(state.configDetails);
 export const selectConfigDetailsEntities = state => configDetailsReducer.selectEntities(state.configDetails);
 export const selectConfigDetailsRequests = state => configDetailsReducer.selectRequests(state.configDetails);
+export function selectConfigDetailsById(id) {
+    return state => configDetailsReducer.selectEntitiesById(id)(state.configDetails);
+}
+export function selectConfigDetailsRequestById(id) {
+    return state => configDetailsReducer.selectRequestById(id)(state.configDetails);
+}
 
 export const selectActionRequests = state => actionRequestsReducer.selectRequests(state.actionRequests);
 

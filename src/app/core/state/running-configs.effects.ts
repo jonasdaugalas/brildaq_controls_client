@@ -14,17 +14,18 @@ import * as runningActions from './running-configs.actions';
 export class RunningConfigsEffects {
 
     @Effect()
-    update$: Observable<Action> = this.actions$
+    update$: Observable<runningActions.Actions> = this.actions$
         .ofType(runningActions.UPDATE, runningActions.UPDATE_CANCEL)
         .switchMap((action) => {
             console.log('in update running effect');
             if (action.type === runningActions.UPDATE_CANCEL) {
                 return Observable.empty();
             }
-            return this.configService.getRunning(action.payload)
+            const payload = (<runningActions.UpdateAction>action).payload;
+            return this.configService.getRunning(payload)
                 .map((response) => (new runningActions.UpdateSuccessAction({
                     result: response,
-                    rcmsUser: action.payload
+                    rcmsUser: payload
                 })))
                 .catch(err => (Observable.of(
                     new runningActions.UpdateFailedAction({
@@ -35,7 +36,7 @@ export class RunningConfigsEffects {
         });
 
     @Effect()
-    updateSucces$: Observable<Action> = this.actions$
+    updateSucces$: Observable<runningActions.Actions> = this.actions$
         .ofType(runningActions.UPDATE_SUCCESS)
         .withLatestFrom(this.store$.select(appState.selectRunningEntities))
         .switchMap(([action, running])=> {
@@ -46,14 +47,15 @@ export class RunningConfigsEffects {
         });
 
     @Effect()
-    updateStates$: Observable<Action> = this.actions$
+    updateStates$: Observable<runningActions.Actions> = this.actions$
         .ofType(runningActions.UPDATE_STATES, runningActions.UPDATE_STATES_CANCEL)
         .switchMap(action => {
             console.log('in update states effect');
             if (action.type === runningActions.UPDATE_STATES_CANCEL) {
                 return Observable.empty();
             }
-            return this.configService.getStates(action.payload)
+            const payload = (<runningActions.UpdateStatesAction>action).payload;
+            return this.configService.getStates(payload)
                 .map((response) => (new runningActions.UpdateStatesSuccessAction(response)))
                 .catch(err => (Observable.of(
                     new runningActions.UpdateFailedAction({
@@ -64,7 +66,7 @@ export class RunningConfigsEffects {
         });
 
     constructor(
-        protected actions$: Actions,
+        protected actions$: Actions<runningActions.Actions>,
         protected store$: Store<appState.State>,
         protected configService: ConfigurationsService) {};
 }

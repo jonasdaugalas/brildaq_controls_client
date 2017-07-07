@@ -21,15 +21,16 @@ export class HistoryEffects {
             this.store$.select(appState.selectHistoryEntities),
             this.store$.select(appState.selectHistoryRequests))
         .mergeMap(([action, history, historyRequests]) => {
-            const id = action.payload.configId;
+            const payload = (<historyActions.GetNewestHistoryAction | historyActions.GetOlderHistoryAction> action).payload;
+            const id = payload.configId;
             let below = null;
             if (action.type === historyActions.GET_OLDER) {
                 if (!history.hasOwnProperty(id) || historyRequests[id].ignore) {
                     return Observable.empty();
                 }
-                below = history[id][history[id].length -1].version;
+                below = history[id][history[id].length -1][0];
             }
-            return this.configService.getHistory(id, action.payload.size, below)
+            return this.configService.getHistory(id, payload.size, below)
                 .map((response) => (new historyActions.GetHistorySuccessAction({
                     configId: id,
                     forNewest: historyRequests[id].forNewest,

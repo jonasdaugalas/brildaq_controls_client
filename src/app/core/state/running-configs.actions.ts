@@ -17,6 +17,8 @@ export class UpdateAction implements Action {
 
 export class UpdateCancelAction implements Action {
     readonly type = UPDATE_CANCEL;
+
+    constructor(public payload: void) {}
 }
 
 export class UpdateSuccessAction implements Action {
@@ -39,6 +41,8 @@ export class UpdateStatesAction implements Action {
 
 export class UpdateStatesCancelAction implements Action {
     readonly type = UPDATE_STATES_CANCEL;
+
+    constructor(public payload: void) {}
 }
 
 export class UpdateStatesSuccessAction implements Action {

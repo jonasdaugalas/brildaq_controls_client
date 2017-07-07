@@ -3,10 +3,17 @@
         <div class="content-area">
             <div class="row">
                 <div class="col-lg-7">
-                    <expert-editor></expert-editor>
+                    <expert-editor
+                        [configDetails]="configDetails$ | async">
+                    </expert-editor>
                 </div>
                 <div class="col-lg-5">
-                    <history-table></history-table>
+                    <history-table
+                        [entries]="history$ | async"
+                        [selectedVersion]="selectedVersion"
+                        (loadOlder)="loadOlderHistory()"
+                        (selectVersion)="selectVersion($event)">
+                    </history-table>
                 </div>
             </div>
         </div>

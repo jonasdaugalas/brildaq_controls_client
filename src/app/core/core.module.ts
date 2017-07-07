@@ -21,15 +21,22 @@ import { AlarmService } from './services/alarm.service';
     declarations: [],
     imports: [
         HttpModule,
-        StoreModule.provideStore(reducers),
-        EffectsModule.run(ConfigurationsEffects),
-        EffectsModule.run(RunningConfigsEffects),
-        EffectsModule.run(ConfigDetailsEffects),
-        EffectsModule.run(ActionRequestsEffects),
-        EffectsModule.run(HistoryEffects),
-        StoreDevtoolsModule.instrumentOnlyWithExtension({
-            maxAge: 5
-        }),
+        StoreModule.forRoot(reducers),
+        EffectsModule.forRoot([
+            ConfigurationsEffects,
+            RunningConfigsEffects,
+            ConfigDetailsEffects,
+            ActionRequestsEffects,
+            HistoryEffects,
+        ]),
+        // EffectsModule.run(ConfigurationsEffects),
+        // EffectsModule.run(RunningConfigsEffects),
+        // EffectsModule.run(ConfigDetailsEffects),
+        // EffectsModule.run(ActionRequestsEffects),
+        // EffectsModule.run(HistoryEffects),
+        // StoreDevtoolsModule.instrument({
+        //     maxAge: 5
+        // }),
         ClarityModule.forRoot()
     ],
     providers: [

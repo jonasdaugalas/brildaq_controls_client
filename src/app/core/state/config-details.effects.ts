@@ -14,18 +14,19 @@ import * as cfgDetailsActions from './config-details.actions';
 export class ConfigDetailsEffects {
 
     @Effect()
-    update$: Observable<Action> = this.actions$
+    update$: Observable<cfgDetailsActions.Actions> = this.actions$
         .ofType(cfgDetailsActions.REQUEST)
         .mergeMap((action) => {
-            return this.configService.getConfigDetails(action.payload.id, action.payload.withXML)
+            const payload = (<cfgDetailsActions.RequestAction>action).payload;
+            return this.configService.getConfigDetails(payload.id, payload.withXML)
                 .map((response) => (new cfgDetailsActions.RequestSuccessAction({
-                    id: action.payload.id,
-                    withXML: action.payload.withXML,
+                    id: payload.id,
+                    withXML: payload.withXML,
                     result: response
                 })))
                 .catch((err, caught) => Observable.of(
                     new cfgDetailsActions.RequestFailedAction({
-                        id: action.payload.id,
+                        id: payload.id,
                         message: 'HTTP request failed',
                         error: err
                     })

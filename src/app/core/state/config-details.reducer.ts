@@ -57,4 +57,10 @@ export function reducer(state = initialState, action: actions.Actions): State {
 
 export const selectIds = (state: State) => state.ids;
 export const selectEntities = (state: State) => state.entities;
+export const selectEntitiesById = (id: string) => {
+    return (state: State) => state.entities[id];
+}
 export const selectRequests = (state: State) => state.requests;
+export const selectRequestById = (id: string) => {
+    return (state: State) => state.requests[id];
+}
