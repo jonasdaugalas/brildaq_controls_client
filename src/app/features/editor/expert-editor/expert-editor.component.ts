@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Input } from '@angular/core';
 
 import * as ace from 'brace';
 import 'brace/mode/xml';
@@ -27,6 +27,14 @@ export class ExpertEditorComponent implements OnInit {
     constructor() { }
 
     ngOnInit() {
+        this.initializeEditor();
+    }
+
+    initializeEditor() {
+        console.log('in initializeEditor');
+        if (this.editor) {
+            return;
+        }
         this.editor = ace.edit('editor');
         this.editor.getSession().setMode('ace/mode/xml');
         this.editor.$blockScrolling = Infinity
@@ -36,6 +44,7 @@ export class ExpertEditorComponent implements OnInit {
         if (!this._configDetails || !this._configDetails.xml) {
             return;
         }
+        this.initializeEditor();
         this.editor.setValue(this._configDetails.xml);
     }
 
@@ -47,5 +56,10 @@ export class ExpertEditorComponent implements OnInit {
             this.editor.setKeyboardHandler(null);
         }
     };
+
+    // resize() {
+    //     console.log('resizing');
+    //     this.editor.resize();
+    // }
 
 }

@@ -1,12 +1,22 @@
 <div class="main-container">
     <div class="content-container">
         <div class="content-area">
+
+            <button (click)="switchMode()">switch mode</button>
             <div class="row">
                 <div class="col-lg-7">
                     <expert-editor
+                        *ngIf="(isEditorModeExpert$ | async); else easyEditor"
                         [configDetails]="configDetails$ | async">
                     </expert-editor>
+
+                    <ng-template #easyEditor>
+                        <easy-editor [hidden]="(isEditorModeExpert$ | async)"> </easy-editor>
+                    </ng-template>
+
                 </div>
+
+
                 <div class="col-lg-5">
                     <history-table
                         [entries]="history$ | async"

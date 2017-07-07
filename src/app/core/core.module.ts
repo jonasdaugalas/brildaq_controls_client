@@ -29,14 +29,9 @@ import { AlarmService } from './services/alarm.service';
             ActionRequestsEffects,
             HistoryEffects,
         ]),
-        // EffectsModule.run(ConfigurationsEffects),
-        // EffectsModule.run(RunningConfigsEffects),
-        // EffectsModule.run(ConfigDetailsEffects),
-        // EffectsModule.run(ActionRequestsEffects),
-        // EffectsModule.run(HistoryEffects),
-        // StoreDevtoolsModule.instrument({
-        //     maxAge: 5
-        // }),
+        StoreDevtoolsModule.instrument({
+            maxAge: 5
+        }),
         ClarityModule.forRoot()
     ],
     providers: [

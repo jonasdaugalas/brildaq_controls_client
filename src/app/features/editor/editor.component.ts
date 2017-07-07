@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Observable, Subject, BehaviorSubject, Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
@@ -34,6 +34,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     history$: Observable<any>;
     historyRequest$: Observable<any>;
     editorMode$: Observable<string>;
+    isEditorModeExpert$: Observable<boolean>;
 
     configDetails$: Observable<ConfigDetails>;
 
@@ -42,22 +43,16 @@ export class EditorComponent implements OnInit, OnDestroy {
         this.historyRequest$ = Observable.empty();
         this.history$ = Observable.empty();
         this.historySubscription = this.history$.subscribe();
-        // this.editorMode$ = this.store.select(editorReducer.selectMode);
+        this.editorMode$ = this.store.select(s => {
+            return editorReducer.selectMode(s['editorModule']);
+        });
+        this.isEditorModeExpert$ = this.editorMode$.map(val => val === 'expert');
     }
 
     ngOnInit() {
-        // this.editorMode$.subscribe(val => {
-        //     console.log('EDITOR MODE', val);
+
+        // this.editorMode$.takeUntil(this.ngUnsubscribe).subscribe(val => {
         // });
-        // setTimeout(() => {
-        //     this.store.dispatch(new editorActions.SwitchModeAction('easy'));
-        //     this.store.dispatch(new editorActions.SwitchModeAction('expert'));
-        //     this.store.dispatch(new editorActions.SwitchModeAction('crap'));
-        //     this.store.dispatch(new editorActions.SwitchModeAction('easy'));
-        // }, 3000);
-
-
-
 
         // this.updateConfigs();
 
@@ -72,6 +67,18 @@ export class EditorComponent implements OnInit, OnDestroy {
     ngOnDestroy() {
         this.ngUnsubscribe.next();
         this.ngUnsubscribe.complete();
+    }
+
+    switchMode() {
+        console.log('switch mode click');
+        this.editorMode$.take(1).subscribe(val => {
+            console.log('swithc mode inside subscribe', val);
+            let newMode = 'expert';
+            if (val === 'expert') {
+                newMode = 'easy';
+            }
+            this.store.dispatch(new editorActions.SwitchModeAction(newMode));
+        });
     }
 
     protected updatePathFromURLSegments() {
