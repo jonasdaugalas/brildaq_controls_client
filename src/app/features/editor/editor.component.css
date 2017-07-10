@@ -1,0 +1,37 @@
+.main-container .content-container .content-area {
+    padding: 0px 12px;
+}
+
+.back-link {
+    display: inline-block;
+}
+
+.back-link-text {
+    display: inline-block;
+    line-height: 1em;
+    vertical-align: middle;
+}
+
+.header-text {
+    display: inline-block;
+    margin-top: 0;
+    vertical-align: middle;
+}
+
+.header-label {
+    vertical-align: middle;
+}
+
+.editor-header {
+    position: relative;
+}
+
+.editor-header-text {
+    display: inline-block;
+}
+
+.editor-mode-toggle {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}

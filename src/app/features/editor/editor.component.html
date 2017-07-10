@@ -2,16 +2,50 @@
     <div class="content-container">
         <div class="content-area">
 
-            <button (click)="switchMode()">switch mode</button>
+            <!-- header with back button -->
+            <a class="back-link" href="#">
+                <clr-icon shape="arrow left" size="36"></clr-icon>
+                <span class="back-link-text">
+                    Back to<br/>
+                    overview
+                </span>
+            </a>
+            <h2 class="header-text">
+                {{path}}
+                <span class="label label-info header-label">
+                    v{{selectedVersion}}
+                </span>
+            </h2>
+            <!-- end header -->
+
             <div class="row">
                 <div class="col-lg-7">
+                    <div class="editor-header">
+                        <h3 class="editor-header-text">
+                            Editor
+                            <span
+                                [hidden]="!(isEditorModeExpert$ | async)"
+                                class="text-danger">
+                                (expert mode)
+                            </span>
+                        </h3>
+
+                        <div class="toggle-switch editor-mode-toggle">
+                            <input id="editor_mode_toggle" type="checkbox"
+                                   [checked]="isEditorModeExpert$ | async"
+                                   (change)="switchMode()">
+                            <label for="editor_mode_toggle">Expert mode</label>
+                        </div>
+                    </div>
+
+
                     <expert-editor
                         *ngIf="(isEditorModeExpert$ | async); else easyEditor"
                         [configDetails]="configDetails$ | async">
                     </expert-editor>
 
                     <ng-template #easyEditor>
-                        <easy-editor [hidden]="(isEditorModeExpert$ | async)"> </easy-editor>
+                        <easy-editor></easy-editor>
                     </ng-template>
 
                 </div>
