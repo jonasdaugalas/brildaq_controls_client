@@ -27,7 +27,7 @@ export class OverviewActivePanelComponent implements OnInit {
 
     protected _activePaths: Array<string>;
     @Input() set activePaths(newPaths: Array<string>) {
-        this._activePaths = newPaths;
+        this._activePaths = newPaths.sort(customConfigSortFn);
         this.refilter();
     }
 

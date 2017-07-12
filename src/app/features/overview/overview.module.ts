@@ -13,6 +13,8 @@ import { OverviewTreeComponent } from './overview-tree/overview-tree.component';
 import { TreeNodeComponent } from './overview-tree/tree-node/tree-node.component';
 import { OverviewActivePanelComponent } from './overview-active-panel/overview-active-panel.component';
 import { ActionMenuComponent } from './action-menu/action-menu.component';
+import { ConfigFieldsComponent } from './config-fields/config-fields.component';
+import { ConfigFieldComponent } from './config-fields/config-field/config-field.component';
 
 @NgModule({
     imports: [
@@ -29,7 +31,9 @@ import { ActionMenuComponent } from './action-menu/action-menu.component';
         OverviewTreeComponent,
         OverviewHeaderComponent,
         ActionMenuComponent,
-        TreeNodeComponent
+        TreeNodeComponent,
+        ConfigFieldsComponent,
+        ConfigFieldComponent
     ],
     providers: [
         OverviewComponent

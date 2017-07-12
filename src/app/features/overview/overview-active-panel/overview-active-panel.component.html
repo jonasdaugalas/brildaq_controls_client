@@ -12,7 +12,7 @@
     </div>
 </div>
 
-<div class="row" style="display: flex">
+<div class="row" style="display: flex;">
     <div *ngFor="let path of filteredActivePaths"
          class="card bc-active-card"
          [class.bc-card-danger-blink]="isStateError(states[path])">
@@ -33,6 +33,7 @@
             <p class="card-text" *ngIf="pathsWithVersion[path] && configDetails[pathsWithVersion[path]]">
                 <b>Host</b>:&nbsp;{{configDetails[pathsWithVersion[path]].executive.host}}&nbsp;
                 <b>Port</b>:&nbsp;<code>{{configDetails[pathsWithVersion[path]].executive.port}}</code>
+                <config-fields [fields]="configDetails[pathsWithVersion[path]].fields"></config-fields>
             </p>
         </div>
     </div>

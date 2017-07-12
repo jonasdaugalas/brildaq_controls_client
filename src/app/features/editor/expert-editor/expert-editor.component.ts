@@ -3,6 +3,8 @@ import { Component, OnInit, AfterViewInit, Input } from '@angular/core';
 import * as ace from 'brace';
 import 'brace/mode/xml';
 import 'brace/keybinding/vim';
+import 'brace/ext/keybinding_menu';
+import 'brace/ext/searchbox';
 
 @Component({
   selector: 'expert-editor',
@@ -37,7 +39,7 @@ export class ExpertEditorComponent implements OnInit {
         }
         this.editor = ace.edit('editor');
         this.editor.getSession().setMode('ace/mode/xml');
-        this.editor.$blockScrolling = Infinity
+        this.editor.$blockScrolling = Infinity;
     }
 
     updateConfigDetails() {
@@ -56,10 +58,5 @@ export class ExpertEditorComponent implements OnInit {
             this.editor.setKeyboardHandler(null);
         }
     };
-
-    // resize() {
-    //     console.log('resizing');
-    //     this.editor.resize();
-    // }
 
 }

@@ -1,12 +1,20 @@
-<div id="editor" style="height: 700px; width: 100%">
-    some text
+<div id="editor" style="height: 700px; width: 100%"> </div>
+
+<div class="checkbox" style="display: inline-block; margin-right: 1em;">
+    <input id="vim_bindings_toggle" type="checkbox"
+           [checked]="vimKeybindings" (change)="toggleBindings()">
+    <label for="vim_bindings_toggle">Vim bindings</label>
 </div>
 
-<form>
-    <div class="form-group">
-        <div class="toggle-switch">
-            <input id="vim_bindings_toggle" type="checkbox" [checked]="vimKeybindings" (change)="toggleBindings()">
-            <label for="vim_bindings_toggle">Vim bindings</label>
-        </div>
-    </div>
-</form>
+<button class="btn" (click)="beautify()">
+    Beautify
+</button>
+
+<button class="btn btn-info" (click)="previewFinalXML()">
+    Preview final XML
+</button>
+
+<button class="btn btn-primary" (click)="submit()"
+        style="float: right">
+    Submit as new version
+</button>
