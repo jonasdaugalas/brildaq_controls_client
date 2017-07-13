@@ -1,0 +1,103 @@
+<form>
+    <fieldset [disabled]="disabled">
+        <div class="form-group row">
+            <div class="col-xs-3 col-sm-2 label-col">
+                <label>Host</label>
+            </div>
+            <div class="col-xs-9 col-sm-4">
+                <div class="tooltip">
+                    <input
+                        class="form-control"
+                        type="text"
+                        [(ngModel)]="executive.host"
+                        name="inputTextHost">
+                    <span class="tooltip-content" [hidden]="disabled">
+                        Must match Context and Endpoint hosts
+                    </span>
+                </div>
+            </div>
+
+            <div class="col-xs-3 col-sm-2 label-col">
+                <label>Port</label>
+            </div>
+            <div class="col-xs-9 col-sm-4">
+                <div class="tooltip">
+                    <input
+                        class="form-control"
+                        type="number"
+                        [(ngModel)]="executive.port"
+                        name="inputTextPort">
+                    <span class="tooltip-content" [hidden]="disabled">
+                        Must match Context port
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-xs-3 col-sm-2 label-col">
+                <label>Role</label>
+            </div>
+            <div class="col-xs-9 col-sm-4">
+                <input
+                    class="form-control"
+                    type="text"
+                    [(ngModel)]="executive.role"
+                    name="inputTextRole">
+            </div>
+
+            <div class="col-xs-3 col-sm-2 label-col">
+                <label>Log URL</label>
+            </div>
+            <div class="col-xs-9 col-sm-4">
+                <input
+                    class="form-control"
+                    type="text"
+                    [(ngModel)]="executive.logURL"
+                    name="inputTextLogURL">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-xs-3 col-sm-2 label-col">
+                <label>Log level</label>
+            </div>
+            <div class="col-xs-9 col-sm-4">
+                <div class="select">
+                    <select
+                        [(ngModel)]="executive.logLevel"
+                        name="selectLogLevel">
+                        <option>ERROR</option>
+                        <option>WARN</option>
+                        <option>INFO</option>
+                        <option>DEBUG</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-xs-3 col-sm-2 label-col">
+                <label>Path to executive</label>
+            </div>
+            <div class="col-xs-9 col-sm-4">
+                <input
+                    class="form-control"
+                    type="text"
+                    [(ngModel)]="executive.pathToExecutive"
+                    name="inputTextPathToExecutive">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-xs-3 col-sm-2 label-col">
+                <label>Environment string</label>
+            </div>
+            <div class="col-xs-9 col-sm-10">
+                <input
+                    class="form-control"
+                    type="text"
+                    [(ngModel)]="executive.environmentString"
+                    name="inputTextEnvironmentString">
+            </div>
+        </div>
+    </fieldset>
+</form>

@@ -1,3 +1,8 @@
-<p>
-  easy-editor works!
-</p>
+<executive-form
+    [disabled]="true"
+    [executive]="configDetails ? configDetails.executive : undefined">
+</executive-form>
+
+<fields-editor [fields]="configDetails ? configDetails.fields : undefined">
+
+</fields-editor>

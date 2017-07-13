@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
 
 import * as ace from 'brace';
 import 'brace/mode/xml';
@@ -7,9 +7,10 @@ import 'brace/ext/keybinding_menu';
 import 'brace/ext/searchbox';
 
 @Component({
-  selector: 'expert-editor',
-  templateUrl: './expert-editor.component.html',
-  styleUrls: ['./expert-editor.component.sass']
+    selector: 'expert-editor',
+    templateUrl: './expert-editor.component.html',
+    styleUrls: ['./expert-editor.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ExpertEditorComponent implements OnInit {
 

@@ -1,15 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
-  selector: 'easy-editor',
-  templateUrl: './easy-editor.component.html',
-  styleUrls: ['./easy-editor.component.sass']
+    selector: 'easy-editor',
+    templateUrl: './easy-editor.component.html',
+    styleUrls: ['./easy-editor.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EasyEditorComponent implements OnInit {
 
-  constructor() { }
+    @Input() configDetails;
 
-  ngOnInit() {
-  }
+    constructor() { }
+
+    ngOnInit() {
+    }
 
 }

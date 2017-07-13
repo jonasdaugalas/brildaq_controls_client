@@ -1,0 +1,62 @@
+<h6>
+    {{field.name}}:
+    <clr-icon
+        *ngIf="field.multiple"
+        shape="copy"
+        class="is-warning tooltip">
+        <span class="tooltip-content">This field modifies multiple values in configuration xml</span>
+    </clr-icon>
+    <!-- <clr-signpost *ngIf="field.typeahead || field.help"> -->
+    <clr-signpost *ngIf="field.help">
+        <clr-signpost-content *clrIfOpen="helpPostIsOpen">
+            <div *ngIf="field.help">
+                {{field.help}}
+            </div>
+            <!-- <div *ngIf="field.typeahead"> -->
+            <!-- <span class="text-info">Typeahead:</span> -->
+            <!-- <span *ngFor="let t of field.typeahead"><br/>{{t}}</span> -->
+            <!-- </div> -->
+        </clr-signpost-content>
+    </clr-signpost>
+</h6>
+<div [ngSwitch]="field.type">
+    <span *ngSwitchCase="'string'">
+        <input type="text" [(ngModel)]="field.value" />
+    </span>
+    <span *ngSwitchCase="'commaSeparatedString'"
+          class="text-primary">
+        {{field.value.join()}}
+    </span>
+    <span *ngSwitchCase="'integer'">
+        <input type="number" [(ngModel)]="field.value" />
+    </span>
+    <span *ngSwitchCase="'unsignedInt'">
+        <input type="number" min="0" [(ngModel)]="field.value" />
+    </span>
+    <span *ngSwitchCase="'float'" lass="badge badge-light-blue">
+        <input type="number" step="0.1" [(ngModel)]="field.value" />
+    </span>
+    <!-- <small *ngSwitchCase="'stringArray'"> -->
+    <!-- <span *ngFor="let value of field.value; let i = index;"> -->
+    <!-- <br/> -->
+    <!-- <span style="padding-left: 6px;">{{$i}}: </span> -->
+    <!-- <span class="text-primary">{{value[1]}}</span> -->
+    <!-- </span> -->
+    <!-- </small> -->
+    <!-- <small *ngSwitchCase="'stringMap'"> -->
+    <!-- <span *ngFor="let key of ObjectKeys(field.value)"> -->
+    <!-- <br/> -->
+    <!-- <span style="padding-left: 6px;">{{key}}: </span> -->
+    <!-- <span class="text-primary">{{field.value[key]}}</span> -->
+    <!-- </span> -->
+    <!-- </small> -->
+    <div *ngSwitchCase="'bool'">
+        <clr-checkbox
+            [(clrChecked)]="field.value">
+            {{field.name}} ({{field.value}})
+        </clr-checkbox>
+    </div>
+    <span *ngSwitchDefault>
+        <input type="text" [(ngModel)]="field.value" />
+    </span>
+</div>

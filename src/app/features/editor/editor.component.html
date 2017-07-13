@@ -38,18 +38,16 @@
                         </div>
                     </div>
 
-
                     <expert-editor
                         *ngIf="(isEditorModeExpert$ | async); else easyEditor"
                         [configDetails]="configDetails$ | async">
                     </expert-editor>
 
                     <ng-template #easyEditor>
-                        <easy-editor></easy-editor>
+                        <easy-editor [configDetails]="configDetails$ | async">
+                        </easy-editor>
                     </ng-template>
-
                 </div>
-
 
                 <div class="col-lg-5">
                     <history-table

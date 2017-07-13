@@ -1,0 +1,12 @@
+form .form-group {
+    margin-bottom: 0px;
+}
+
+.label-col {
+    text-align: right;
+}
+
+label {
+    font-weight: bold;
+    line-height: 1em;
+}
