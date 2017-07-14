@@ -15,7 +15,13 @@ export class FieldsEditorComponent implements OnInit {
             return;
         }
         this._fields = newFields.map(v => {
-            return Object.assign({}, v);
+            const newField =  Object.assign({}, v);
+            if (newField.value instanceof Array) {
+                newField.value = newField.value.slice();
+            } else if (newField.value instanceof Object) {
+                newField.value = Object.assign({}, newField.value);
+            }
+            return newField;
         });
     };
     get fields() {
