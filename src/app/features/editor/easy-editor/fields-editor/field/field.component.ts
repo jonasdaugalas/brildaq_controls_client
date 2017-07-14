@@ -4,9 +4,11 @@ import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core
     selector: 'field',
     templateUrl: './field.component.html',
     styleUrls: ['./field.component.css'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FieldComponent implements OnInit {
+
+    ObjectKeys = Object.keys;
 
     protected _field;
     @Input() set field(newField) {
@@ -23,9 +25,56 @@ export class FieldComponent implements OnInit {
         return this._field;
     }
 
+    newStringItemValue = '';
+    newStringItemKey = '';
+
     constructor() { }
 
     ngOnInit() {
+    }
+
+    stringItemMoveUp(index) {
+        if (index === 0) {
+            return;
+        }
+        const tmp = this.field.value[index - 1];
+        this.field.value[index - 1] = this.field.value[index];
+        this.field.value[index] = tmp;
+    }
+
+    stringItemMoveDown(index) {
+        if (index === this.field.value.length -1) {
+            return;
+        }
+        const tmp = this.field.value[index + 1];
+        this.field.value[index + 1] = this.field.value[index];
+        this.field.value[index] = tmp;
+    }
+
+    stringItemRemove(keyOrIndex) {
+        if (this.field.type === 'stringMap') {
+            delete this.field.value[keyOrIndex];
+        } else {
+            this.field.value.splice(keyOrIndex, 1);
+        }
+    }
+
+    stringItemAdd() {
+        if (this.field.type === 'commaSeparatedString' && this.newStringItemValue.indexOf(',') < 0) {
+            this.field.value.push(this.newStringItemValue);
+            this.newStringItemValue = '';
+        } else if (this.field.type === 'stringArray' && this.newStringItemKey) {
+            this.field.value.push([this.newStringItemKey, this.newStringItemValue]);
+            this.newStringItemValue = '';
+            this.newStringItemKey = '';
+        } else if (this.field.type === 'stringMap' && this.newStringItemKey) {
+            if (this.field.value.hasOwnProperty(this.newStringItemKey)) {
+                return;
+            }
+            this.field.value[this.newStringItemKey] = this.newStringItemValue;
+            this.newStringItemValue = '';
+            this.newStringItemKey = '';
+        }
     }
 
 }
