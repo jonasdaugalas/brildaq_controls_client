@@ -7,8 +7,8 @@ import * as actions from './running-configs.actions';
 
 export interface State {
     ids: string[];
-    running: { [id: string]: RunningDetails };
-    states: { [id: string]: string };
+    running: {  string: RunningDetails } | {};
+    states: { string: string } | {};
     rcmsUser: string;
     requestRunning: RequestState;
     requestStates: RequestState;

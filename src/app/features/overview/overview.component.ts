@@ -21,21 +21,21 @@ export class OverviewComponent implements OnInit, OnDestroy {
 
     private ngUnsubscribe: Subject<void> = new Subject<void>();
 
-    configurationIds$: Observable<Array<string>>;
-    configurations$: Observable<{string: Configuration}>;
+    configurationIds$: Observable<Readonly<Array<string>>>;
+    configurations$: Observable<{string: Configuration} | {}>;
     configurationsRequest$: Observable<RequestState>;
     userConfigurationIds$: Observable<Array<string>>;
 
-    runningDetails$: Observable<{string: RunningDetails}>;
+    runningDetails$: Observable<{string: RunningDetails} | {}>;
     runningDetailsRequest$: Observable<RequestState>;
-    runningStates$: Observable<{string: string}>;
+    runningStates$: Observable<{string: string} | {}>;
     runningStatesRequest$: Observable<RequestState>;
 
-    actionRequests$: Observable<{string: ActionRequest}>;
+    actionRequests$: Observable<{string: ActionRequest} | {}>;
 
     activeConfigIds$: Observable<Array<string>>;
 
-    configDetails$: Observable<{string: ConfigDetails}>;
+    configDetails$: Observable<{string: ConfigDetails} | {}>;
 
     isLoading$: Observable<boolean>;
     // TODO: make selectedRcmsUser observable (in local store of the overview module)

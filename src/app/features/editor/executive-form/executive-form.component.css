@@ -10,3 +10,7 @@ label {
     font-weight: bold;
     line-height: 1em;
 }
+
+.tooltip {
+    width: 100%;
+}

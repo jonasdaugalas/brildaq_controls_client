@@ -7,8 +7,8 @@ import * as actions from './config-details.actions';
 
 export interface State {
     ids: string[];
-    entities: { [id: string]: ConfigDetails };
-    requests: { [id: string]: RequestState };
+    entities: { string: ConfigDetails } | {};
+    requests: { string: RequestState } | {};
 }
 
 export const initialState: State = {

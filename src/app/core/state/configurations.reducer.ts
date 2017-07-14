@@ -7,8 +7,8 @@ import {
 import * as configs from './configurations.actions';
 
 export interface State {
-    ids: string[];
-    entities: { [id: string]: Configuration };
+    ids: Array<string>;
+    entities: { string: Configuration } | {};
     request: RequestState;
 }
 

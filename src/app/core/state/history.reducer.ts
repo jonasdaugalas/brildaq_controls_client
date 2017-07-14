@@ -6,7 +6,7 @@ import * as actions from './history.actions';
 
 export interface State {
     ids: string[];
-    history: {[id: string]: Array<any>};
+    history: {string: Array<any>} | {};
     requests: {
         [id: string]: {
             state: RequestState,

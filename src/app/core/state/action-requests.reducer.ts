@@ -7,7 +7,7 @@ import { ActionRequest } from '../models/action-request';
 import * as actions from './action-requests.actions';
 
 export interface State {
-    requests: {[id: string]: ActionRequest};
+    requests: {string: ActionRequest} | {};
 }
 
 export const initialState: State = {
