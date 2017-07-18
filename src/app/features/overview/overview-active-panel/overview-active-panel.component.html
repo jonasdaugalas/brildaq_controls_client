@@ -25,7 +25,10 @@
                     <clr-icon shape="caret down"></clr-icon>
                 </span>
                 <div class="dropdown-menu">
-                    <config-action-menu [path]="path"></config-action-menu>
+                    <config-action-menu
+                        [path]="path"
+                        [configDetails]="configDetails[pathsWithVersion[path]]">
+                    </config-action-menu>
                 </div>
             </clr-dropdown>
         </div>
