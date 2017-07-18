@@ -27,3 +27,16 @@
         [class.disabled]="disabledActionButton.destroy">
     <b>Destroy</b> <small>function manager</small>
 </button>
+
+<div *ngIf="configDetails" class="deck-buttons">
+<hr/>
+<a [href]="'http://' + configDetails.executive.host + ':' + configDetails.executive.port"
+   target="_blank">
+    <img src="/assets/img/xdaqapplication.png" style="height: 2em"/>
+</a>
+<a *ngIf="path.split('/')[3] === 'global'"
+   [href]="webLogsURL"
+   target="_blank">
+    <img src="/assets/img/logs.png" style="height: 2em"/>
+</a>
+</div>

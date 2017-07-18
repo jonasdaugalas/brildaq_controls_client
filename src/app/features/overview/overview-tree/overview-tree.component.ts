@@ -14,6 +14,7 @@ class Leaf {
     iconClass = 'is-solid';
     spinner = false;
     tooltip = '';
+    configDetails = undefined;
 
     constructor(public path: string) {
         this.name = path.split('/').pop();
@@ -28,32 +29,39 @@ class Leaf {
 })
 export class OverviewTreeComponent implements OnInit {
 
-    _runningDetails: {string: any} | {};
+    protected _runningDetails: {string: any} | {};
     @Input() set running(newRunning) {
         console.log('updating running details', newRunning);
         this._runningDetails = newRunning;
         this.updateLeafs(Object.keys(newRunning));
     }
 
-    _runningStates: {string: string} | {};
+    protected _runningStates: {string: string} | {};
     @Input() set states(newStates) {
         console.log('updating states', newStates);
         this._runningStates = newStates;
         this.updateLeafs(Object.keys(newStates));
     }
 
-    _paths: Array<string>;
+    protected _paths: Array<string>;
     @Input() set paths(newPaths: Array<string>) {
         console.log('updating paths', newPaths);
         this._paths = newPaths.sort(customConfigSortFn);
         this.buildTree();
     }
 
-    _actionRequests: {string: ActionRequest} | {};
+    protected _actionRequests: {string: ActionRequest} | {};
     @Input() set actionRequests(newActionRequests) {
         console.log('updating actionRequests', newActionRequests);
         this._actionRequests = newActionRequests;
         this.updateLeafs(Object.keys(newActionRequests));
+    }
+
+    protected _configDetails;
+    @Input() set configDetails(newConfigDetails) {
+        this._configDetails = newConfigDetails;
+        this.updateLeafs(Object.keys(this._runningDetails))
+        console.log('after set configDetails', this.configTreeLeafs);
     }
 
     configTree = [];
@@ -110,6 +118,10 @@ export class OverviewTreeComponent implements OnInit {
                 this.configTreeLeafs[path] = leaf;
             }
             leaf.actionRequest = this._actionRequests[path];
+            if (this._runningDetails[path]) {
+                const detailsID = path + '/v=' + this._runningDetails[path].version;
+                leaf.configDetails = this._configDetails[detailsID];
+            }
             this.updateLeafStatus(leaf);
         });
     }

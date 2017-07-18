@@ -5,14 +5,17 @@ import * as actionRequestsActions from '@app/core/state/action-requests.actions'
 import { ActionRequest } from '@app/core/models/action-request';
 import * as CONTROL_ACTIONS from '@app/core/models/control-actions';
 import { STATES as CONFIG_STATES } from '@app/core/models/running-details';
+import * as APP_CONFIG from '@app/../app-config-constants';
 
 @Component({
-  selector: 'config-action-menu',
-  templateUrl: './action-menu.component.html'
+    selector: 'config-action-menu',
+    templateUrl: './action-menu.component.html',
+    styleUrls: ['./action-menu.component.css']
 })
 export class ActionMenuComponent implements OnInit {
 
     name: string;
+    webLogsURL: string;
     disabledActionButton = {
         turnon: false,
         turnoff: false,
@@ -28,6 +31,17 @@ export class ActionMenuComponent implements OnInit {
     }
     get path(): string {
         return this._path;
+    }
+
+    protected _configDetails;
+    @Input() set configDetails(newConfigDetails) {
+        this._configDetails = newConfigDetails;
+        if (newConfigDetails) {
+            this.updateWebLogsURL();
+        }
+    };
+    get configDetails() {
+        return this._configDetails;
     }
 
     protected _actionRequest: ActionRequest;
@@ -81,6 +95,18 @@ export class ActionMenuComponent implements OnInit {
     protected sendAction(action) {
         this.store.dispatch(new actionRequestsActions.SendActionAction(
             {configId: this._path, actionType: action}));
+    }
+
+    protected updateWebLogsURL() {
+        const exec = this.configDetails.executive;
+        if (!exec) {
+            this.webLogsURL = '';
+            return;
+        }
+        this.webLogsURL = APP_CONFIG.WEBLOGREADER_BASE +
+            '?host=' + exec.host.split('.')[0] +
+            '&port=' + exec.port +
+            '&group=' + (exec.logURL === 'xml://cmsrc-lumi.cms:26010' ? 'lumipro' : 'lumidev');
     }
 
 }
