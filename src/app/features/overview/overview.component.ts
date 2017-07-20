@@ -76,7 +76,6 @@ export class OverviewComponent implements OnInit, OnDestroy {
                 const failing = cfgReq instanceof RequestFailedState ||
                     runningReq instanceof RequestFailedState ||
                     statesReq instanceof RequestFailedState;
-                console.log('FAILING?', failing);
                 return failing;
             });
 
@@ -91,7 +90,6 @@ export class OverviewComponent implements OnInit, OnDestroy {
         this.userConfigurationIds$ = this.selectedRCMSUser$
             .combineLatest(this.configurationIds$)
             .map(([user, ids]) => {
-                console.log('update userConfigurationIds$', user, ids);
                 return ids.filter(val => {
                     return val.startsWith('/' + user);
                 });
@@ -114,7 +112,6 @@ export class OverviewComponent implements OnInit, OnDestroy {
             .takeUntil(this.ngUnsubscribe)
             .withLatestFrom(this.configurationIds$)
             .subscribe(([counter, ids]) => {
-                console.log(counter, ids);
                 if (counter % 10 === 9 || ids.length === 0) {
                     this.refresh();
                 } else {
@@ -132,7 +129,6 @@ export class OverviewComponent implements OnInit, OnDestroy {
                         return false;
                     }
                 });
-                console.log('waiting', waiting);
                 if (waiting.length === 0) {
                     this.updateStates();
                 }
@@ -141,7 +137,6 @@ export class OverviewComponent implements OnInit, OnDestroy {
         this.runningStates$
             .takeUntil(this.ngUnsubscribe)
             .subscribe(val => {
-                console.log('checking running states for unstable');
                 const hasUnstableStates = Object.keys(val).some(key => {
                     return !CONFIG_STATES.stateIsStable(val[key]);
                 });
@@ -182,7 +177,6 @@ export class OverviewComponent implements OnInit, OnDestroy {
     }
 
     updateConfigs() {
-        console.log('dispatching configurations update');
         this.store.dispatch(new configsActions.UpdateAction());
     }
 

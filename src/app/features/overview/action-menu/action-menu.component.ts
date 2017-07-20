@@ -7,6 +7,15 @@ import * as CONTROL_ACTIONS from '@app/core/models/control-actions';
 import { STATES as CONFIG_STATES } from '@app/core/models/running-details';
 import * as APP_CONFIG from '@app/../app-config-constants';
 
+
+class DisabledActionButtons {
+    turnon: boolean
+    turnoff: boolean
+    reset?: boolean
+    create: boolean
+    destroy: boolean
+}
+
 @Component({
     selector: 'config-action-menu',
     templateUrl: './action-menu.component.html',
@@ -16,7 +25,7 @@ export class ActionMenuComponent implements OnInit {
 
     name: string;
     webLogsURL: string;
-    disabledActionButton = {
+    disabledActionButtons: DisabledActionButtons = {
         turnon: false,
         turnoff: false,
         reset: false,
@@ -51,8 +60,11 @@ export class ActionMenuComponent implements OnInit {
     }
 
     stateIsON: boolean;
+    protected _state;
     @Input() set state(newState) {
+        this._state = newState;
         this.stateIsON = newState === CONFIG_STATES.ON;
+        this.updateButtonDisables();
     }
 
     @Output() onAction = new EventEmitter();
@@ -64,14 +76,26 @@ export class ActionMenuComponent implements OnInit {
 
     updateButtonDisables() {
         if (this._actionRequest && this._actionRequest.state.loading) {
-            Object.keys(this.disabledActionButton).forEach(key => {
-                this.disabledActionButton[key] = true;
+            Object.keys(this.disabledActionButtons).forEach(key => {
+                this.disabledActionButtons[key] = true;
             });
-        } else {
-            Object.keys(this.disabledActionButton).forEach(key => {
-                this.disabledActionButton[key] = false;
-            });
+            return;
         }
+        this.disabledActionButtons.reset = false;
+        this.disabledActionButtons.destroy = false;
+        let change = {};
+        if (this._state === CONFIG_STATES.ON) {
+            change = {turnon: true, turnoff: false, create: true};
+        } else if (this._state === CONFIG_STATES.OFF) {
+            change = {turnon: false, turnoff: true, create: true};
+        } else if (this._state === CONFIG_STATES.ERROR) {
+            change = {turnon: true, turnoff: true, create: true};
+        } else if (this._state === CONFIG_STATES.NO_FM) {
+            change = {turnon: true, turnoff: true, reset: true, create: false, destroy: true};
+        } else {
+            change = {turnon: true, turnoff: true, create: true, destroy: true};
+        }
+        this.disabledActionButtons = Object.assign(this.disabledActionButtons, change);
     }
 
     sendTurnON() {

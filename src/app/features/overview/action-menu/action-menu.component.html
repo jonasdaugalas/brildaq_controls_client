@@ -3,28 +3,28 @@
     <b>Edit</b> <small>configuration</small>
 </a>
 <button class="dropdown-item" (click)="sendTurnON()"
-        [disabled]="disabledActionButton.turnon"
-        [class.disabled]="disabledActionButton.turnon">
+        [disabled]="disabledActionButtons.turnon"
+        [class.disabled]="disabledActionButtons.turnon">
     <b>Turn ON</b> <small>executive</small>
 </button>
 <button class="dropdown-item" (click)="sendTurnOFF()"
-        [disabled]="disabledActionButton.turnoff"
-        [class.disabled]="disabledActionButton.turnoff">
+        [disabled]="disabledActionButtons.turnoff"
+        [class.disabled]="disabledActionButtons.turnoff">
     <b>Turn OFF</b> <small>executive</small>
 </button>
 <button class="dropdown-item disabled" (click)="sendReset()"
-        [disabled]="disabledActionButton.reset"
-        [class.disabled]="disabledActionButton.reset">
+        [disabled]="disabledActionButtons.reset"
+        [class.disabled]="disabledActionButtons.reset">
     <b>Reset</b> <small>executive</small>
 </button>
 <button class="dropdown-item" (click)="sendCreate()"
-        [disabled]="disabledActionButton.create"
-        [class.disabled]="disabledActionButton.create">
+        [disabled]="disabledActionButtons.create"
+        [class.disabled]="disabledActionButtons.create">
     <b>Create</b> <small>function manager</small>
 </button>
 <button class="dropdown-item" (click)="sendDestroy()"
-        [disabled]="disabledActionButton.destroy"
-        [class.disabled]="disabledActionButton.destroy">
+        [disabled]="disabledActionButtons.destroy"
+        [class.disabled]="disabledActionButtons.destroy">
     <b>Destroy</b> <small>function manager</small>
 </button>
 
