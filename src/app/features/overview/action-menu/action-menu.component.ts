@@ -50,7 +50,10 @@ export class ActionMenuComponent implements OnInit {
         this.updateButtonDisables();
     }
 
-    @Input() state: string;
+    stateIsON: boolean;
+    @Input() set state(newState) {
+        this.stateIsON = newState === CONFIG_STATES.ON;
+    }
 
     @Output() onAction = new EventEmitter();
 

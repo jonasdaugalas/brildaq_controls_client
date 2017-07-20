@@ -26,6 +26,8 @@
                 </span>
                 <div class="dropdown-menu">
                     <config-action-menu
+                        [state]="states[path]"
+                        [actionRequest]="actionRequests[path]"
                         [path]="path"
                         [configDetails]="configDetails[pathsWithVersion[path]]">
                     </config-action-menu>

@@ -28,7 +28,7 @@
     <b>Destroy</b> <small>function manager</small>
 </button>
 
-<div *ngIf="configDetails" class="deck-buttons">
+<div *ngIf="configDetails && stateIsON" class="deck-buttons">
 <hr/>
 <a [href]="'http://' + configDetails.executive.host + ':' + configDetails.executive.port"
    target="_blank">

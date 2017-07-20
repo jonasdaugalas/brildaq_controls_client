@@ -2,6 +2,7 @@ import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core
 import { ConfigDetails } from '@app/core/models/config-details';
 import { STATES, RunningDetails } from '@app/core/models/running-details';
 import { customConfigSortFn } from '@app/shared/utils/custom-sort';
+import { ActionRequest } from '@app/core/models/action-request';
 
 @Component({
     selector: 'overview-active-panel',
@@ -24,6 +25,7 @@ export class OverviewActivePanelComponent implements OnInit {
 
     @Input() configDetails: {string: ConfigDetails};
     @Input() states: {string: string};
+    @Input() actionRequests: {string: ActionRequest};
 
     protected _activePaths: Array<string>;
     @Input() set activePaths(newPaths: Array<string>) {

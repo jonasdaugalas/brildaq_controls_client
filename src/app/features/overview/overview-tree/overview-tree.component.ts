@@ -126,7 +126,7 @@ export class OverviewTreeComponent implements OnInit {
         if (this._actionRequests &&
             this._actionRequests.hasOwnProperty(leaf.path) &&
             this._actionRequests[leaf.path].state.loading) {
-            leaf.status = null;
+            leaf.state = null;
             leaf.icon = null;
             leaf.iconClass = '';
             leaf.spinner = true;
@@ -135,13 +135,13 @@ export class OverviewTreeComponent implements OnInit {
         }
         leaf.spinner = false;
         if (!this._runningDetails.hasOwnProperty(leaf.path)) {
-            leaf.status = STATES.NO_FM;
+            leaf.state = STATES.NO_FM;
             leaf.icon = 'document';
             leaf.iconClass = 'is-solid';
             leaf.tooltip = 'No function manager.';
             return;
         }
-        leaf.status = this._runningStates[leaf.path];
+        leaf.state = this._runningStates[leaf.path];
         switch (this._runningStates[leaf.path]) {
         case STATES.ON:
             leaf.icon = 'heart';
@@ -164,10 +164,10 @@ export class OverviewTreeComponent implements OnInit {
             leaf.icon = null;
             leaf.iconClass = '';
             leaf.spinner = true;
-            leaf.tooltip = leaf.status;
+            leaf.tooltip = leaf.state;
             break;
         default:
-            leaf.status = STATES.UNKNOWN;
+            leaf.state = STATES.UNKNOWN;
             leaf.icon = 'warning';
             leaf.iconClass = 'is-solid is-warning';
             leaf.tooltip = 'Unknown state';
