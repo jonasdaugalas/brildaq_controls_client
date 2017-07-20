@@ -1,7 +1,7 @@
 <clr-main-container>
     <overview-header
         [users]="rcmsUsers"
-        [selectedUser]="selectedRcmsUser$ | async"
+        [selectedUser]="selectedRCMSUser$ | async"
         [isLoading]="isLoading$ | async"
         (userChange)="selectRcmsUser($event)"
         (refresh)="refresh()">
@@ -16,6 +16,7 @@
             </overview-active-panel>
         </div>
         <nav class="sidenav">
+            <div class="curtain" [hidden]="!(isLoading$ | async)"></div>
             <section>
                 <overview-tree
                     style="display: block;"

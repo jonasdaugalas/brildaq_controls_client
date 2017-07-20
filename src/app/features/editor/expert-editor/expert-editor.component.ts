@@ -34,7 +34,7 @@ export class ExpertEditorComponent implements OnInit {
     }
 
     initializeEditor() {
-        console.log('in initializeEditor');
+        console.log('initializeEditor (expert)');
         if (this.editor) {
             return;
         }

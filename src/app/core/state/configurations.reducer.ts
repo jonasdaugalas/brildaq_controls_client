@@ -21,13 +21,11 @@ export const initialState: State = {
 export function reducer(state = initialState, action: configs.Actions): State {
     switch (action.type) {
     case configs.UPDATE: {
-        console.log('UPDATE CONFIGS');
         return Object.assign({}, state, {
             request: new RequestInitiatedState()
         });
     }
     case configs.UPDATE_SUCCESS: {
-        console.log('SUCCESS', action.payload);
         const newConfigs = action.payload;
         return {
             ids: Object.keys(newConfigs),
@@ -36,7 +34,6 @@ export function reducer(state = initialState, action: configs.Actions): State {
         };
     }
     case configs.UPDATE_FAILED: {
-        console.log(action);
         return Object.assign({}, state, {
             request: new RequestFailedState(
                 action.payload.message, action.payload.error)

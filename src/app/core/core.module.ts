@@ -11,7 +11,7 @@ import { RunningConfigsEffects } from './state/running-configs.effects';
 import { ConfigDetailsEffects } from './state/config-details.effects';
 import { ActionRequestsEffects } from './state/action-requests.effects';
 import { HistoryEffects } from './state/history.effects';
-import { reducers } from './state/state.reducer';
+import { reducers, makeLoggingReducer } from './state/state.reducer';
 
 import { ConfigurationsService } from './services/configurations.service';
 import { AlarmService } from './services/alarm.service';
@@ -21,7 +21,7 @@ import { AlarmService } from './services/alarm.service';
     declarations: [],
     imports: [
         HttpModule,
-        StoreModule.forRoot(reducers),
+        StoreModule.forRoot(reducers, { metaReducers: [makeLoggingReducer] }),
         EffectsModule.forRoot([
             ConfigurationsEffects,
             RunningConfigsEffects,

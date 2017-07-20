@@ -2,9 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ClarityModule } from 'clarity-angular';
+import { StoreModule } from '@ngrx/store';
 
 import { RouterModule } from '@angular/router';
-// import { SharedModule } from '@app/shared/shared.module';
 import { OverviewRouting } from './overview.routing';
 
 import { OverviewComponent } from './overview.component';
@@ -15,6 +15,7 @@ import { OverviewActivePanelComponent } from './overview-active-panel/overview-a
 import { ActionMenuComponent } from './action-menu/action-menu.component';
 import { ConfigFieldsComponent } from './config-fields/config-fields.component';
 import { ConfigFieldComponent } from './config-fields/config-field/config-field.component';
+import * as overviewReducer from './state/overview.reducer';
 
 @NgModule({
     imports: [
@@ -23,7 +24,8 @@ import { ConfigFieldComponent } from './config-fields/config-field/config-field.
         FormsModule,
         ClarityModule.forChild(),
         RouterModule,
-        OverviewRouting
+        OverviewRouting,
+        StoreModule.forFeature('overviewModule', overviewReducer.reducer)
     ],
     declarations: [
         OverviewComponent,

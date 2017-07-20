@@ -70,9 +70,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     }
 
     switchMode() {
-        console.log('switch mode click');
         this.editorMode$.take(1).subscribe(val => {
-            console.log('swithc mode inside subscribe', val);
             let newMode = 'expert';
             if (val === 'expert') {
                 newMode = 'easy';
@@ -92,7 +90,6 @@ export class EditorComponent implements OnInit, OnDestroy {
     }
 
     reselectWorkingConfiguration() {
-        console.log('reselecting', this.path);
         this.firstLoadVersionSelected = false;
 
         this.history$ = this.store.select(appState.selectHistoryById(this.path));
@@ -105,13 +102,10 @@ export class EditorComponent implements OnInit, OnDestroy {
         this.historySubscription = this.history$
             .takeUntil(this.ngUnsubscribe)
             .withLatestFrom(this.historyRequest$).subscribe(([history, request]) => {
-                console.log('history request subscription', request, history);
                 if (!request.forNewest) {
-                    console.log('not for newest. skipping');
                     return;
                 }
                 if (!history.length) {
-                    console.log('history no length');
                     return;
                 }
                 this._selectVersion(history[0][0])
@@ -129,7 +123,6 @@ export class EditorComponent implements OnInit, OnDestroy {
 
     selectVersion(newVersion: number) {
         if (!this.firstLoadVersionSelected) {
-            console.log('Initial version not yet selected. ');
             return;
         }
         this._selectVersion(newVersion);

@@ -58,7 +58,6 @@ export function reducer(state = initialState, action: actions.Actions): State {
         return Object.assign({}, state, {requests: newRequests});
     }
     case actions.GET_SUCCESS: {
-        console.log('SUCCESS GET HISTORY', action.payload);
         const newRequests = Object.assign({}, state.requests);
         newRequests[action.payload.configId] = {
             state: new RequestSuccessState(),
@@ -72,14 +71,12 @@ export function reducer(state = initialState, action: actions.Actions): State {
             newHistory[action.payload.configId] =
                 newHistory[action.payload.configId].concat(action.payload.result);
         }
-        console.log(state);
         return Object.assign({}, state, {
             history: newHistory,
             requests: newRequests
         });
     }
     case actions.GET_FAILED: {
-        console.log(action);
         const newRequests = Object.assign({}, state.requests);
         newRequests[action.payload.configId] = Object.assign(
             {},

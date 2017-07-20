@@ -26,29 +26,30 @@ export const initialState: State = {
 export function reducer(state = initialState, action: actions.Actions): State {
     switch (action.type) {
     case actions.UPDATE: {
-        console.log('UPDATE RUNNING');
         return Object.assign({}, state, {
             requestRunning: new RequestInitiatedState()
         });
     }
     case actions.UPDATE_CANCEL: {
-        console.log('UPDATE_CANCEL');
         return Object.assign({}, state, {
             requestRunning: new RequestCanceledState()
         });
     }
     case actions.UPDATE_SUCCESS: {
-        console.log('SUCCESS running', action.payload);
-        const newRunning = action.payload.result;
+        let newRunning = action.payload.result;
+        let newIds = Object.keys(newRunning);
+        if (JSON.stringify(newRunning) === JSON.stringify(state.running)) {
+            newRunning = state.running;
+            newIds = state.ids;
+        }
         return Object.assign({}, state, {
-            ids: Object.keys(newRunning),
+            ids: newIds,
             running: newRunning,
             rcmsUser: action.payload.rcmsUser,
             requestRunning: new RequestSuccessState()
         });
     }
     case actions.UPDATE_FAILED: {
-        console.log(action);
         return Object.assign({}, state, {
             requestRunning: new RequestFailedState(
                 action.payload.message, action.payload.error)
@@ -56,15 +57,12 @@ export function reducer(state = initialState, action: actions.Actions): State {
     }
 
     case actions.UPDATE_STATES: {
-        console.log('UPDATE_STATES');
         return Object.assign({}, state, {requestStates: new RequestInitiatedState()});
     }
     case actions.UPDATE_STATES_CANCEL: {
-        console.log('UPDATE_STATES_CANCEL');
         return Object.assign({}, state, {requestStates: new RequestCanceledState()});
     }
     case actions.UPDATE_STATES_SUCCESS: {
-        console.log('SUCCESS states', action.payload);
         const newStates = {};
         state.ids.forEach(id => {
             newStates[id] = action.payload[state.running[id].URI]
@@ -75,7 +73,6 @@ export function reducer(state = initialState, action: actions.Actions): State {
         });
     }
     case actions.UPDATE_STATES_FAILED: {
-        console.log(action);
         return Object.assign({}, state, {
             requestStates: new RequestFailedState(
                 action.payload.message, action.payload.error)

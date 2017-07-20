@@ -60,7 +60,6 @@ export class ActionMenuComponent implements OnInit {
     }
 
     updateButtonDisables() {
-        console.log('updateButtonDisables');
         if (this._actionRequest && this._actionRequest.state.loading) {
             Object.keys(this.disabledActionButton).forEach(key => {
                 this.disabledActionButton[key] = true;

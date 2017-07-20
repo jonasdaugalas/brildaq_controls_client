@@ -1,4 +1,4 @@
-import { ActionReducer, combineReducers } from '@ngrx/store';
+import { ActionReducer } from '@ngrx/store';
 import * as configsReducer from './configurations.reducer';
 import * as runningReducer from './running-configs.reducer';
 import * as configDetailsReducer from './config-details.reducer';
@@ -20,6 +20,13 @@ export const reducers = {
     actionRequests: actionRequestsReducer.reducer,
     history: historyReducer.reducer
 };
+
+export function makeLoggingReducer(reducer) {
+    return function(state, action) {
+        console.log(action);
+        return reducer(state, action);
+    }
+}
 
 export const selectConfigsIds = state => configsReducer.selectIds(state.configs);
 export const selectConfigsEntities = state => configsReducer.selectEntities(state.configs);

@@ -31,28 +31,25 @@ export class OverviewTreeComponent implements OnInit {
 
     protected _runningDetails: {string: any} | {};
     @Input() set running(newRunning) {
-        console.log('updating running details', newRunning);
+        console.log('running changed', newRunning);
         this._runningDetails = newRunning;
-        this.updateLeafs(Object.keys(newRunning));
+        this.updateLeafs(this._paths);
     }
 
     protected _runningStates: {string: string} | {};
     @Input() set states(newStates) {
-        console.log('updating states', newStates);
         this._runningStates = newStates;
         this.updateLeafs(Object.keys(newStates));
     }
 
     protected _paths: Array<string>;
     @Input() set paths(newPaths: Array<string>) {
-        console.log('updating paths', newPaths);
         this._paths = newPaths.sort(customConfigSortFn);
         this.buildTree();
     }
 
     protected _actionRequests: {string: ActionRequest} | {};
     @Input() set actionRequests(newActionRequests) {
-        console.log('updating actionRequests', newActionRequests);
         this._actionRequests = newActionRequests;
         this.updateLeafs(Object.keys(newActionRequests));
     }
@@ -61,7 +58,6 @@ export class OverviewTreeComponent implements OnInit {
     @Input() set configDetails(newConfigDetails) {
         this._configDetails = newConfigDetails;
         this.updateLeafs(Object.keys(this._runningDetails))
-        console.log('after set configDetails', this.configTreeLeafs);
     }
 
     configTree = [];
@@ -78,7 +74,6 @@ export class OverviewTreeComponent implements OnInit {
     }
 
     protected buildTree() {
-        console.log('building tree', this._paths);
         this.configTree = [];
         this.updateLeafs(this._paths);
         this._paths.forEach(path => {

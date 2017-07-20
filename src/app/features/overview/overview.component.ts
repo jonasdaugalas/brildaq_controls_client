@@ -7,10 +7,12 @@ import * as configsActions from '@app/core/state/configurations.actions';
 import * as runningActions from '@app/core/state/running-configs.actions';
 import * as configDetailsActions from '@app/core/state/config-details.actions';
 import * as actionRequestsActions from '@app/core/state/action-requests.actions';
+import * as overviewActions from './state/overview.actions';
+import * as overviewReducer from './state/overview.reducer';
 import { Configuration } from '@app/core/models/configuration';
 import { RunningDetails, STATES as RUNNING_STATES } from '@app/core/models/running-details';
 import { ConfigDetails } from '@app/core/models/config-details';
-import { RequestState } from '@app/core/models/request-state';
+import { RequestState, RequestInitiatedState } from '@app/core/models/request-state';
 import { ActionRequest } from '@app/core/models/action-request';
 
 @Component({
@@ -38,9 +40,9 @@ export class OverviewComponent implements OnInit, OnDestroy {
     configDetails$: Observable<{string: ConfigDetails} | {}>;
 
     isLoading$: Observable<boolean>;
-    // TODO: make selectedRcmsUser observable (in local store of the overview module)
+
     rcmsUsers = ['lumipro', 'lumidev'];
-    selectedRcmsUser$: BehaviorSubject<string> = new BehaviorSubject<string>('lumipro');
+    selectedRCMSUser$: Observable<string>;
 
     constructor(private store: Store<appState.State>) {
         console.log('CONSTRUCT overview');
@@ -53,12 +55,13 @@ export class OverviewComponent implements OnInit, OnDestroy {
         this.runningStatesRequest$ = this.store.select(appState.selectRunningRequestStates);
         this.configDetails$ = this.store.select(appState.selectConfigDetailsEntities);
         this.actionRequests$ = this.store.select(appState.selectActionRequests);
+        this.selectedRCMSUser$ = this.store.select(state => {
+            return overviewReducer.selectRCMSUser(state['overviewModule']);
+        });
     }
 
     ngOnInit() {
-
         console.log('INIT overview');
-        // this.refresh();
 
         this.isLoading$ = this.configurationsRequest$
             .combineLatest(this.runningDetailsRequest$, this.runningStatesRequest$)
@@ -66,7 +69,7 @@ export class OverviewComponent implements OnInit, OnDestroy {
                 return cfgReq.loading || runningReq.loading || statesReq.loading;
             });
 
-        this.userConfigurationIds$ = this.selectedRcmsUser$
+        this.userConfigurationIds$ = this.selectedRCMSUser$
             .combineLatest(this.configurationIds$)
             .map(([user, ids]) => {
                 return ids.filter(val => {
@@ -83,11 +86,38 @@ export class OverviewComponent implements OnInit, OnDestroy {
             .takeUntil(this.ngUnsubscribe)
             .subscribe(combination => {
                 const activeIds = combination[0];
-                console.log(activeIds);
                 const running = combination[1];
                 this.updateConfigDetails(activeIds, running);
             });
 
+        Observable.interval(56000)
+            .takeUntil(this.ngUnsubscribe)
+            .subscribe(val => {
+                if (val % 10 === 9) {
+                    this.refresh();
+                } else {
+                    this.updateStates();
+                }
+            });
+
+        this.actionRequests$
+            .takeUntil(this.ngUnsubscribe)
+            .subscribe(requests => {
+                console.log('actionRequest changed (overview)', requests);
+                const waiting = Object.keys(requests).filter(key => {
+                    if (requests[key].state instanceof RequestInitiatedState) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                });
+                console.log('waiting', waiting);
+                if (waiting.length === 0) {
+                    this.updateStates();
+                }
+            });
+
+        this.refresh();
     }
 
     ngOnDestroy() {
@@ -102,7 +132,7 @@ export class OverviewComponent implements OnInit, OnDestroy {
     }
 
     selectRcmsUser(newUser: string) {
-        this.selectedRcmsUser$.next(newUser);
+        this.store.dispatch(new overviewActions.SelectRCMSUserAction(newUser));
         this.updateStates();
     }
 
@@ -116,17 +146,17 @@ export class OverviewComponent implements OnInit, OnDestroy {
     }
 
     updateConfigs() {
+        console.log('dispatching configurations update');
         this.store.dispatch(new configsActions.UpdateAction());
     }
 
     updateStates() {
-        this.selectedRcmsUser$.take(1).subscribe(user => {
+        this.selectedRCMSUser$.take(1).subscribe(user => {
             this.store.dispatch(new runningActions.UpdateAction(user));
         });
     }
 
     updateConfigDetails(activeIds, running) {
-        console.log('in overview updateConfigDetails', activeIds, running);
         this.configDetails$.take(1).subscribe((cfgDetails) => {
             const detailsIds = []
             activeIds.forEach(runningId => {

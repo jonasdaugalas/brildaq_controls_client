@@ -31,7 +31,6 @@ export class OverviewHeaderComponent implements OnInit {
     }
 
     selectUser(newUser) {
-        console.log('selecting new user in header');
         this.userChange.emit(newUser);
     }
 

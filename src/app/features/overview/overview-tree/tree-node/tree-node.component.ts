@@ -43,7 +43,6 @@ export class TreeNodeComponent implements OnInit, AfterViewInit {
     toggleDropdown(event) {
         if (this.node['isLeaf']) {
             if (event['target'] === this.dropdown.nativeElement) {
-                console.log(event);
                 this.dropdownIsOpen = true;
                 this.tether.position();
             } else {
