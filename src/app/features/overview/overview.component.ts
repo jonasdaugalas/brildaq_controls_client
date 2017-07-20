@@ -1,7 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable, Subject, BehaviorSubject } from 'rxjs';
+import 'rxjs/add/operator/debounceTime';
 import { Store } from '@ngrx/store';
 import * as appState from '@app/core/state/state.reducer';
+import * as APP_CONFIG from '@app/../app-config-constants';
 
 import * as configsActions from '@app/core/state/configurations.actions';
 import * as runningActions from '@app/core/state/running-configs.actions';
@@ -10,9 +12,11 @@ import * as actionRequestsActions from '@app/core/state/action-requests.actions'
 import * as overviewActions from './state/overview.actions';
 import * as overviewReducer from './state/overview.reducer';
 import { Configuration } from '@app/core/models/configuration';
-import { RunningDetails, STATES as RUNNING_STATES } from '@app/core/models/running-details';
+import { RunningDetails, STATES as CONFIG_STATES } from '@app/core/models/running-details';
 import { ConfigDetails } from '@app/core/models/config-details';
-import { RequestState, RequestInitiatedState } from '@app/core/models/request-state';
+import {
+    RequestState, RequestInitiatedState, RequestFailedState
+} from '@app/core/models/request-state';
 import { ActionRequest } from '@app/core/models/action-request';
 
 @Component({
@@ -22,6 +26,7 @@ import { ActionRequest } from '@app/core/models/action-request';
 export class OverviewComponent implements OnInit, OnDestroy {
 
     private ngUnsubscribe: Subject<void> = new Subject<void>();
+    protected unstableStatesUpdateTimeoutID;
 
     configurationIds$: Observable<Readonly<Array<string>>>;
     configurations$: Observable<{string: Configuration} | {}>;
@@ -40,6 +45,7 @@ export class OverviewComponent implements OnInit, OnDestroy {
     configDetails$: Observable<{string: ConfigDetails} | {}>;
 
     isLoading$: Observable<boolean>;
+    requestsFailing$: Observable<boolean>;
 
     rcmsUsers = ['lumipro', 'lumidev'];
     selectedRCMSUser$: Observable<string>;
@@ -63,15 +69,29 @@ export class OverviewComponent implements OnInit, OnDestroy {
     ngOnInit() {
         console.log('INIT overview');
 
+        this.requestsFailing$ = this.configurationsRequest$
+            .combineLatest(this.runningDetailsRequest$, this.runningStatesRequest$)
+            .debounceTime(400)
+            .map(([cfgReq, runningReq, statesReq]) => {
+                const failing = cfgReq instanceof RequestFailedState ||
+                    runningReq instanceof RequestFailedState ||
+                    statesReq instanceof RequestFailedState;
+                console.log('FAILING?', failing);
+                return failing;
+            });
+
         this.isLoading$ = this.configurationsRequest$
             .combineLatest(this.runningDetailsRequest$, this.runningStatesRequest$)
             .map(([cfgReq, runningReq, statesReq]) => {
-                return cfgReq.loading || runningReq.loading || statesReq.loading;
+                return cfgReq instanceof RequestInitiatedState ||
+                    runningReq instanceof RequestInitiatedState ||
+                    statesReq instanceof RequestInitiatedState;
             });
 
         this.userConfigurationIds$ = this.selectedRCMSUser$
             .combineLatest(this.configurationIds$)
             .map(([user, ids]) => {
+                console.log('update userConfigurationIds$', user, ids);
                 return ids.filter(val => {
                     return val.startsWith('/' + user);
                 });
@@ -90,10 +110,12 @@ export class OverviewComponent implements OnInit, OnDestroy {
                 this.updateConfigDetails(activeIds, running);
             });
 
-        Observable.interval(56000)
+        Observable.interval(APP_CONFIG.AUTOUPDATE_INTERVAL)
             .takeUntil(this.ngUnsubscribe)
-            .subscribe(val => {
-                if (val % 10 === 9) {
+            .withLatestFrom(this.configurationIds$)
+            .subscribe(([counter, ids]) => {
+                console.log(counter, ids);
+                if (counter % 10 === 9 || ids.length === 0) {
                     this.refresh();
                 } else {
                     this.updateStates();
@@ -103,7 +125,6 @@ export class OverviewComponent implements OnInit, OnDestroy {
         this.actionRequests$
             .takeUntil(this.ngUnsubscribe)
             .subscribe(requests => {
-                console.log('actionRequest changed (overview)', requests);
                 const waiting = Object.keys(requests).filter(key => {
                     if (requests[key].state instanceof RequestInitiatedState) {
                         return true;
@@ -114,6 +135,21 @@ export class OverviewComponent implements OnInit, OnDestroy {
                 console.log('waiting', waiting);
                 if (waiting.length === 0) {
                     this.updateStates();
+                }
+            });
+
+        this.runningStates$
+            .takeUntil(this.ngUnsubscribe)
+            .subscribe(val => {
+                console.log('checking running states for unstable');
+                const hasUnstableStates = Object.keys(val).some(key => {
+                    return !CONFIG_STATES.stateIsStable(val[key]);
+                });
+                if (hasUnstableStates) {
+                    clearTimeout(this.unstableStatesUpdateTimeoutID);
+                    this.unstableStatesUpdateTimeoutID =  setTimeout(
+                        this.updateStates.bind(this),
+                        APP_CONFIG.UPDATE_UNSTABLE_STATES_INTERVAL);
                 }
             });
 
@@ -138,8 +174,8 @@ export class OverviewComponent implements OnInit, OnDestroy {
 
     filterActiveStates(states) {
         return Object.keys(states).filter(key => {
-            if (states[key] === RUNNING_STATES.ON ||
-                states[key] === RUNNING_STATES.ERROR) {
+            if (states[key] === CONFIG_STATES.ON ||
+                states[key] === CONFIG_STATES.ERROR) {
                 return true;
             }
         });

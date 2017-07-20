@@ -35,6 +35,8 @@ export function reducer(state = initialState, action: configs.Actions): State {
     }
     case configs.UPDATE_FAILED: {
         return Object.assign({}, state, {
+            ids: state.ids.length === 0 ? state.ids : [],
+            entities: Object.keys(state.entities).length === 0 ? state.entities : {},
             request: new RequestFailedState(
                 action.payload.message, action.payload.error)
         });

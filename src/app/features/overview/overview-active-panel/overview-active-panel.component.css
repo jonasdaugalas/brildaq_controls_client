@@ -1,6 +1,6 @@
 .bc-active-card {
     max-width: 380px;
-    flex: 1 1 300px;
+    flex: 1 0 300px;
     margin-top: 12px;
     margin-left: 6px;
 }

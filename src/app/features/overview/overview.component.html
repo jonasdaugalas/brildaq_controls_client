@@ -7,6 +7,10 @@
         (refresh)="refresh()">
     </overview-header>
     <div class="content-container">
+        <div class="dark-curtain" [hidden]="!(requestsFailing$ | async)">
+            <clr-icon shape="danger" class="is-danger" size="300"></clr-icon>
+            <h1 class="text-danger">Requests are failing</h1>
+        </div>
         <div class="content-area">
             <overview-active-panel
                 [activePaths]="activeConfigIds$ | async"

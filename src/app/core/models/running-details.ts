@@ -10,7 +10,14 @@ export class STATES {
     static NO_FM = 'NO_FM';
     static UNKNOWN = 'UNKNOWN';
     static ERROR = 'Error';
-    static TURNING_ON = 'TURNING_ON';
-    static TURNING_OFF = 'TURNING_OFF';
-    static RESETTING = 'RESETTING';
+    static TURNING_ON = 'GoingOn';
+    static TURNING_OFF = 'GoingOff';
+    static RESETTING = 'Resetting';
+
+    static stateIsStable(state) {
+        return state === STATES.ON || state === STATES.OFF ||
+            state === STATES.NO_FM || state === STATES.ERROR ||
+            state === STATES.UNKNOWN;
+    }
+
 }

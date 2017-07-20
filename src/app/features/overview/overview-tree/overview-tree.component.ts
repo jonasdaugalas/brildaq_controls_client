@@ -5,6 +5,7 @@ import { Configuration } from '@app/core/models/configuration';
 import { STATES } from '@app/core/models/running-details';
 import { customConfigSortFn } from '@app/shared/utils/custom-sort';
 import { ActionRequest } from '@app/core/models/action-request';
+import { RequestFailedState } from '@app/core/models/request-state';
 
 class Leaf {
     name: string;

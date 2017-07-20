@@ -51,6 +51,9 @@ export function reducer(state = initialState, action: actions.Actions): State {
     }
     case actions.UPDATE_FAILED: {
         return Object.assign({}, state, {
+            ids: [],
+            running: {},
+            states: {},
             requestRunning: new RequestFailedState(
                 action.payload.message, action.payload.error)
         });
@@ -74,6 +77,7 @@ export function reducer(state = initialState, action: actions.Actions): State {
     }
     case actions.UPDATE_STATES_FAILED: {
         return Object.assign({}, state, {
+            states: {},
             requestStates: new RequestFailedState(
                 action.payload.message, action.payload.error)
         });
