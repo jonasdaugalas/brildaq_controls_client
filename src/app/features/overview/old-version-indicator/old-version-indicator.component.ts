@@ -20,27 +20,27 @@ export class OldVersionIndicatorComponent implements OnInit {
     ngOnInit() {
     }
 
-    protected tetherConfig;
-
     ngAfterViewInit() {
-        this.tetherConfig = {
+    }
+
+    showTooltip() {
+        if (!this.tooltip) {
+            return;
+        }
+        this.tether = new Tether({
             element: this.tooltip.nativeElement,
             target: this.anchor.nativeElement,
             attachment: 'bottom left',
             targetAttachment: 'top right',
-        };
-        this.tether = new Tether(this.tetherConfig);
-        this.tether.disable();
-    }
-
-    showTooltip() {
+        });
         this.tooltipVisible = true;
-        this.tether.enable();
         setTimeout(this.tether.position);
     }
 
     hideTooltip() {
-        this.tether.disable();
         this.tooltipVisible = false;
+        if (this.tether) {
+            this.tether.destroy();
+        }
     }
 }

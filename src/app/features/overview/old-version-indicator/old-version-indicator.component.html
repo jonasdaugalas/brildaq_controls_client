@@ -1,4 +1,4 @@
-<span #anchor
+<span #anchor *ngIf="runningVersion !== -1 && runningVersion < newestVersion"
       (mouseenter)="showTooltip()"
       (mouseleave)="hideTooltip()">
     <clr-icon
@@ -9,7 +9,7 @@
     <span
         #tooltip
         [hidden]="!tooltipVisible"
-        class="tooltip-content">
+        class="tooltip-content" >
         Running configuration v{{runningVersion}} is not the newest configuration v{{newestVersion}}.
     </span>
 </span>
