@@ -31,7 +31,7 @@ export class OverviewComponent implements OnInit, OnDestroy {
     configurationIds$: Observable<Readonly<Array<string>>>;
     configurations$: Observable<{string: Configuration} | {}>;
     configurationsRequest$: Observable<RequestState>;
-    userConfigurationIds$: Observable<Array<string>>;
+    userConfigurations$: Observable<{string: Configuration} | {}>;
 
     runningDetails$: Observable<{string: RunningDetails} | {}>;
     runningDetailsRequest$: Observable<RequestState>;
@@ -87,12 +87,16 @@ export class OverviewComponent implements OnInit, OnDestroy {
                     statesReq instanceof RequestInitiatedState;
             });
 
-        this.userConfigurationIds$ = this.selectedRCMSUser$
-            .combineLatest(this.configurationIds$)
-            .map(([user, ids]) => {
-                return ids.filter(val => {
-                    return val.startsWith('/' + user);
+        this.userConfigurations$ = this.selectedRCMSUser$
+            .combineLatest(this.configurations$)
+            .map(([user, configs]) => {
+                const userConfigs = {};
+                Object.keys(configs).forEach(key => {
+                    if (key.startsWith('/' + user)) {
+                        userConfigs[key] = configs[key];
+                    }
                 });
+                return userConfigs;
             });
 
         this.activeConfigIds$ = this.runningStates$

@@ -16,6 +16,8 @@ class Leaf {
     spinner = false;
     tooltip = '';
     configDetails = undefined;
+    runningVersion = -1;
+    newestVersion = -1;
 
     constructor(public path: string) {
         this.name = path.split('/').pop();
@@ -34,7 +36,7 @@ export class OverviewTreeComponent implements OnInit {
     @Input() set running(newRunning) {
         console.log('running changed', newRunning);
         this._runningDetails = newRunning;
-        this.updateLeafs(this._paths);
+        this.updateLeafs(this.paths);
     }
 
     protected _runningStates: {string: string} | {};
@@ -43,9 +45,11 @@ export class OverviewTreeComponent implements OnInit {
         this.updateLeafs(Object.keys(newStates));
     }
 
-    protected _paths: Array<string>;
-    @Input() set paths(newPaths: Array<string>) {
-        this._paths = newPaths.sort(customConfigSortFn);
+    protected paths: Array<string>;
+    protected _configs: {string: Configuration};
+    @Input() set configs(newConfigs) {
+        this.paths = Object.keys(newConfigs).sort(customConfigSortFn);
+        this._configs = newConfigs;
         this.buildTree();
     }
 
@@ -65,7 +69,7 @@ export class OverviewTreeComponent implements OnInit {
     configTreeLeafs = {};
 
     constructor() {
-        this._paths = [];
+        this.paths = [];
         this._runningStates = {};
         this._runningDetails = {};
         this._actionRequests = {};
@@ -76,8 +80,8 @@ export class OverviewTreeComponent implements OnInit {
 
     protected buildTree() {
         this.configTree = [];
-        this.updateLeafs(this._paths);
-        this._paths.forEach(path => {
+        this.updateLeafs(this.paths);
+        this.paths.forEach(path => {
             const branch = path.split('/');
             branch.shift(); // drop first element because path starts with '/'
             branch.shift(); // drop second element because it is user
@@ -115,8 +119,14 @@ export class OverviewTreeComponent implements OnInit {
             }
             leaf.actionRequest = this._actionRequests[path];
             if (this._runningDetails[path]) {
+                leaf.runningVersion = this._runningDetails[path].version;
                 const detailsID = path + '/v=' + this._runningDetails[path].version;
                 leaf.configDetails = this._configDetails[detailsID];
+            } else {
+                leaf.runningVersion = -1;
+            }
+            if (this._configs[path]) {
+                leaf.newestVersion = this._configs[path].version;
             }
             this.updateLeafStatus(leaf);
         });

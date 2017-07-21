@@ -25,7 +25,7 @@
             <section>
                 <overview-tree
                     style="display: block;"
-                    [paths]="userConfigurationIds$ | async"
+                    [configs]="userConfigurations$ | async"
                     [running]="runningDetails$ | async"
                     [states]="runningStates$ | async"
                     [configDetails]="configDetails$ | async"

@@ -37,6 +37,7 @@ export class TreeNodeComponent implements OnInit, AfterViewInit {
                     pin: ['top', 'bottom']
                 }]
             });
+            this.tether.disable();
         }
     }
 
@@ -44,8 +45,10 @@ export class TreeNodeComponent implements OnInit, AfterViewInit {
         if (this.node['isLeaf']) {
             if (event['target'] === this.dropdown.nativeElement) {
                 this.dropdownIsOpen = true;
+                this.tether.enable();
                 this.tether.position();
             } else {
+                this.tether.disable();
                 this.dropdownIsOpen = false;
             }
         }

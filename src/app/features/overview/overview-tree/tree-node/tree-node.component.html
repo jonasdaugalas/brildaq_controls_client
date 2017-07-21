@@ -7,6 +7,10 @@
         <span *ngIf="node.spinner" class="spinner spinner-inline"></span>
         <span class="tooltip-content">{{node.tooltip}}</span>
     </span>
+    <old-version-indicator
+        [runningVersion]="node.runningVersion"
+        [newestVersion]="node.newestVersion">
+    </old-version-indicator>
 
     <a #dropdown (click)="toggleDropdown($event)" style="cursor: pointer;"
        [class.bc-dropdown-toggle-active]="dropdownIsOpen">

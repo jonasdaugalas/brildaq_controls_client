@@ -16,6 +16,7 @@ import { ActionMenuComponent } from './action-menu/action-menu.component';
 import { ConfigFieldsComponent } from './config-fields/config-fields.component';
 import { ConfigFieldComponent } from './config-fields/config-field/config-field.component';
 import * as overviewReducer from './state/overview.reducer';
+import { OldVersionIndicatorComponent } from './old-version-indicator/old-version-indicator.component';
 
 @NgModule({
     imports: [
@@ -35,7 +36,8 @@ import * as overviewReducer from './state/overview.reducer';
         ActionMenuComponent,
         TreeNodeComponent,
         ConfigFieldsComponent,
-        ConfigFieldComponent
+        ConfigFieldComponent,
+        OldVersionIndicatorComponent
     ],
     providers: [
         OverviewComponent
