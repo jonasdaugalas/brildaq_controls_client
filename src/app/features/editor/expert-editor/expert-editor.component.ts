@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
+import { html as html_beautify } from 'js-beautify';
 
 import * as ace from 'brace';
 import 'brace/mode/xml';
@@ -59,5 +60,11 @@ export class ExpertEditorComponent implements OnInit {
             this.editor.setKeyboardHandler(null);
         }
     };
+
+    beautifyXML() {
+        const beautified = html_beautify(
+            this.editor.getValue(), {indent_size: 2});
+        this.editor.setValue(beautified);
+    }
 
 }
