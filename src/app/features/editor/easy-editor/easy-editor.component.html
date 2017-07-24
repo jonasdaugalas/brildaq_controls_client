@@ -3,6 +3,14 @@
     [executive]="configDetails ? configDetails.executive : undefined">
 </executive-form>
 
-<fields-editor [fields]="configDetails ? configDetails.fields : undefined">
+<ng-container *ngIf="configDetails && configDetails.fields === 'ERROR'; else fieldsEditor">
+    <h3 class="text-warning">
+        Unable to parse configuration fields. Use expert mode editor
+    </h3>
+</ng-container>
 
-</fields-editor>
+<ng-template #fieldsEditor>
+    <fields-editor
+        [fields]="configDetails ? configDetails.fields : undefined">
+    </fields-editor>
+</ng-template>
