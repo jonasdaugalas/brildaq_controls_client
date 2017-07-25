@@ -5,16 +5,11 @@ import { Store } from '@ngrx/store';
 import * as appState from '@app/core/state/state.reducer';
 import * as editorReducer from './state/editor.reducer';
 
-// import * as configsActions from '@app/core/state/configurations.actions';
-// import * as runningActions from '@app/core/state/running-configs.actions';
 import * as configDetailsActions from '@app/core/state/config-details.actions';
 import * as actionRequestsActions from '@app/core/state/action-requests.actions';
 import * as historyActions from '@app/core/state/history.actions';
 import * as editorActions from './state/editor.actions';
-// import { Configuration } from '@app/core/models/configuration';
 import { ConfigDetails } from '@app/core/models/config-details';
-// import { RequestState } from '@app/core/models/request-state';
-// import { ActionRequest } from '@app/core/models/action-request';
 
 
 @Component({
@@ -35,8 +30,10 @@ export class EditorComponent implements OnInit, OnDestroy {
     historyRequest$: Observable<any>;
     editorMode$: Observable<string>;
     isEditorModeExpert$: Observable<boolean>;
-
     configDetails$: Observable<ConfigDetails>;
+    previewModal$: Observable<any>;
+    responseModal$: Observable<any>;
+    confirmModal$: Observable<any>;
 
     constructor(protected store: Store<any>, protected route: ActivatedRoute) {
         this.configDetails$ = Observable.empty();
@@ -46,16 +43,19 @@ export class EditorComponent implements OnInit, OnDestroy {
         this.editorMode$ = this.store.select(s => {
             return editorReducer.selectMode(s['editorModule']);
         });
+        this.previewModal$ = this.store.select(s => {
+            return editorReducer.selectXMLViewModal(s['editorModule']);
+        });
+        this.responseModal$ = this.store.select(s => {
+            return editorReducer.selectResponseModal(s['editorModule']);
+        });
+        this.confirmModal$ = this.store.select(s => {
+            return editorReducer.selectConfirmModal(s['editorModule']);
+        });
         this.isEditorModeExpert$ = this.editorMode$.map(val => val === 'expert');
     }
 
     ngOnInit() {
-
-        // this.editorMode$.takeUntil(this.ngUnsubscribe).subscribe(val => {
-        // });
-
-        // this.updateConfigs();
-
         // ActivatedRoute attributes do not need to be unsubscribed.
         this.route.url.subscribe(urlSegments => {
             this.urlSegments = urlSegments;
@@ -139,6 +139,47 @@ export class EditorComponent implements OnInit, OnDestroy {
         this.store.dispatch(new historyActions.GetOlderHistoryAction({
             configId: this.path, size: 20
         }));
+    }
+
+    showXMLFromFields(fields) {
+        this.store.dispatch(
+            new editorActions.RequestXMLFromFieldsAction({
+                path: this.path,
+                version: this.selectedVersion,
+                fields: fields
+            }));
+    }
+
+    showFinalXML(event: {xml: string, executive}) {
+        this.store.dispatch(
+            new editorActions.RequestFinalXMLAction({
+                path: this.path,
+                version: this.selectedVersion,
+                xml: event.xml,
+                executive: event.executive
+            }));
+    }
+
+    submitFields(fields) {
+
+    }
+
+    submitExpertXML(xml, executive) {
+
+    }
+
+    closeModal(name) {
+        switch(name) {
+        case 'preview': {
+            this.store.dispatch(new editorActions.CloseXMLViewModalAction());
+        }
+        case 'confirm': {
+            this.store.dispatch(new editorActions.CloseConfirmModalAction());
+        }
+        case 'response': {
+            this.store.dispatch(new editorActions.CloseResponseModalAction());
+        }
+        }
     }
 
 }

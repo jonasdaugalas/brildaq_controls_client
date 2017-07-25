@@ -1,0 +1,15 @@
+<ng-container *ngIf="state">
+    <clr-modal [(clrModalOpen)]="state.isOpen" [clrModalClosable]="false">
+        <h3 class="modal-title">response modal</h3>
+        <div class="modal-body">
+            loading {{state.showLoading}}
+            message {{state.message}}
+            code {{state.code}}
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn" (click)="onClickClose()">
+                Cancel
+            </button>
+        </div>
+    </clr-modal>
+</ng-container>

@@ -1,6 +1,7 @@
 import { NgModule, SkipSelf, Optional } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { ClarityModule } from 'clarity-angular';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { StoreModule } from '@ngrx/store';
@@ -32,6 +33,7 @@ import { AlarmService } from './services/alarm.service';
         StoreDevtoolsModule.instrument({
             maxAge: 5
         }),
+        BrowserAnimationsModule, // Needed for clarity modals
         ClarityModule.forRoot()
     ],
     providers: [

@@ -15,6 +15,9 @@ import { EasyEditorComponent } from './easy-editor/easy-editor.component';
 import { ExecutiveFormComponent } from './executive-form/executive-form.component';
 import { FieldsEditorComponent } from './easy-editor/fields-editor/fields-editor.component';
 import { FieldComponent } from './easy-editor/fields-editor/field/field.component';
+import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
+import { PreviewModalComponent } from './preview-modal/preview-modal.component';
+import { ResponseModalComponent } from './response-modal/response-modal.component';
 
 @NgModule({
     imports: [
@@ -31,7 +34,10 @@ import { FieldComponent } from './easy-editor/fields-editor/field/field.componen
         EasyEditorComponent,
         ExecutiveFormComponent,
         FieldsEditorComponent,
-        FieldComponent
+        FieldComponent,
+        ConfirmModalComponent,
+        PreviewModalComponent,
+        ResponseModalComponent
     ]
 })
 export class EditorModule { }

@@ -1,4 +1,6 @@
-import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
+import {
+    Component, OnInit, Input, ChangeDetectionStrategy, Output, EventEmitter, ViewChild
+} from '@angular/core';
 import { html as html_beautify } from 'js-beautify';
 
 import * as ace from 'brace';
@@ -14,6 +16,10 @@ import 'brace/ext/searchbox';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ExpertEditorComponent implements OnInit {
+
+    @ViewChild('executiveForm') executiveForm;
+
+    @Output('previewFinalXML') outputPreviewFinal = new EventEmitter<{xml: string, executive: any}>();
 
     protected _configDetails: any;
     @Input() set configDetails(newDetails) {
@@ -65,6 +71,16 @@ export class ExpertEditorComponent implements OnInit {
         const beautified = html_beautify(
             this.editor.getValue(), {indent_size: 2});
         this.editor.setValue(beautified);
+    }
+
+    submit() {
+    }
+
+    previewFinalXML() {
+        this.outputPreviewFinal.emit({
+            xml: this.editor.getValue(),
+            executive: this.executiveForm.getValue()
+        });
     }
 
 }

@@ -40,7 +40,8 @@
 
                     <expert-editor
                         *ngIf="(isEditorModeExpert$ | async); else easyEditor"
-                        [configDetails]="configDetails$ | async">
+                        [configDetails]="configDetails$ | async"
+                        (previewFinalXML)="showFinalXML($event)">
                     </expert-editor>
 
                     <ng-template #easyEditor>
@@ -61,3 +62,19 @@
         </div>
     </div>
 </div>
+
+
+<confirm-modal
+    [state]="confirmModal$ | async"
+    (close)="closeModal('confirm')">
+</confirm-modal>
+
+<preview-modal
+    [state]="previewModal$ | async"
+    (close)="closeModal('preview')">
+</preview-modal>
+
+<response-modal
+    [state]="responseModal$ | async"
+    (close)="closeModal('response')">
+</response-modal>

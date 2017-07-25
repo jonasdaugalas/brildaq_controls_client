@@ -23,7 +23,7 @@ export class ExecutiveFormComponent implements OnInit {
     ngOnInit() {
     }
 
-    getModifiedExecutive() {
+    getValue() {
         return this._executive;
     }
 
