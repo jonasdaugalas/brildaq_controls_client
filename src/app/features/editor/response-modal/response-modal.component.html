@@ -1,10 +1,17 @@
 <ng-container *ngIf="state">
     <clr-modal [(clrModalOpen)]="state.isOpen" [clrModalClosable]="false">
-        <h3 class="modal-title">response modal</h3>
+        <h3 class="modal-title">{{state.title}}</h3>
         <div class="modal-body">
-            loading {{state.showLoading}}
-            message {{state.message}}
-            code {{state.code}}
+            <div [hidden]="!state.showLoading" style="text-align: center">
+                <span class="spinner spinner-lg">
+                    Loading...
+                </span>
+            </div>
+            <div [hidden]="state.showLoading" >
+                Status code: <code>{{state.code}}</code><br />
+                Response:<br />
+                <pre><code>{{state.message}}</code></pre>
+            </div>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn" (click)="onClickClose()">

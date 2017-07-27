@@ -80,4 +80,28 @@ export class ConfigurationsService {
             .map((resp) => resp.json())
             .catch((err) => Observable.throw(err));
     }
+
+    buildFinalXML(path: string, version: number, xml: string, executive: any) {
+        const url = '/api/buildfinalxml';
+        console.log()
+        return this.http.post(url, {
+            path: path,
+            version: version,
+            xml: xml,
+            executive: executive
+        })
+            .map(response => response.text())
+            .catch(err => Observable.throw(err));
+    }
+
+    buildXML(path: string, version: number, fields: any) {
+        const url = '/api/buildxml';
+        return this.http.post(url, {
+            path: path,
+            version: version,
+            fields: fields
+        })
+            .map(response => response.text())
+            .catch(err => Observable.throw(err));
+    }
 }

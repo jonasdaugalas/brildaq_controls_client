@@ -1,37 +1,45 @@
-// import 'rxjs/add/operator/switchMap';
-// import 'rxjs/add/operator/mergeMap';
-// import 'rxjs/add/operator/map';
-// import { Injectable } from '@angular/core';
-// import { Effect, Actions } from '@ngrx/effects';
-// import { Action } from '@ngrx/store';
-// import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/switchMap';
+import 'rxjs/add/operator/mergeMap';
+import 'rxjs/add/operator/map';
+import { Injectable } from '@angular/core';
+import { Effect, Actions } from '@ngrx/effects';
+import { Action } from '@ngrx/store';
+import { Observable } from 'rxjs/Observable';
 
-// import { ConfigurationsService } from '../services/configurations.service';
-// import * as cfgDetailsActions from './config-details.actions';
+import { ConfigurationsService } from '@app/core/services/configurations.service';
+import * as editorActions from './editor.actions';
 
+@Injectable()
+export class EditorEffects {
 
-// @Injectable()
-// export class ConfigDetailsEffects {
+    @Effect()
+    finalXML$: Observable<Action> = this.actions$
+        .ofType(editorActions.REQUEST_FINAL_XML, editorActions.CLOSE_RESPONSE_MODAL)
+        .switchMap((action) => {
+            if (action.type === editorActions.CLOSE_RESPONSE_MODAL) {
+                return Observable.empty();
+            }
+            // return Observable.timer(2000).map(val => {
+            //     if (Math.random() < 0.5) {
+            //         return new editorActions.FailRequestXMLAction({code: 555, message: "oops"});
+            //     } else {
+            //         return new editorActions.SuccessRequestXMLAction({xml: '<bla>new xml </bla>'});
+            //     }
+            // });
+            const payload = (<editorActions.RequestFinalXMLAction>action).payload;
+            return this.configService.buildFinalXML(
+                payload.path, payload.version, payload.xml, payload.executive)
+                .map(response => new editorActions.SuccessRequestXMLAction({
+                    xml: response
+                }))
+                .catch((err, caught) => Observable.of(
+                    new editorActions.FailRequestXMLAction({
+                        code: err.status || -1,
+                        message: JSON.stringify(err),
+                    })
+                ));
+        });
 
-//     @Effect()
-//     update$: Observable<Action> = this.actions$
-//         .ofType(cfgDetailsActions.REQUEST)
-//         .mergeMap((action) => {
-//             return this.configService.getConfigDetails(action.payload.id, action.payload.withXML)
-//                 .map((response) => (new cfgDetailsActions.RequestSuccessAction({
-//                     id: action.payload.id,
-//                     withXML: action.payload.withXML,
-//                     result: response
-//                 })))
-//                 .catch((err, caught) => Observable.of(
-//                     new cfgDetailsActions.RequestFailedAction({
-//                         id: action.payload.id,
-//                         message: 'HTTP request failed',
-//                         error: err
-//                     })
-//                 ));
-//         });
-
-//     constructor(protected actions$: Actions,
-//                 protected configService: ConfigurationsService) {};
-// }
+    constructor(protected actions$: Actions,
+                protected configService: ConfigurationsService) {};
+}

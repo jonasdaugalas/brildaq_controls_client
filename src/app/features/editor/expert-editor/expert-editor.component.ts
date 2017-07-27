@@ -9,6 +9,10 @@ import 'brace/keybinding/vim';
 import 'brace/ext/keybinding_menu';
 import 'brace/ext/searchbox';
 
+const VirtualRenderer = ace.acequire('ace/virtual_renderer').VirtualRenderer;
+const Editor = ace.acequire('ace/editor').Editor;
+const EditSession = ace.acequire('ace/edit_session').EditSession;
+
 @Component({
     selector: 'expert-editor',
     templateUrl: './expert-editor.component.html',
@@ -17,6 +21,7 @@ import 'brace/ext/searchbox';
 })
 export class ExpertEditorComponent implements OnInit {
 
+    @ViewChild('editorContainer') editorContainer;
     @ViewChild('executiveForm') executiveForm;
 
     @Output('previewFinalXML') outputPreviewFinal = new EventEmitter<{xml: string, executive: any}>();
@@ -41,12 +46,12 @@ export class ExpertEditorComponent implements OnInit {
     }
 
     initializeEditor() {
-        console.log('initializeEditor (expert)');
-        if (this.editor) {
+        if (this.editor || !this.editorContainer) {
             return;
         }
-        this.editor = ace.edit('editor');
-        this.editor.getSession().setMode('ace/mode/xml');
+        const renderer = new VirtualRenderer(this.editorContainer.nativeElement);
+        const session = new EditSession('', 'ace/mode/xml');
+        this.editor = new Editor(renderer, session);
         this.editor.$blockScrolling = Infinity;
     }
 

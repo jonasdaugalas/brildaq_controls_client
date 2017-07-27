@@ -66,25 +66,29 @@ export function reducer(state = initialState, action: actions.Actions): State {
         return Object.assign({}, state, {responseModal: responseModal});
     }
     case actions.SUCCESS_REQUEST_XML: {
-        const responseModal = Object.assign({}, state.responseModal, {isOpen: false});
+        const responseModal = Object.assign(
+            {},
+            state.responseModal,
+            {isOpen: false, showLoading: false, message: 'Success', code: null});
         const XMLViewModal = {
             isOpen: true,
             xml: action.payload.xml
         }
+        console.log('success', XMLViewModal);
         return Object.assign(
             {},
             state,
             {responseModal: responseModal, XMLViewModal: XMLViewModal});
     }
     case actions.FAIL_REQUEST_XML: {
-        const responseModalUpdate = {
+        const responseModal = {
+            title: 'Failed',
             isOpen: true,
             showLoading: false,
             message: action.payload.message,
             code: action.payload.code
         }
-        const responseModal = Object.assign({}, state.responseModal, responseModalUpdate);
-        return Object.assign({}, state, responseModal);
+        return Object.assign({}, state, {responseModal: responseModal});
     }
     case actions.CLOSE_CONFIRM_MODAL: {
         const confirmModal = Object.assign({}, state.confirmModal, {isOpen: false});
