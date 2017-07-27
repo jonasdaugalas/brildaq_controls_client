@@ -14,11 +14,7 @@ export interface State {
         title: string,
         isOpen: boolean,
         showLoading: boolean,
-        message: string,
-        code: number
-    },
-    confirmModal: {
-        isOpen: boolean
+        response: any,
     }
 }
 
@@ -32,11 +28,7 @@ export const initialState: State = {
         title: '',
         isOpen: false,
         showLoading: false,
-        message: '',
-        code: null
-    },
-    confirmModal: {
-        isOpen: false
+        response: null
     }
 };
 
@@ -50,8 +42,7 @@ export function reducer(state = initialState, action: actions.Actions): State {
             title: 'Waiting for final XML to be generated',
             isOpen: true,
             showLoading: true,
-            message: '',
-            code: null
+            response: null
         }
         return Object.assign({}, state, {responseModal: responseModal});
     }
@@ -60,8 +51,7 @@ export function reducer(state = initialState, action: actions.Actions): State {
             title: 'Waiting for XML to be generated',
             isOpen: true,
             showLoading: true,
-            message: '',
-            code: null
+            response: null
         }
         return Object.assign({}, state, {responseModal: responseModal});
     }
@@ -85,14 +75,45 @@ export function reducer(state = initialState, action: actions.Actions): State {
             title: 'Failed',
             isOpen: true,
             showLoading: false,
-            message: action.payload.message,
-            code: action.payload.code
+            response: action.payload.response,
         }
         return Object.assign({}, state, {responseModal: responseModal});
     }
-    case actions.CLOSE_CONFIRM_MODAL: {
-        const confirmModal = Object.assign({}, state.confirmModal, {isOpen: false});
-        return Object.assign({}, state, {confirmModal: confirmModal});
+    case actions.SUBMIT_XML: {
+        const responseModal = {
+            title: 'Submitting...',
+            isOpen: true,
+            showLoading: true,
+            response: null
+        }
+        return Object.assign({}, state, {responseModal: responseModal});
+    }
+    case actions.SUBMIT_FIELDS: {
+        const responseModal = {
+            title: 'Submitting',
+            isOpen: true,
+            showLoading: true,
+            response: null
+        }
+        return Object.assign({}, state, {responseModal: responseModal});
+    }
+    case actions.SUCCESS_SUBMIT: {
+        const responseModal = {
+            isOpen: true,
+            showLoading: false,
+            message: 'Success',
+            response: action.payload.response
+        };
+        return Object.assign({}, state, {responseModal: responseModal});
+    }
+    case actions.FAIL_SUBMIT: {
+        const responseModal = {
+            isOpen: true,
+            showLoading: false,
+            message: 'Failed',
+            response: action.payload.response
+        };
+        return Object.assign({}, state, {responseModal: responseModal});
     }
     case actions.CLOSE_RESPONSE_MODAL: {
         const responseModal = Object.assign({}, state.responseModal, {isOpen: false});
@@ -110,4 +131,3 @@ export function reducer(state = initialState, action: actions.Actions): State {
 export const selectMode = (state: State) => state.editorMode;
 export const selectXMLViewModal = (state: State) => state.XMLViewModal;
 export const selectResponseModal = (state: State) => state.responseModal;
-export const selectConfirmModal = (state: State) => state.confirmModal;

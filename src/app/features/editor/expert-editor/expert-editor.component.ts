@@ -22,9 +22,9 @@ const EditSession = ace.acequire('ace/edit_session').EditSession;
 export class ExpertEditorComponent implements OnInit {
 
     @ViewChild('editorContainer') editorContainer;
-    @ViewChild('executiveForm') executiveForm;
 
-    @Output('previewFinalXML') outputPreviewFinal = new EventEmitter<{xml: string, executive: any}>();
+    @Output() preview = new EventEmitter<{xml: string, executive: any}>();
+    @Output() submit = new EventEmitter<{xml: string, executive: any}>();
 
     protected _configDetails: any;
     @Input() set configDetails(newDetails) {
@@ -76,16 +76,6 @@ export class ExpertEditorComponent implements OnInit {
         const beautified = html_beautify(
             this.editor.getValue(), {indent_size: 2});
         this.editor.setValue(beautified);
-    }
-
-    submit() {
-    }
-
-    previewFinalXML() {
-        this.outputPreviewFinal.emit({
-            xml: this.editor.getValue(),
-            executive: this.executiveForm.getValue()
-        });
     }
 
 }

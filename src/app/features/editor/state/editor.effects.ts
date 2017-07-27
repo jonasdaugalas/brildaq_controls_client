@@ -19,13 +19,6 @@ export class EditorEffects {
             if (action.type === editorActions.CLOSE_RESPONSE_MODAL) {
                 return Observable.empty();
             }
-            // return Observable.timer(2000).map(val => {
-            //     if (Math.random() < 0.5) {
-            //         return new editorActions.FailRequestXMLAction({code: 555, message: "oops"});
-            //     } else {
-            //         return new editorActions.SuccessRequestXMLAction({xml: '<bla>new xml </bla>'});
-            //     }
-            // });
             const payload = (<editorActions.RequestFinalXMLAction>action).payload;
             return this.configService.buildFinalXML(
                 payload.path, payload.version, payload.xml, payload.executive)
@@ -34,8 +27,67 @@ export class EditorEffects {
                 }))
                 .catch((err, caught) => Observable.of(
                     new editorActions.FailRequestXMLAction({
-                        code: err.status || -1,
-                        message: JSON.stringify(err),
+                        response: err
+                    })
+                ));
+        });
+
+    @Effect()
+    fromFieldsXML$: Observable<Action> = this.actions$
+        .ofType(editorActions.REQUEST_XML_FROM_FIELDS, editorActions.CLOSE_RESPONSE_MODAL)
+        .switchMap((action) => {
+            if (action.type === editorActions.CLOSE_RESPONSE_MODAL) {
+                return Observable.empty();
+            }
+            const payload = (<editorActions.RequestXMLFromFieldsAction>action).payload;
+            return this.configService.buildXML(
+                payload.path, payload.version, payload.fields)
+                .map(response => new editorActions.SuccessRequestXMLAction({
+                    xml: response
+                }))
+                .catch((err, caught) => Observable.of(
+                    new editorActions.FailRequestXMLAction({
+                        response: err
+                    })
+                ));
+        });
+
+    @Effect()
+    submitFields$: Observable<Action> = this.actions$
+        .ofType(editorActions.SUBMIT_FIELDS, editorActions.CLOSE_RESPONSE_MODAL)
+        .switchMap((action) => {
+            if (action.type === editorActions.CLOSE_RESPONSE_MODAL) {
+                return Observable.empty();
+            }
+            const payload = (<editorActions.SubmitFieldsAction>action).payload;
+            return this.configService.submitFields(
+                payload.comment, payload.path, payload.version, payload.fields)
+                .map(response => new editorActions.SuccessSubmitAction({
+                    response: response
+                }))
+                .catch((err, caught) => Observable.of(
+                    new editorActions.FailSubmitAction({
+                        response: err
+                    })
+                ));
+        });
+
+    @Effect()
+    submitXML$: Observable<Action> = this.actions$
+        .ofType(editorActions.SUBMIT_XML, editorActions.CLOSE_RESPONSE_MODAL)
+        .switchMap((action) => {
+            if (action.type === editorActions.CLOSE_RESPONSE_MODAL) {
+                return Observable.empty();
+            }
+            const payload = (<editorActions.SubmitXMLAction>action).payload;
+            return this.configService.submitXML(
+                payload.comment, payload.path, payload.version, payload.xml, payload.executive)
+                .map(response => new editorActions.SuccessSubmitAction({
+                    response: response
+                }))
+                .catch((err, caught) => Observable.of(
+                    new editorActions.FailSubmitAction({
+                        response: err
                     })
                 ));
         });

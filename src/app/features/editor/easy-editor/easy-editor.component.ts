@@ -1,4 +1,6 @@
-import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
+import {
+    Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy
+} from '@angular/core';
 
 @Component({
     selector: 'easy-editor',
@@ -8,6 +10,8 @@ import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core
 })
 export class EasyEditorComponent implements OnInit {
 
+    @Output() preview = new EventEmitter();
+    @Output() submit = new EventEmitter();
     @Input() configDetails;
 
     constructor() { }

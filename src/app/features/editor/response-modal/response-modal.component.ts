@@ -19,7 +19,11 @@ export class ResponseModalComponent implements OnInit {
     }
 
     onClickClose() {
-        console.log('click close');
         this.close.emit();
+    }
+
+    badStatus() {
+        return this.state && this.state.response &&
+            (this.state.response.status < 200 || this.state.response.status >= 300);
     }
 }

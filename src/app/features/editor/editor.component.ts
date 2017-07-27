@@ -13,13 +13,15 @@ import { ConfigDetails } from '@app/core/models/config-details';
 
 
 @Component({
-  templateUrl: './editor.component.html',
-  styleUrls: ['./editor.component.css']
+    templateUrl: './editor.component.html',
+    styleUrls: ['./editor.component.css']
 })
 export class EditorComponent implements OnInit, OnDestroy {
 
     private ngUnsubscribe: Subject<void> = new Subject<void>();
     protected historySubscription: Subscription;
+
+    @ViewChild('confirmModal') confirmModal;
 
     urlSegments = [];
     path: string = null;
@@ -33,7 +35,6 @@ export class EditorComponent implements OnInit, OnDestroy {
     configDetails$: Observable<ConfigDetails>;
     previewModal$: Observable<any>;
     responseModal$: Observable<any>;
-    confirmModal$: Observable<any>;
 
     constructor(protected store: Store<any>, protected route: ActivatedRoute) {
         this.configDetails$ = Observable.empty();
@@ -48,9 +49,6 @@ export class EditorComponent implements OnInit, OnDestroy {
         });
         this.responseModal$ = this.store.select(s => {
             return editorReducer.selectResponseModal(s['editorModule']);
-        });
-        this.confirmModal$ = this.store.select(s => {
-            return editorReducer.selectConfirmModal(s['editorModule']);
         });
         this.isEditorModeExpert$ = this.editorMode$.map(val => val === 'expert');
     }
@@ -161,20 +159,38 @@ export class EditorComponent implements OnInit, OnDestroy {
     }
 
     submitFields(fields) {
-
+        this.confirmModal.close();
+        this.confirmModal.setCallback((comment) => {
+            this.store.dispatch(
+                new editorActions.SubmitFieldsAction({
+                    comment: comment,
+                    path: this.path,
+                    version: this.selectedVersion,
+                    fields: fields
+                }));
+        });
+        this.confirmModal.open();
     }
 
-    submitExpertXML(xml, executive) {
-
+    submitXML(event: {xml, executive}) {
+        this.confirmModal.close();
+        this.confirmModal.setCallback((comment) => {
+            this.store.dispatch(
+                new editorActions.SubmitXMLAction({
+                    comment: comment,
+                    path: this.path,
+                    version: this.selectedVersion,
+                    xml: event.xml,
+                    executive: event.executive
+                }));
+        });
+        this.confirmModal.open();
     }
 
     closeModal(name) {
         switch(name) {
         case 'preview': {
             this.store.dispatch(new editorActions.CloseXMLViewModalAction());
-        }
-        case 'confirm': {
-            this.store.dispatch(new editorActions.CloseConfirmModalAction());
         }
         case 'response': {
             this.store.dispatch(new editorActions.CloseResponseModalAction());

@@ -1,5 +1,5 @@
 import {
-    Component, OnInit, AfterViewInit, Input, Output, EventEmitter
+    Component, OnInit, AfterViewInit, Input, Output, EventEmitter, ViewChild
 } from '@angular/core';
 
 @Component({
@@ -9,8 +9,16 @@ import {
 })
 export class ConfirmModalComponent implements OnInit, AfterViewInit {
 
-    @Output() close = new EventEmitter();
-    @Input() state;
+    @ViewChild('modal') modal;
+    callback = null;
+    comment = '';
+
+    set isOpen(newVal) {
+        if (!newVal) {
+            this.callback = null;
+            this.comment = '';
+        }
+    }
 
     constructor() { }
 
@@ -21,18 +29,25 @@ export class ConfirmModalComponent implements OnInit, AfterViewInit {
 
     }
 
+    setCallback(func) {
+        this.callback = func;
+    }
+
     open() {
-        // this.modal.open();
+        this.modal.open();
     }
 
-    callback() {
-        // this.modal.close();
-        console.log('callback');
+    close() {
+        this.modal.close();
     }
 
-    onClickClose() {
-        console.log('clicked close');
-        this.close.emit();
+    confirm() {
+        if (this.callback) {
+            this.callback(this.comment);
+            setTimeout(() => {
+              this.modal.close()
+            }, 50);
+        }
     }
 
 }

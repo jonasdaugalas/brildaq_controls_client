@@ -83,7 +83,6 @@ export class ConfigurationsService {
 
     buildFinalXML(path: string, version: number, xml: string, executive: any) {
         const url = '/api/buildfinalxml';
-        console.log()
         return this.http.post(url, {
             path: path,
             version: version,
@@ -104,4 +103,28 @@ export class ConfigurationsService {
             .map(response => response.text())
             .catch(err => Observable.throw(err));
     }
+
+    submitFields(comment: string, path: string, version: number, fields: any) {
+        const url = '/api/submitfields';
+        return this.http.post(url, {
+            comment: comment,
+            path: path,
+            version: version,
+            fields: fields
+        })
+            .catch(err => Observable.throw(err));
+    }
+
+    submitXML(comment: string, path: string, version: number, xml: string, executive: any) {
+        const url = '/api/submitxml';
+        return this.http.post(url, {
+            comment: comment,
+            path: path,
+            version: version,
+            xml: xml,
+            executive: executive
+        })
+            .catch(err => Observable.throw(err));
+    }
+
 }

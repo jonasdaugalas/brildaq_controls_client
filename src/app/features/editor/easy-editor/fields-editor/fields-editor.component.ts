@@ -33,7 +33,7 @@ export class FieldsEditorComponent implements OnInit {
     ngOnInit() {
     }
 
-    getModifiedFields() {
+    getValue() {
         return this._fields;
     }
 
