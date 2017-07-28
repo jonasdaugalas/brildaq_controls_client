@@ -18,20 +18,20 @@ export class ConfigurationsService {
     constructor(protected http: Http) {}
 
     getConfigs() {
-        return this.http.get('/api/configurations')
+        return this.http.get('api/configurations')
             .map((resp) => resp.json())
             .catch((err) => Observable.throw(err));
     }
 
     getRunning(owner: string) {
-        return this.http.get('/api/running/' + owner)
+        return this.http.get('api/running/' + owner)
             .map((resp) => resp.json())
             .catch((err) => Observable.throw(err));
     }
 
     getStates(uris: Array<string>) {
         return this.http.post(
-            '/api/states',
+            'api/states',
             JSON.stringify(uris),
             {headers: ConfigurationsService.postHeaders})
             .map((resp) => resp.json())
@@ -39,7 +39,7 @@ export class ConfigurationsService {
     }
 
     getConfigDetails(id: string, withXML = false) {
-        let url = '/api/config' + id;
+        let url = 'api/config' + id;
         if (!withXML) {
             url += '/noxml';
         }
@@ -71,7 +71,7 @@ export class ConfigurationsService {
     }
 
     getHistory(id: string, size=20, below=null) {
-        let url = '/api/history' + id + '/limit=' + size;
+        let url = 'api/history' + id + '/limit=' + size;
         if (below) {
             // yes. url parameter has double 'l'...
             url += '/bellow=' + below;
@@ -82,7 +82,7 @@ export class ConfigurationsService {
     }
 
     buildFinalXML(path: string, version: number, xml: string, executive: any) {
-        const url = '/api/buildfinalxml';
+        const url = 'api/buildfinalxml';
         return this.http.post(url, {
             path: path,
             version: version,
@@ -94,7 +94,7 @@ export class ConfigurationsService {
     }
 
     buildXML(path: string, version: number, fields: any) {
-        const url = '/api/buildxml';
+        const url = 'api/buildxml';
         return this.http.post(url, {
             path: path,
             version: version,
@@ -105,7 +105,7 @@ export class ConfigurationsService {
     }
 
     submitFields(comment: string, path: string, version: number, fields: any) {
-        const url = '/api/submitfields';
+        const url = 'api/submitfields';
         return this.http.post(url, {
             comment: comment,
             path: path,
@@ -116,7 +116,7 @@ export class ConfigurationsService {
     }
 
     submitXML(comment: string, path: string, version: number, xml: string, executive: any) {
-        const url = '/api/submitxml';
+        const url = 'api/submitxml';
         return this.http.post(url, {
             comment: comment,
             path: path,
