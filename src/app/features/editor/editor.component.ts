@@ -99,6 +99,7 @@ export class EditorComponent implements OnInit, OnDestroy {
         this.historySubscription.unsubscribe();
         this.historySubscription = this.history$
             .takeUntil(this.ngUnsubscribe)
+            .skip(1) // skip initial value - avoid useless updates
             .withLatestFrom(this.historyRequest$).subscribe(([history, request]) => {
                 if (!request.forNewest) {
                     return;

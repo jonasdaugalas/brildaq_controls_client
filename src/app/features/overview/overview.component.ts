@@ -125,6 +125,7 @@ export class OverviewComponent implements OnInit, OnDestroy {
 
         this.actionRequests$
             .takeUntil(this.ngUnsubscribe)
+            .skip(1) // skip initial value, not necessary, but to avoid useless update
             .subscribe(requests => {
                 const waiting = Object.keys(requests).filter(key => {
                     if (requests[key].state instanceof RequestInitiatedState) {
