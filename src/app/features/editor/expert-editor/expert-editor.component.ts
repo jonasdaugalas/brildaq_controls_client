@@ -12,6 +12,7 @@ import 'brace/ext/searchbox';
 const VirtualRenderer = ace.acequire('ace/virtual_renderer').VirtualRenderer;
 const Editor = ace.acequire('ace/editor').Editor;
 const EditSession = ace.acequire('ace/edit_session').EditSession;
+const UndoManager = ace.acequire('ace/undomanager').UndoManager;
 
 @Component({
     selector: 'expert-editor',
@@ -51,6 +52,7 @@ export class ExpertEditorComponent implements OnInit {
         }
         const renderer = new VirtualRenderer(this.editorContainer.nativeElement);
         const session = new EditSession('', 'ace/mode/xml');
+        session.setUndoManager(new UndoManager());
         this.editor = new Editor(renderer, session);
         this.editor.$blockScrolling = Infinity;
     }
@@ -73,6 +75,7 @@ export class ExpertEditorComponent implements OnInit {
     };
 
     beautifyXML() {
+        this.editor.getSession().getUndoManager().undo();
         const beautified = html_beautify(
             this.editor.getValue(), {indent_size: 2});
         this.editor.setValue(beautified);
