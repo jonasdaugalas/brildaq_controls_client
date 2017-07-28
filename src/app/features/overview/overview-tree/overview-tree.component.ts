@@ -118,14 +118,16 @@ export class OverviewTreeComponent implements OnInit {
                 this.configTreeLeafs[path] = leaf;
             }
             leaf.actionRequest = this._actionRequests[path];
-            if (this._runningDetails[path]) {
+            if (this._runningDetails && this._runningDetails[path]) {
                 leaf.runningVersion = this._runningDetails[path].version;
-                const detailsID = path + '/v=' + this._runningDetails[path].version;
-                leaf.configDetails = this._configDetails[detailsID];
+                if (this._configDetails) {
+                    const detailsID = path + '/v=' + this._runningDetails[path].version;
+                    leaf.configDetails = this._configDetails[detailsID];
+                }
             } else {
                 leaf.runningVersion = -1;
             }
-            if (this._configs[path]) {
+            if (this._configs && this._configs[path]) {
                 leaf.newestVersion = this._configs[path].version;
             }
             this.updateLeafStatus(leaf);

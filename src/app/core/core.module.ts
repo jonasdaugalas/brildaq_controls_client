@@ -31,7 +31,7 @@ import { AlarmService } from './services/alarm.service';
             HistoryEffects,
         ]),
         StoreDevtoolsModule.instrument({
-            maxAge: 5
+            maxAge: 50
         }),
         BrowserAnimationsModule, // Needed for clarity modals
         ClarityModule.forRoot()
