@@ -11,6 +11,8 @@
 
 .card .card-block {
     padding: 6px 12px;
+    word-break: break-all;
+    overflow: hidden;
 }
 
 .card .card-footer {
