@@ -1,5 +1,5 @@
 import {
-    Component, OnInit, AfterViewInit, Input, ViewChild
+    Component, OnInit, AfterViewInit, Input, ViewChild, OnDestroy
 } from '@angular/core';
 import * as Tether from 'tether';
 
@@ -11,7 +11,7 @@ import * as Tether from 'tether';
         '(document:click)': 'toggleDropdown($event)',
     }
 })
-export class TreeNodeComponent implements OnInit, AfterViewInit {
+export class TreeNodeComponent implements OnInit, AfterViewInit, OnDestroy {
 
     @Input() node;
     tether: Tether;
@@ -22,6 +22,11 @@ export class TreeNodeComponent implements OnInit, AfterViewInit {
     constructor() { }
 
     ngOnInit() {
+    }
+
+    ngOnDestroy() {
+        this.dropdownIsOpen = false;
+        this.tether.destroy();
     }
 
     ngAfterViewInit() {
