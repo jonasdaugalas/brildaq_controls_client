@@ -5,11 +5,13 @@
 
 <div #editorContainer class="editor" > </div>
 
-<div class="checkbox" style="display: inline-block; margin-right: 1em;">
-    <input id="vim_bindings_toggle" type="checkbox"
-           [checked]="vimKeybindings" (change)="toggleBindings()">
-    <label for="vim_bindings_toggle">Vim bindings</label>
-</div>
+<clr-checkbox
+    name="vimBindingsCheckbox"
+    style="display: inline-block; margin-right: 1em;"
+    [ngModel]="vimKeybindings"
+    (ngModelChange)="toggleBindings()">
+    VIM bindings
+</clr-checkbox>
 
 <button class="btn" (click)="beautifyXML()">
     Beautify

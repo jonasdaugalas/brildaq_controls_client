@@ -34,7 +34,7 @@ export class OverviewHeaderComponent implements OnInit {
         this.userChange.emit(newUser);
     }
 
-    onRefreshClick(event) {
+    onRefreshClick() {
         this.refresh.emit();
     }
 }

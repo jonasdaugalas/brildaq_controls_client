@@ -22,23 +22,23 @@ const UndoManager = ace.acequire('ace/undomanager').UndoManager;
 })
 export class ExpertEditorComponent implements OnInit {
 
-    @ViewChild('editorContainer') editorContainer;
+    @ViewChild('editorContainer') public editorContainer;
 
-    @Output() preview = new EventEmitter<{xml: string, executive: any}>();
-    @Output() submit = new EventEmitter<{xml: string, executive: any}>();
+    @Output() public preview = new EventEmitter<{xml: string, executive: any}>();
+    @Output() public submit = new EventEmitter<{xml: string, executive: any}>();
 
     protected _configDetails: any;
-    @Input() set configDetails(newDetails) {
+    @Input() public set configDetails(newDetails) {
         this._configDetails = newDetails;
         console.log('Setting config details in expert editor', newDetails);
         this.updateConfigDetails();
     }
-    get configDetails() {
+    public get configDetails() {
         return this._configDetails;
     }
 
-    vimKeybindings: boolean = false;
-    editor: ace.Editor;
+    public vimKeybindings: boolean = false;
+    public editor: ace.Editor;
 
     constructor() { }
 
@@ -65,7 +65,7 @@ export class ExpertEditorComponent implements OnInit {
         this.editor.setValue(this._configDetails.xml);
     }
 
-    toggleBindings(newVal) {
+    toggleBindings() {
         this.vimKeybindings = !this.vimKeybindings;
         if (this.vimKeybindings) {
             this.editor.setKeyboardHandler('ace/keyboard/vim');

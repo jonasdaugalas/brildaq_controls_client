@@ -26,7 +26,6 @@ export class ActionRequestsEffects {
                 return Observable.empty();
             }
             return this.configService.sendAction(payload.configId, payload.actionType)
-                // .delay(2000)
                 .map((response) => (new actionRequestsActions.SendActionSuccessAction({
                     configId: payload.configId,
                     actionType: payload.actionType
