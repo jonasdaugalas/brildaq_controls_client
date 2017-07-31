@@ -25,9 +25,15 @@ export class TreeNodeComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        this.dropdownIsOpen = false;
         if (this.tether) {
             this.tether.destroy();
+        }
+        // sometimes dropdownMenu can be just left detached and not hidden,
+        // below is the fix which probably is not the Angular way. But I don't
+        // know how to solve this other way.
+        if (this.dropdownMenu) {
+            const el = this.dropdownMenu.nativeElement;
+            el.parentNode.removeChild(el);
         }
     }
 
