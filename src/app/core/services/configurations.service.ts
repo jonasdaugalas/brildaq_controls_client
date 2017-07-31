@@ -49,7 +49,7 @@ export class ConfigurationsService {
     }
 
     sendAction(id: string, actionType: string) {
-        let url = '/api';
+        let url = 'api';
         switch (actionType) {
         case CONTROL_ACTIONS.CREATE_FM:
             url += '/create';
