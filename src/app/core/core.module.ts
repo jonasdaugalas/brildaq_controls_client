@@ -1,3 +1,4 @@
+import { environment } from '../../environments/environment';
 import { NgModule, SkipSelf, Optional } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { ClarityModule } from 'clarity-angular';
@@ -30,9 +31,7 @@ import { AlarmService } from './services/alarm.service';
             ActionRequestsEffects,
             HistoryEffects,
         ]),
-        StoreDevtoolsModule.instrument({
-            maxAge: 50
-        }),
+        !environment.production ? StoreDevtoolsModule.instrument({maxAge: 50}) : [],
         BrowserAnimationsModule, // Needed for clarity modals
         ClarityModule.forRoot()
     ],
