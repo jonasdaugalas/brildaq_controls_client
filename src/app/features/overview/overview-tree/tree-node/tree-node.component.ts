@@ -26,7 +26,9 @@ export class TreeNodeComponent implements OnInit, AfterViewInit, OnDestroy {
 
     ngOnDestroy() {
         this.dropdownIsOpen = false;
-        this.tether.destroy();
+        if (this.tether) {
+            this.tether.destroy();
+        }
     }
 
     ngAfterViewInit() {
