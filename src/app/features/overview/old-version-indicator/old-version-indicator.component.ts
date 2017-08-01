@@ -1,4 +1,6 @@
-import { Component, OnInit, Input, AfterViewInit, ViewChild } from '@angular/core';
+import {
+    Component, OnInit, Input, AfterViewInit, ViewChild, OnDestroy
+} from '@angular/core';
 import * as Tether from 'tether';
 
 @Component({
@@ -6,7 +8,7 @@ import * as Tether from 'tether';
     templateUrl: './old-version-indicator.component.html',
     styleUrls: ['./old-version-indicator.component.css']
 })
-export class OldVersionIndicatorComponent implements OnInit {
+export class OldVersionIndicatorComponent implements OnInit, OnDestroy {
 
     tether;
     tooltipVisible = false;
@@ -18,6 +20,12 @@ export class OldVersionIndicatorComponent implements OnInit {
     constructor() { }
 
     ngOnInit() {
+    }
+
+    ngOnDestroy() {
+        if (this.tether) {
+            this.tether.destroy();
+        }
     }
 
     ngAfterViewInit() {
