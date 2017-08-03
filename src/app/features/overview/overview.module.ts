@@ -21,7 +21,6 @@ import { OldVersionIndicatorComponent } from './old-version-indicator/old-versio
 @NgModule({
     imports: [
         CommonModule,
-        // SharedModule,
         FormsModule,
         ClarityModule.forChild(),
         RouterModule,

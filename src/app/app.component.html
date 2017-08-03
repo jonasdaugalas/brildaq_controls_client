@@ -1,1 +1,6 @@
+<app-alerts
+    [alerts]="alerts$ | async"
+    (processAlert)="handleAlert($event)">
+</app-alerts>
+
 <router-outlet></router-outlet>

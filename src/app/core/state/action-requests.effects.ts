@@ -6,7 +6,7 @@ import { Effect, Actions } from '@ngrx/effects';
 import { Store, Action } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 
-import * as appState from './state.reducer';
+import * as coreState from './state.reducer';
 import { ConfigurationsService } from '../services/configurations.service';
 import * as actionRequestsActions from './action-requests.actions';
 
@@ -17,7 +17,7 @@ export class ActionRequestsEffects {
     @Effect()
     update$: Observable<Action> = this.actions$
         .ofType(actionRequestsActions.SEND_ACTION)
-        .withLatestFrom(this.store$.select(appState.selectActionRequests))
+        .withLatestFrom(this.store$.select(coreState.selectActionRequests))
         .mergeMap(([action, actionRequests]) => {
             const payload = (<actionRequestsActions.SendActionAction>action).payload;
             if (actionRequests.hasOwnProperty(payload.configId) &&
@@ -42,6 +42,6 @@ export class ActionRequestsEffects {
 
     constructor(
         protected actions$: Actions,
-        protected store$: Store<appState.State>,
+        protected store$: Store<coreState.State>,
         protected configService: ConfigurationsService) {};
 }

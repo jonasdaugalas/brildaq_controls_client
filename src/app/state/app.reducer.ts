@@ -1,0 +1,76 @@
+import * as actions from './app.actions';
+import { Alert, AlertAction } from '../models/alert';
+
+export interface State {
+    alerts: {
+        entities: Array<Alert>,
+        handleAlert: boolean,
+        handleAction: AlertAction
+    }
+}
+
+export const initialState: State = {
+    alerts: {
+        entities: [],
+        handleAlert: false,
+        handleAction: undefined
+    }
+};
+
+export const alertTypeSeverity = {
+    success: 0,
+    info: 1,
+    warning: 2,
+    danger: 3
+}
+
+export function severityComparator(a: Alert, b: Alert) {
+    return alertTypeSeverity[a.type] - alertTypeSeverity[b.type];
+}
+
+export function reverseSeverityComparator(a: Alert, b: Alert) {
+    return severityComparator(a, b) * -1;
+}
+
+export function insertAlertSorted(alerts: Array<Alert>, newAlert: Alert) {
+    if (!alerts) {
+        return [newAlert];
+    }
+    alerts.push(newAlert);
+    alerts.sort(reverseSeverityComparator);
+    return alerts.slice();
+}
+
+export function reducer(state = initialState, action: actions.Actions): State {
+    switch (action.type) {
+    case actions.ADD_ALERT: {
+        const newEntities = insertAlertSorted(state.alerts.entities, action.payload);
+        const newAlerts = Object.assign({}, state.alerts, {entities: newEntities});
+        return Object.assign({}, state, {alerts: newAlerts});
+    }
+    case actions.HANDLE_ALERT: {
+        console.log('handle alert', action);
+        const index = state.alerts.entities.indexOf(action.payload.alert);
+        let newAlerts;
+        if (index < 0) {
+            const update = {handleAlert: false, handleAction: undefined};
+            newAlerts = Object.assign({}, state.alerts, update);
+        } else {
+            const newEntities = state.alerts.entities.slice()
+            newEntities.splice(index, 1);
+            const update = {
+                entities: newEntities,
+                handleAlert: true,
+                handleAction: action.payload.alert.actions[action.payload.actionName]
+            }
+            newAlerts = Object.assign({}, state.alerts, update);
+        }
+        return Object.assign({}, state, {alerts: newAlerts});
+    }
+    default:
+        return state;
+    }
+}
+
+export const selectAlerts = (state: State) => state.alerts;
+export const selectAlertsEntities = (state: State) => state.alerts.entities;
