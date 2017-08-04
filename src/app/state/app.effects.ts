@@ -20,7 +20,6 @@ export class AppEffects {
             return appReducer.selectAlerts(state['appModule']);
         }))
         .switchMap(([action, alerts]) => {
-            console.log('in Handle alert effect');
             if (alerts.handleAlert) {
                 const payload = (<appActions.HandleAlertAction>action).payload;
                 const newAction = payload.alert.actions[payload.actionName].action;
@@ -30,6 +29,18 @@ export class AppEffects {
             }
             return Observable.empty();
         });
+
+    @Effect()
+    setCookiew$: Observable<Action> = this.actions$
+        .ofType(appActions.SET_COOKIE)
+        .switchMap(action => {
+            const payload = (<appActions.SetCookieAction>action).payload;
+            const date = new Date();
+            date.setTime(date.getTime() + (payload.days*24*60*60*1000));
+            const expires = "; expires=" + date.toUTCString();
+            document.cookie = payload.name + '=' + payload.value + expires + '; path=/';
+            return Observable.empty();
+        })
 
 
     constructor(

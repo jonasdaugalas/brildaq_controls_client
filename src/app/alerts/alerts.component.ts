@@ -13,7 +13,6 @@ export class AlertsComponent implements OnInit {
     protected _alerts: Array<Alert>;
     @Input() set alerts(newAlerts) {
         this._alerts = newAlerts;
-        console.log('setting alerts', newAlerts);
     }
     get alerts() {
         return this._alerts;

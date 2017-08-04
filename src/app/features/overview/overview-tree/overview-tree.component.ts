@@ -34,7 +34,6 @@ export class OverviewTreeComponent implements OnInit {
 
     protected _runningDetails: {string: any} | {};
     @Input() set running(newRunning) {
-        console.log('running changed', newRunning);
         this._runningDetails = newRunning;
         this.updateLeafs(this.paths);
     }

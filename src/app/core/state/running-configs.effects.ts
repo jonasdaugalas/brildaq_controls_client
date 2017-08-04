@@ -17,7 +17,6 @@ export class RunningConfigsEffects {
     update$: Observable<runningActions.Actions> = this.actions$
         .ofType(runningActions.UPDATE, runningActions.UPDATE_CANCEL)
         .switchMap((action) => {
-            console.log('in update running effect');
             if (action.type === runningActions.UPDATE_CANCEL) {
                 return Observable.empty();
             }
@@ -50,7 +49,6 @@ export class RunningConfigsEffects {
     updateStates$: Observable<runningActions.Actions> = this.actions$
         .ofType(runningActions.UPDATE_STATES, runningActions.UPDATE_STATES_CANCEL)
         .switchMap(action => {
-            console.log('in update states effect');
             if (action.type === runningActions.UPDATE_STATES_CANCEL) {
                 return Observable.empty();
             }

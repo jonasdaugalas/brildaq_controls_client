@@ -29,11 +29,9 @@ export class AppComponent implements OnInit, AfterViewInit {
     ngOnInit() {
         console.log('APP INIT');
 
-        // NOTE: ngrx store has a problem https://github.com/ngrx/platform/issues/133
+        // NOTE:
         // until the problem is fixed, we cannot dispatch actions between two
-        // ngrx stre initializations, because after the second one is
-        // initialized, the action is handled once more.
-        // Workaround: dispatch actions only when all stores are initialized
+        // ngrx stre initializations, with devtools enabled
         if (document.cookie.indexOf('clientname') < 0) {
             setTimeout(this.pushNameCookieAlert.bind(this), 2000);
         }
@@ -51,14 +49,23 @@ export class AppComponent implements OnInit, AfterViewInit {
     }
 
     pushNameCookieAlert() {
+        const nameCookieModalAction = new appActions.OpenModalAction(
+            {id: 'modalNameCookie'}
+        );
+        const autoNameCokieAction = new appActions.SetCookieAction(
+            {name: 'clientname', value: Date.now().toString().substring(5, 10), days: 30}
+        );
+        const text = 'Would you mind setting your name into a cookie? ' +
+            'It would be associated with your actions in server logs.';
+
         this.store.dispatch(new appActions.AddAlertAction({
             type: 'info',
-            text: 'Would you mind setting your name into a cookie? It would be associated with your actions in server logs.',
+            text: text,
             closable: true,
             actions: {
                 closeAction: {action: null, text: ''},
-                firstAction: {action: null, text: 'Set name'},
-                secondAction: {action: null, text: 'Hide this'}
+                firstAction: {action: nameCookieModalAction, text: 'Set name'},
+                secondAction: {action: autoNameCokieAction, text: 'Hide this'}
             }
         }));
     }

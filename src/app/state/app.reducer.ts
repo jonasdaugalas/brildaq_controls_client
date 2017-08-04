@@ -6,7 +6,8 @@ export interface State {
         entities: Array<Alert>,
         handleAlert: boolean,
         handleAction: AlertAction
-    }
+    },
+    modals: ModalsState
 }
 
 export const initialState: State = {
@@ -14,7 +15,20 @@ export const initialState: State = {
         entities: [],
         handleAlert: false,
         handleAction: undefined
+    },
+    modals: {
+        modalNameCookie: {open: false},
+        modalTest: {open: false}
     }
+};
+
+export type ModalsState = {
+    modalNameCookie: ModalState;
+    modalTest: ModalState;
+};
+
+export type ModalState = {
+    open: boolean
 };
 
 export const alertTypeSeverity = {
@@ -49,7 +63,6 @@ export function reducer(state = initialState, action: actions.Actions): State {
         return Object.assign({}, state, {alerts: newAlerts});
     }
     case actions.HANDLE_ALERT: {
-        console.log('handle alert', action);
         const index = state.alerts.entities.indexOf(action.payload.alert);
         let newAlerts;
         if (index < 0) {
@@ -67,6 +80,22 @@ export function reducer(state = initialState, action: actions.Actions): State {
         }
         return Object.assign({}, state, {alerts: newAlerts});
     }
+    case actions.OPEN_MODAL: {
+        const newModals = Object.assign({}, state.modals);
+        newModals[action.payload.id] = {open: true};
+        return Object.assign({}, state, {modals: newModals});
+    }
+    case actions.CLOSE_MODAL:
+    case actions.MODAL_CLOSED: {
+        if (state.modals.hasOwnProperty(action.payload.id)) {
+            if (state.modals[action.payload.id].open) {
+                const newModals = Object.assign({}, state.modals);
+                newModals[action.payload.id] = {open: false};
+                return Object.assign({}, state, {modals: newModals});
+            }
+        }
+        return state
+    }
     default:
         return state;
     }
@@ -74,3 +103,4 @@ export function reducer(state = initialState, action: actions.Actions): State {
 
 export const selectAlerts = (state: State) => state.alerts;
 export const selectAlertsEntities = (state: State) => state.alerts.entities;
+export const selectModals = (state: State) => state.modals;
