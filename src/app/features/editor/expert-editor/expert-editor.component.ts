@@ -75,7 +75,6 @@ export class ExpertEditorComponent implements OnInit {
     };
 
     beautifyXML() {
-        this.editor.getSession().getUndoManager().undo();
         const beautified = html_beautify(
             this.editor.getValue(), {indent_size: 2});
         this.editor.setValue(beautified);
