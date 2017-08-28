@@ -10,6 +10,10 @@ export const MODAL_CLOSED = '[App] MODAL_CLOSED';
 
 export const SET_COOKIE = '[App] SET_COOKIE';
 
+export const GET_BUILD_NUMBER = '[App] GET_BUILD_NUMBER';
+export const SUCCESS_GET_BUILD_NUMBER = '[App] SUCCESS_GET_BUILD_NUMBER';
+export const FAIL_GET_BUILD_NUMBER = '[App] FAIL_GET_BUILD_NUMBER';
+
 export class AddAlertAction implements Action {
     readonly type = ADD_ALERT;
 
@@ -46,10 +50,28 @@ export class SetCookieAction implements Action {
     constructor(public payload: {name: string, value: string, days: number}) {};
 }
 
+export class GetNewestAppBuildNumberAction implements Action {
+    readonly type = GET_BUILD_NUMBER;
+}
+
+export class SuccessGetNewestAppBuildNumberAction implements Action {
+    readonly type = SUCCESS_GET_BUILD_NUMBER;
+
+    constructor(public payload: number) {};
+}
+
+export class FailGetNewestAppBuildNumberAction implements Action {
+    readonly type = FAIL_GET_BUILD_NUMBER;
+}
+
+
 export type Actions =
     AddAlertAction |
     HandleAlertAction |
     OpenModalAction |
     CloseModalAction |
     ModalClosedAction |
-    SetCookieAction;
+    SetCookieAction |
+    GetNewestAppBuildNumberAction |
+    SuccessGetNewestAppBuildNumberAction |
+    FailGetNewestAppBuildNumberAction;

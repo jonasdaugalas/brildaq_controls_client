@@ -6,6 +6,7 @@ import { Effect, Actions } from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 
+import { AppService } from '@app/services/app.service';
 import * as coreState from '@app/core/state/state.reducer';
 import * as appReducer from './app.reducer';
 import * as appActions from './app.actions';
@@ -40,11 +41,25 @@ export class AppEffects {
             const expires = "; expires=" + date.toUTCString();
             document.cookie = payload.name + '=' + payload.value + expires + '; path=/';
             return Observable.empty();
-        })
+        });
+
+    @Effect()
+    getBuildNumber$: Observable<Action> = this.actions$
+        .ofType(appActions.GET_BUILD_NUMBER)
+        .switchMap(action => {
+            return this.appService.getBuildNumber()
+                .map(response => (
+                    new appActions.SuccessGetNewestAppBuildNumberAction(response)
+                ))
+                .catch((err, caught) => Observable.of(
+                    new appActions.FailGetNewestAppBuildNumberAction()
+                ))
+        });
 
 
     constructor(
         protected actions$: Actions,
-        protected store$: Store<coreState.State>) {}
+        protected store$: Store<coreState.State>,
+        protected appService: AppService) {}
 
 }

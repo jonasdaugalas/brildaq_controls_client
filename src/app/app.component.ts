@@ -1,11 +1,11 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Observable, Subject, BehaviorSubject } from 'rxjs';
 
+import * as APP_CONFIG from '@app/../app-config-constants';
 import { Alert, AlertActionNames } from './models/alert';
 import { Store } from '@ngrx/store';
 import * as appState from '@app/core/state/state.reducer';
 import * as appReducer from './state/app.reducer';
-
 import * as appActions from './state/app.actions';
 import * as configsActions from './core/state/configurations.actions';
 
@@ -17,11 +17,15 @@ import * as configsActions from './core/state/configurations.actions';
 export class AppComponent implements OnInit, AfterViewInit {
 
     alerts$: Observable<Array<Alert>>;
+    newestBuildNumber$: Observable<number>;
 
     constructor(private store: Store<appState.State>) {
         console.log('CONSTRUCT app');
         this.alerts$ = this.store.select(state => {
             return appReducer.selectAlertsEntities(state['appModule']);
+        });
+        this.newestBuildNumber$ = this.store.select(state => {
+            return appReducer.selectBuildNumber(state['appModule']);
         });
 
     }
@@ -35,6 +39,16 @@ export class AppComponent implements OnInit, AfterViewInit {
         if (document.cookie.indexOf('clientname') < 0) {
             setTimeout(this.pushNameCookieAlert.bind(this), 2000);
         }
+
+        Observable.interval(APP_CONFIG.BUILD_NUMBER_CHECK_INTERVAL).subscribe(() => {
+            this.store.dispatch(new appActions.GetNewestAppBuildNumberAction());
+        });
+        this.newestBuildNumber$.subscribe((val) => {
+            if (val > APP_CONFIG.BUILD_NUMBER) {
+                this.store.dispatch(
+                    new appActions.OpenModalAction({id: 'modalAppRefresh'}));
+            }
+        });
 
     }
 

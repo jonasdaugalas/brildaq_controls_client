@@ -9,22 +9,23 @@ import { EffectsModule } from '@ngrx/effects';
 import { AppRouting } from './app.routing';
 import { CoreModule } from './core/core.module';
 
+import { AppService } from './services/app.service';
 import { AppComponent } from './app.component';
 import { AlertsComponent } from './alerts/alerts.component';
 import * as appReducer from './state/app.reducer';
 import { AppEffects } from './state/app.effects';
 import { ModalsComponent } from './modals/modals.component';
-import { ModalComponent } from './modals/modal/modal.component';
 import { NameCookieModalComponent } from './modals/name-cookie-modal/name-cookie-modal.component';
 import { TestModalComponent } from './modals/test-modal/test-modal.component';
+import { AppRefreshModalComponent } from './modals/app-refresh-modal/app-refresh-modal.component';
 
 @NgModule({
     declarations: [
         AppComponent,
         AlertsComponent,
         ModalsComponent,
-        ModalComponent,
         NameCookieModalComponent,
+        AppRefreshModalComponent,
         TestModalComponent,
     ],
     imports: [
@@ -39,7 +40,9 @@ import { TestModalComponent } from './modals/test-modal/test-modal.component';
         ]),
         CoreModule
     ],
-    providers: [],
+    providers: [
+        AppService
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule { }

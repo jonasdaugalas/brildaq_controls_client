@@ -7,7 +7,8 @@ export interface State {
         handleAlert: boolean,
         handleAction: AlertAction
     },
-    modals: ModalsState
+    modals: ModalsState,
+    newestBuildNumber: number
 }
 
 export const initialState: State = {
@@ -18,12 +19,15 @@ export const initialState: State = {
     },
     modals: {
         modalNameCookie: {open: false},
+        modalAppRefresh: {open: false},
         modalTest: {open: false}
-    }
+    },
+    newestBuildNumber: -1
 };
 
 export type ModalsState = {
     modalNameCookie: ModalState;
+    modalAppRefresh: ModalState;
     modalTest: ModalState;
 };
 
@@ -96,6 +100,12 @@ export function reducer(state = initialState, action: actions.Actions): State {
         }
         return state
     }
+    case actions.SUCCESS_GET_BUILD_NUMBER: {
+        return Object.assign({}, state, {newestBuildNumber: action.payload});
+    }
+    case actions.FAIL_GET_BUILD_NUMBER: {
+        return Object.assign({}, state, {newestBuildNumber: -1});
+    }
     default:
         return state;
     }
@@ -104,3 +114,4 @@ export function reducer(state = initialState, action: actions.Actions): State {
 export const selectAlerts = (state: State) => state.alerts;
 export const selectAlertsEntities = (state: State) => state.alerts.entities;
 export const selectModals = (state: State) => state.modals;
+export const selectBuildNumber = (state: State) => state.newestBuildNumber;
