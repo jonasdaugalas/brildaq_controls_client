@@ -46,7 +46,7 @@ export class StandaloneComponent extends RoutedEditorComponent implements OnInit
             .takeUntil(this.ngUnsubscribe)
             .subscribe((counter) => {
                 this.updateState();
-                if (counter % 10 === 9) {
+                if (counter % 60 === 59) {
                     this.updateEditor();
                 }
             });

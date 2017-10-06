@@ -164,7 +164,7 @@ export class EditorComponent implements OnInit, OnDestroy {
                     version: this.selectedVersion,
                     fields: fields
                 }));
-            setTimeout(this.reselectWorkingConfiguration.bind(this), 3000);
+            setTimeout(this.reselectWorkingConfiguration.bind(this), 5500);
         });
         this.confirmModal.open();
     }
@@ -182,6 +182,7 @@ export class EditorComponent implements OnInit, OnDestroy {
                     xml: event.xml,
                     executive: event.executive
                 }));
+            setTimeout(this.reselectWorkingConfiguration.bind(this), 5500);
         });
         this.confirmModal.open();
     }
@@ -192,9 +193,9 @@ export class EditorComponent implements OnInit, OnDestroy {
             this.store.dispatch(new editorActions.CloseXMLViewModalAction());
         }
         case 'response': {
-            if (!this.responseModal.badStatus()) {
-                setTimeout(this.reselectWorkingConfiguration.bind(this), 100);
-            }
+            // if (!this.responseModal.badStatus()) {
+            //     setTimeout(this.reselectWorkingConfiguration.bind(this), 100);
+            // }
             this.store.dispatch(new editorActions.CloseResponseModalAction());
         }
         }
