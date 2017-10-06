@@ -5,8 +5,6 @@ import { ClarityModule } from 'clarity-angular';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects'
 
-import { EditorRouting } from './editor.routing';
-
 import * as editorReducer from './state/editor.reducer';
 import { EditorEffects } from './state/editor.effects';
 import { EditorComponent } from './editor.component';
@@ -23,7 +21,6 @@ import { ResponseModalComponent } from './modals/response-modal/response-modal.c
 @NgModule({
     imports: [
         CommonModule,
-        EditorRouting,
         FormsModule,
         ClarityModule,
         StoreModule.forFeature('editorModule', editorReducer.reducer),
@@ -42,6 +39,10 @@ import { ResponseModalComponent } from './modals/response-modal/response-modal.c
         ConfirmModalComponent,
         PreviewModalComponent,
         ResponseModalComponent
+    ],
+    exports: [
+        EditorComponent,
+        HistoryComponent
     ]
 })
 export class EditorModule { }

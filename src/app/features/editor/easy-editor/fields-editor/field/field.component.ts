@@ -17,7 +17,7 @@ export class FieldComponent implements OnInit {
             if (this._field.value === 'false') {
                 this._field.value = false;
             } else {
-                this._field.value = Boolean(this._field.value);
+                this._field.value = true;
             }
         }
     }

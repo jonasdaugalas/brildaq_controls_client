@@ -1,8 +1,8 @@
-.main-container .content-container {
-    position: relative;
-}
+/* .main-container .content-container { */
+/*     position: relative; */
+/* } */
 
-.main-container .content-container .content-area {
+.content-container .content-area {
     padding-top: 0px;
 }
 
@@ -10,6 +10,7 @@
     position: relative;
     max-width: 288px;
     min-width: 240px;
+    max-height: 100%;
 }
 
 nav > section {

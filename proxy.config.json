@@ -1,6 +1,6 @@
 {
     "/api": {
-        "target": "http://localhost:3000/runcontroltest/",
+        "target": "http://localhost:3000/runcontrol/",
         "secure": false,
         "logLevel": "debug"
     }

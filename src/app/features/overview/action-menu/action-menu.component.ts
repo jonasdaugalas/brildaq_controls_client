@@ -42,6 +42,8 @@ export class ActionMenuComponent implements OnInit {
         return this._path;
     }
 
+    @Input('hideEditLink') hideEditLink = false;
+
     protected _configDetails;
     @Input() set configDetails(newConfigDetails) {
         this._configDetails = newConfigDetails;
@@ -66,8 +68,6 @@ export class ActionMenuComponent implements OnInit {
         this.stateIsON = newState === CONFIG_STATES.ON;
         this.updateButtonDisables();
     }
-
-    @Output() onAction = new EventEmitter();
 
     constructor(protected store: Store<appState.State>) {};
 

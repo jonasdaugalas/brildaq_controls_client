@@ -38,6 +38,13 @@ export class ConfigurationsService {
             .catch((err) => Observable.throw(err));
     }
 
+    getState(path: string) {
+        return this.http.get(
+            'api/state' + path)
+            .map((resp) => resp.json())
+            .catch((err) => Observable.throw(err));
+    }
+
     getConfigDetails(id: string, withXML = false) {
         let url = 'api/config' + id;
         if (!withXML) {

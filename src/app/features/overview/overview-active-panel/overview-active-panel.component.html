@@ -19,19 +19,19 @@
         <div class="card-header"
              [class.bc-card-header-success]="isStateOK(states[path])"
              [class.bc-card-header-danger]="isStateError(states[path])">
-            <clr-dropdown [clrMenuPosition]="'bottom-right'" style="width: 100%" >
+            <clr-dropdown style="width: 100%" >
                 <span clrDropdownToggle style="width: 100%; white-space: normal">
                     {{path}}
                     <clr-icon shape="caret down"></clr-icon>
                 </span>
-                <div class="dropdown-menu">
+                <clr-dropdown-menu [clrPosition]="'bottom-right'">
                     <config-action-menu
                         [state]="states[path]"
                         [actionRequest]="actionRequests[path]"
                         [path]="path"
                         [configDetails]="configDetails[pathsWithVersion[path]]">
                     </config-action-menu>
-                </div>
+                </clr-dropdown-menu>
             </clr-dropdown>
         </div>
         <div class="card-block">

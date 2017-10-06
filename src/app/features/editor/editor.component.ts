@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, Input } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Observable, Subject, BehaviorSubject, Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
@@ -13,6 +13,7 @@ import { ConfigDetails } from '@app/core/models/config-details';
 
 
 @Component({
+    selector: 'bc-editor',
     templateUrl: './editor.component.html',
     styleUrls: ['./editor.component.css']
 })
@@ -22,9 +23,18 @@ export class EditorComponent implements OnInit, OnDestroy {
     protected historySubscription: Subscription;
 
     @ViewChild('confirmModal') confirmModal;
+    @ViewChild('responseModal') responseModal;
+
+    protected _path: string;
+    @Input('path') set path(newPath: string) {
+        this._path = newPath;
+        this.reselectWorkingConfiguration();
+    }
+    get path() {
+        return this._path;
+    }
 
     urlSegments = [];
-    path: string = null;
     selectedVersion = null;
     firstLoadVersionSelected = false;
 
@@ -53,14 +63,7 @@ export class EditorComponent implements OnInit, OnDestroy {
         this.isEditorModeExpert$ = this.editorMode$.map(val => val === 'expert');
     }
 
-    ngOnInit() {
-        // ActivatedRoute attributes do not need to be unsubscribed.
-        this.route.url.subscribe(urlSegments => {
-            this.urlSegments = urlSegments;
-            this.updatePathFromURLSegments();
-            this.reselectWorkingConfiguration();
-        });
-    }
+    ngOnInit() {}
 
     ngOnDestroy() {
         this.ngUnsubscribe.next();
@@ -75,16 +78,6 @@ export class EditorComponent implements OnInit, OnDestroy {
             }
             this.store.dispatch(new editorActions.SwitchModeAction(newMode));
         });
-    }
-
-    protected updatePathFromURLSegments() {
-        if (this.urlSegments.length === 0) {
-            this.path = null;
-            return;
-        }
-        this.path = this.urlSegments.reduce((acc, val, index, array) => {
-            return acc + '/' + val.path;
-        }, '');
     }
 
     reselectWorkingConfiguration() {
@@ -160,7 +153,9 @@ export class EditorComponent implements OnInit, OnDestroy {
     }
 
     submitFields(fields) {
-        this.confirmModal.close();
+        try {
+            this.confirmModal.close();
+        } catch (e) {}
         this.confirmModal.setCallback((comment) => {
             this.store.dispatch(
                 new editorActions.SubmitFieldsAction({
@@ -169,12 +164,15 @@ export class EditorComponent implements OnInit, OnDestroy {
                     version: this.selectedVersion,
                     fields: fields
                 }));
+            setTimeout(this.reselectWorkingConfiguration.bind(this), 3000);
         });
         this.confirmModal.open();
     }
 
     submitXML(event: {xml, executive}) {
-        this.confirmModal.close();
+        try {
+            this.confirmModal.close();
+        } catch (e) {}
         this.confirmModal.setCallback((comment) => {
             this.store.dispatch(
                 new editorActions.SubmitXMLAction({
@@ -194,6 +192,9 @@ export class EditorComponent implements OnInit, OnDestroy {
             this.store.dispatch(new editorActions.CloseXMLViewModalAction());
         }
         case 'response': {
+            if (!this.responseModal.badStatus()) {
+                setTimeout(this.reselectWorkingConfiguration.bind(this), 100);
+            }
             this.store.dispatch(new editorActions.CloseResponseModalAction());
         }
         }

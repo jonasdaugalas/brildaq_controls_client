@@ -20,6 +20,7 @@ import {
 import { ActionRequest } from '@app/core/models/action-request';
 
 @Component({
+    selector: 'bc-overview',
     templateUrl: './overview.component.html',
     styleUrls: ['./overview.component.css']
 })

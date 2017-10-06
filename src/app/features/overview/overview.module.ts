@@ -40,6 +40,12 @@ import { OldVersionIndicatorComponent } from './old-version-indicator/old-versio
     ],
     providers: [
         OverviewComponent
+    ],
+    exports: [
+        OverviewComponent,
+        OverviewTreeComponent,
+        OverviewActivePanelComponent,
+        ActionMenuComponent
     ]
 })
 export class OverviewModule { }
